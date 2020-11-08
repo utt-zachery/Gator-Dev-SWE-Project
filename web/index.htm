@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 
+<link rel="stylesheet" href="nutritionSheet.css">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -10,68 +11,366 @@
 <body>
     <input id="image-file" type="file" accept="image/png,image/jpeg,image/bmp,image/gif">
     <div id="barcode-result"></div>
-    <div id="ocr-result"></div>
-    <!-- Get a free trial license from https://www.dynamsoft.com/CustomerPortal/Portal/TrialLicense.aspx -->
+    <div id="lookup-name"></div>
+    <div id="food-name"></div>
+	<div id="health-rating"></div>
+	<div id="food-image"></div>
+  
     <script src="../node_modules/dynamsoft-javascript-barcode/dist/dbr.js"
-        data-productKeys="t0068NQAAAEVstLIsgc9hWbA0o6jqlfcAR0BeZBLF0AhkB+7kOS63Oprq0nopsJtAeL9yNFv4U+uqp1VHtXrRTutFmod3R0g="></script>
+        data-productKeys="t0076xQAAAIjKUUiAy33ls/u0gA1c4Qe3JQjCrVqWCBmrObJiePN3jQb9gahDa4/IoZVw4D3eLoStdirOwCfEYWYCCjUMeDH2ZRsdbDwqcw=="></script>
 
     <script>
+
+    function tryAlternate(barcode) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (xhttp.readyState == 4 && xhttp.status == 200) {
+                var decoded = JSON.parse(xhttp.responseText);
+                var prodName = decoded.items[0].title;
+                var prodImage =decoded.items[0].image[0];
+                document.getElementById("lookup-name").innerHTML = prodName;
+                document.getElementById("itemIm").src = prodImage;
+            }
+        };
+        xhttp.open("GET", "https://cors-anywhere.herokuapp.com/https://api.upcitemdb.com/prod/trial/lookup?upc=" + barcode, true);
+        xhttp.send();
+    }
+
+
+	function brokenCode() {
+            alert("Bad Read");
+    }
+
+	function isValidBarcode(barcode) {
+  // check length
+  if (barcode.length < 8 || barcode.length > 18 ||
+      (barcode.length != 8 && barcode.length != 13 &&
+      barcode.length != 14 && barcode.length != 18)) {
+    return false;
+  }
+
+  var lastDigit = Number(barcode.substring(barcode.length - 1));
+  var checkSum = 0;
+  if (isNaN(lastDigit)) { return false; } // not a valid upc/ean
+
+  var arr = barcode.substring(0,barcode.length - 1).split("").reverse();
+  var oddTotal = 0, evenTotal = 0;
+
+  for (var i=0; i<arr.length; i++) {
+    if (isNaN(arr[i])) { return false; } // can't be a valid upc/ean we're checking for
+
+    if (i % 2 == 0) { oddTotal += Number(arr[i]) * 3; }
+    else { evenTotal += Number(arr[i]); }
+  }
+  checkSum = 10 - ((evenTotal + oddTotal) % 10);
+
+  // true if they are equal
+  return checkSum == lastDigit;
+}
+
         let reader = null;
 
         document.getElementById('image-file').addEventListener('change', async function () {
             try {
-                // Use Dynamsoft JavaScript Barcode Reader
+               
                 reader = reader || await Dynamsoft.BarcodeReader.createInstance();
                 let barcode_results = [];
                 let file = this.files[0];
                 let results = await reader.decode(file);
                 for (let result of results) {
-                    barcode_results.push(result.barcodeText);
+					if (result.barcodeText) 
+						barcode_results.push(result.barcodeText);
                 }
 
+                for (let validBarcode of barcode_results) {
+
+                    let xhr = new XMLHttpRequest();
+
+                    // 2. Configure it: GET-request for the URL /article/.../load
+                    xhr.open('GET', 'https://world.openfoodfacts.org/api/v0/product/' + validBarcode + '.json');
+
+                    // 3. Send the request over the network
+                    xhr.send();
+
+                    // 4. This will be called after the response is received
+                    xhr.onload = function() {
+                    if (xhr.status == 200) { // analyze HTTP status of the response
+                        if (xhr.responseText.indexOf("Not a valid UPC code") == -1) {
+                            var prodData = JSON.parse(xhr.responseText);
+
+                            var nutritionData = {
+                                servingSize: prodData.product.serving_size,
+                                calories: prodData.product.nutriments["energy-kcal_serving"],
+                                totalFat: prodData.product.nutriments["fat_serving"],
+                                saturatedFat:prodData.product.nutriments["saturated-fat"],
+                                transFat:prodData.product.nutriments["trans-fat"],
+                                polyFat: prodData.product.nutriments["polyunsaturated-fat_serving"],
+                                monoFat: prodData.product.nutriments["monounsaturated-fat_serving"],
+                                cholest: prodData.product.nutriments["cholesterol_serving"],
+                                sodium: prodData.product.nutriments["sodium_serving"],
+                                carb: prodData.product.nutriments["carbohydrates_serving"],
+                                fiber: prodData.product.nutriments["fiber_serving"],
+                                sugar: prodData.product.nutriments["sugars_serving"],
+                                protein: prodData.product.nutriments["proteins_serving"],
+                                vitA: prodData.product.nutriments["vitamin-a_serving"],
+                                vitC: prodData.product.nutriments["vitamin-c_serving"],
+                                calcium: prodData.product.nutriments["calcium_serving"],
+                                iron: prodData.product.nutriments["iron_serving"] 
+                            };
+
+                            var prodName = prodData.product.product_name_en_imported;
+                            var prodHealthScore =prodData.product.nutriments["nutrition-score-fr"];
+                            document.getElementById("lookup-name").innerHTML = prodName;
+                            var xhttp = new XMLHttpRequest();
+                            xhttp.onreadystatechange = function() {
+                                if (xhttp.readyState == 4 && xhttp.status == 200) {
+                                    var imData = JSON.parse(xhttp.responseText);
+                                    var imageLink = imData.hints[0].food.image;
+                                    
+                                    document.getElementById("itemIm").src = imageLink;
+                                }
+                            };
+                            xhttp.open("GET", "https://api.edamam.com/api/food-database/v2/parser?upc=" + validBarcode + "&app_id=3845197c&app_key=4beb9027400f8e78cbd8619c42532730", true);
+                            xhttp.send();
+
+                            document.getElementById("food-name").innerHTML= "Data: " + JSON.stringify(nutritionData);
+                            createLabel(nutritionData);
+                        } else {
+
+                        }
+                    } else {
+                        
+                    }
+                    };
+
+                }
+                
+				
                 document.getElementById("barcode-result").innerText = 'Barcode result: ' + barcode_results.join('\n');
 
-                // Use JavaScript OCR
-                const { createWorker } = Tesseract;
-                const worker = createWorker({
-                workerPath: '../node_modules/tesseract.js/dist/worker.min.js',
-                langPath: '../lang-data',
-                corePath: '../node_modules/tesseract.js-core/tesseract-core.wasm.js',
-                logger: m => console.log(m),
-                });
-
-                await worker.load();
-                await worker.loadLanguage('eng');
-                await worker.initialize('eng');
-                await worker.setParameters({
-                    tessedit_char_whitelist: '0123456789',
-                });
-                const { data: { text } } = await worker.recognize(file);
-                document.getElementById("ocr-result").innerText = 'OCR result: ' + text;
-                await worker.terminate();
-
-                // Draw the input image to a canvas
-                let img = new Image;
-                img.onload = function () {
-                    let canvas = document.createElement("canvas");
-                    let old_canvas = document.querySelector('canvas');
-                    if (old_canvas) {
-                        old_canvas.parentNode.removeChild(old_canvas);
-                    }
-                    document.body.appendChild(canvas);
-                    canvas.width = img.width;
-                    canvas.height = img.height;
-
-                    let ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0);
-                }
-                img.src = URL.createObjectURL(file);
+            
             } catch (ex) {
                 alert(ex.message);
                 throw ex;
             }
         });
     </script>
+
+
+<section class="performance-facts" style="display: none" id="nutrition">
+    <header class="performance-facts__header">
+      <h1 class="performance-facts__title">Nutrition Facts</h1>
+      <p>Serving Size <span id="servSize">1/2 cup (about 82g)</span>
+    </header>
+    <table class="performance-facts__table">
+      <thead>
+        <tr>
+          <th colspan="3" class="small-info">
+            Amount Per Serving
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th colspan="2">
+            <b>Calories</b>
+            <span id="calCount"></span>
+          </th>
+        </tr>
+        <tr class="thick-row">
+          <td colspan="3" class="small-info">
+            <b>% Daily Value*</b>
+          </td>
+        </tr>
+        <tr>
+          <th colspan="2">
+            <b>Total Fat</b>
+            <span id="totalFat">&nbsp;</span>
+          </th>
+          <td>
+            <b><span id="fatRatio">&nbsp;</span></b>
+          </td>
+        </tr>
+        <tr>
+          <td class="blank-cell">
+          </td>
+          <th>
+            Saturated Fat
+            <span id="satFat">&nbsp;</span>
+          </th>
+        </tr>
+        <tr>
+          <td class="blank-cell">
+          </td>
+          <th>
+            Trans Fat
+            <span id="transFat">&nbsp;</span>
+          </th>
+          <td>
+          </td>
+        </tr>
+        <tr>
+          <th colspan="2">
+            <b>Cholesterol</b>
+            <span id="chol">&nbsp;</span>
+          </th>
+          <td>
+            <b><span id="cholRatio"></span></b>
+          </td>
+        </tr>
+        <tr>
+          <th colspan="2">
+            <b>Sodium</b>
+            <span id="sodium">&nbsp;</span>
+          </th>
+          <td>
+            <b><span id="sodRatio">&nbsp;</span></b>
+          </td>
+        </tr>
+        <tr>
+          <th colspan="2">
+            <b>Total Carbohydrate</b>
+            <span id="carbs">&nbsp;</span>
+          </th>
+          <td>
+            <b><span id="carbRatio">&nbsp;</span></b>
+          </td>
+        </tr>
+        <tr>
+          <td class="blank-cell">
+          </td>
+          <th>
+            Dietary Fiber
+            <span id="fiber">&nbsp;</span>
+          </th>
+          <td>
+            <b><span id="fiberRatio">&nbsp;</span></b>
+          </td>
+        </tr>
+        <tr>
+          <td class="blank-cell">
+          </td>
+          <th>
+            Sugars
+            <span id="sugar">&nbsp;</span>
+          </th>
+          <td>
+          </td>
+        </tr>
+        <tr class="thick-end">
+          <th colspan="2">
+            <b>Protein</b>
+            <span id="protein">&nbsp;</span>
+          </th>
+          <td>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <table class="performance-facts__table--grid">
+      <tbody>
+        <tr>
+          <td colspan="2">
+            Vitamin A
+            <span id="vitA">&nbsp;</span>
+          </td>
+          <td>
+            Vitamin C
+            <span id="vitC">&nbsp;</span>
+          </td>
+        </tr>
+        <tr class="thin-end">
+          <td colspan="2">
+            Calcium
+            <span id="calcium">&nbsp;</span>
+          </td>
+          <td>
+            Iron
+            <span id="iron">&nbsp;</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <p class="small-info">* Percent Daily Values are based on a 2,000 calorie diet. Your daily values may be higher or lower depending on your calorie needs:</p>
+  
+    <table class="performance-facts__table--small small-info">
+      <thead>
+        <tr>
+          <td colspan="2"></td>
+          <th>Calories:</th>
+          <th>2,000</th>
+          <th>2,500</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th colspan="2">Total Fat</th>
+          <td>Less than</td>
+          <td>65g</td>
+          <td>80g</td>
+        </tr>
+        <tr>
+          <td class="blank-cell"></td>
+          <th>Saturated Fat</th>
+          <td>Less than</td>
+          <td>20g</td>
+          <td>25g</td>
+        </tr>
+        <tr>
+          <th colspan="2">Cholesterol</th>
+          <td>Less than</td>
+          <td>300mg</td>
+          <td>300 mg</td>
+        </tr>
+        <tr>
+          <th colspan="2">Sodium</th>
+          <td>Less than</td>
+          <td>2,400mg</td>
+          <td>2,400mg</td>
+        </tr>
+        <tr>
+          <th colspan="3">Total Carbohydrate</th>
+          <td>300g</td>
+          <td>375g</td>
+        </tr>
+        <tr>
+          <td class="blank-cell"></td>
+          <th colspan="2">Dietary Fiber</th>
+          <td>25g</td>
+          <td>30g</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+<img id="itemIm"></img>
 </body>
 
+<script>
+    function createLabel(foodData) {
+        document.getElementById("servSize").innerHTML = foodData.servingSize;
+        document.getElementById("calCount").innerHTML = foodData.calories;
+        document.getElementById("totalFat").innerHTML = foodData.totalFat;
+        document.getElementById("fatRatio").innerHTML = Math.round((parseInt(foodData.totalFat)/65.0) * 100.0) + "%";
+        document.getElementById("satFat").innerHTML = foodData.saturatedFat;
+        document.getElementById("transFat").innerHTML = foodData.transFat;
+        document.getElementById("chol").innerHTML = foodData.cholest;
+        document.getElementById("cholRatio").innerHTML = Math.round((parseInt(foodData.cholest)/300.0) * 100.0) + "%";
+        document.getElementById("sodium").innerHTML = foodData.sodium;
+        document.getElementById("sodRatio").innerHTML = Math.round((parseInt(foodData.sodium)/	2400.0) * 100.0) + "%";
+        document.getElementById("carbs").innerHTML = foodData.carb;
+        document.getElementById("carbRatio").innerHTML = Math.round((parseInt(foodData.carb)/300.0) * 100.0) + "%";
+        document.getElementById("fiber").innerHTML = foodData.fiber;
+        document.getElementById("fiberRatio").innerHTML = Math.round((parseInt(foodData.fiber)/25.0) * 100.0) + "%";
+        document.getElementById("sugar").innerHTML = foodData.sugar;
+        document.getElementById("protein").innerHTML = foodData.protein;
+        document.getElementById("vitA").innerHTML = foodData.vitA;
+        document.getElementById("vitC").innerHTML = foodData.vitC;
+        document.getElementById("iron").innerHTML = foodData.iron;
+        document.getElementById("calcium").innerHTML = foodData.calcium;
+        document.getElementById("nutrition").style = "display: block";
+    }
+</script>
 </html>
