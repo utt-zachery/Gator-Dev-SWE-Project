@@ -30,7 +30,7 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 //Serve File resources
-app.use(express.static("../"));
+app.use(express.static(process.cwd()));
 
 //Serves the API
 app.use('/api/', apiRouter);
