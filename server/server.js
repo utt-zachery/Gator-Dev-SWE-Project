@@ -53,7 +53,7 @@ app.all('/*', (req, res) => {
        The path.resolve() method returns a string and resolves a sequence of paths or path segments into an absolute path.
        If no path segments are passed, path.resolve() will return the absolute path of the current working directory.
     */
-   res.statusCode === 404 ? res.send('Sorry, information not available') : res.sendFile(path.resolve('./client/index.html'))
+   res.statusCode === 404 ? res.send('Sorry, information not available') : res.sendFile(path.resolve('./web/index.htm'))
         
 });
 
