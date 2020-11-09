@@ -14,22 +14,3 @@ Dynamsoft.BarcodeReader.productKeys = 't0068NQAAAEVstLIsgc9hWbA0o6jqlfcAR0BeZBLF
     reader.destroy();
     await Dynamsoft.BarcodeReader._dbrWorker.terminate();
 })();
-
-//  OCR
-const { createWorker } = require('tesseract.js');
-
-const worker = createWorker({
-  langPath: path.join(__dirname, '..', 'lang-data')
-});
-
-(async () => {
-  await worker.load();
-  await worker.loadLanguage('eng');
-  await worker.initialize('eng');
-  await worker.setParameters({
-    tessedit_char_whitelist: '0123456789',
-  });
-  const { data: { text } } = await worker.recognize(image_file);
-  console.log('OCR result:  ' + text);
-  await worker.terminate();
-})();
