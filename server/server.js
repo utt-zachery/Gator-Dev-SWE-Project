@@ -29,22 +29,13 @@ app.use(bodyParser.urlencoded({
 
 app.use(bodyParser.json());
 
-/* serve static files - see http://expressjs.com/en/starter/static-files.html */
+//Serve File resources
 app.use(express.static("../"));
 
-/* The next three middleware are important to the API that we are building */
-
-/* Request Handler for route /api/footballClub
-   TODO: Update the code to meet the required format - app.use('/api/footballClub', appropriateMiddleWare)
-   use the footballClub router middleware for requests to the api
-   check the variables list above
-*/
-//app.use('/api/footballClubs/', footballClubRouter);
-
+//Serves the API
 app.use('/api/', apiRouter);
 
-/* Request handler for all other routes
-   Sends a response (res) to go to the homepage for all routes not specified */
+//404 - resource not found
 app.all('/*', (req, res) => {
 
     /*Add YOUR CODE HERE
