@@ -17,10 +17,17 @@ export const addFoodBank = async (req, res) => {
 
     if (!foodBankData) {
         return res.status(200).send({
-          error: "FootballClub not found",
+          error: "Reques data not found",
         });
       }
       
+    const newTuple = new FoodBank({
+      name: req.body.name,
+      address: req.body.address,
+      longitude: req.body.longitude,
+      latitude: req.body.latitude
+    });
+
     await new FoodBank(foodBankData).save()
     .then((data) => {
       res.json(data);
