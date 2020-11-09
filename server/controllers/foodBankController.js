@@ -7,7 +7,8 @@ export const viewFoodBanks = async (req, res) => {
           return res.status(200).send({
             message: err.message || "An unknown error occurred",
           });
-        res.json(data);
+         res.json(data);
+         console.log(data._id);
       });
 };
 
@@ -21,7 +22,6 @@ export const addFoodBank = async (req, res) => {
         });
       }
       
-      console.log(req.body.name);
     const newTuple = new FoodBank({
       name: req.body.name,
       address: req.body.address,
