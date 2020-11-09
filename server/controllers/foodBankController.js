@@ -45,7 +45,9 @@ export const addFoodBank = async (req, res) => {
         });
       }
       
-    
+    console.log({ name: req.body.name,
+      address: req.body.address});
+      
     await FoodBank.find({
       name: req.body.name,
       address: req.body.address
