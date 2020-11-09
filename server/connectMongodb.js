@@ -1,7 +1,7 @@
 "use strict";
 
 /*import all libraries */
-import config from "./config/config.js";
+import config from "../config/config.js";
 import mongoose from "mongoose";
 
 /* Connect to your database using mongoose */
