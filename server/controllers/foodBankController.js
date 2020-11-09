@@ -16,6 +16,7 @@ export const viewFoodBanks = async (req, res) => {
 
 const executeAddItem = async (foundBank, req, res) => {
   if (foundBank.length == 0) {
+
       const newTuple = new FoodBank({
         name: req.body.name,
         address: req.body.address,
@@ -23,7 +24,7 @@ const executeAddItem = async (foundBank, req, res) => {
         latitude: req.body.latitude
       });
 
-      await new FoodBank(foodBankData).save()
+      await new FoodBank(newTuple).save()
       .then((data) => {
         res.json(data);
       })
