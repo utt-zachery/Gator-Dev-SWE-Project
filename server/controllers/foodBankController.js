@@ -12,6 +12,29 @@ export const viewFoodBanks = async (req, res) => {
       });
 };
 
+
+
+const executeAddItem = async (foundBank, req, res) => {
+  if (!foundBank) {
+      const newTuple = new FoodBank({
+        name: req.body.name,
+        address: req.body.address,
+        longitude: req.body.longitude,
+        latitude: req.body.latitude
+      });
+
+      await new FoodBank(foodBankData).save()
+      .then((data) => {
+        res.json(data);
+      })
+      .catch((err) => {
+        res.status(200).send(err);
+      });
+  } else {
+    res.status(200).send("Foodbank Already Exists!");
+  }
+}
+
 //Create a foodBank
 export const addFoodBank = async (req, res) => {
     const foodBankData = req.body;
@@ -26,27 +49,6 @@ export const addFoodBank = async (req, res) => {
     await FoodBank.find({
       name: req.body.name,
       address: req.body.address
-    }).then((footballClub) => {
-
-      if (!footballClub) {
-        const newTuple = new FoodBank({
-          name: req.body.name,
-          address: req.body.address,
-          longitude: req.body.longitude,
-          latitude: req.body.latitude
-        });
-    
-        await new FoodBank(foodBankData).save()
-        .then((data) => {
-          res.json(data);
-        })
-        .catch((err) => {
-          res.status(200).send(err);
-        });
-      } else {
-        res.status(200).send("Foodbank Already Exists!");
-      }
-
-    });
+    }).then( foodBank => executeAddItem(foodBank, req, res));
     
 }
