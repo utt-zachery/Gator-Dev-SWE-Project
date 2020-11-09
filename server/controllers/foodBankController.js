@@ -21,7 +21,7 @@ export const addFoodBank = async (req, res) => {
         });
       }
       
-    await new FootballClub(footballClub).save()
+    await new FoodBank(foodBankData).save()
     .then((data) => {
       res.json(data);
     })
