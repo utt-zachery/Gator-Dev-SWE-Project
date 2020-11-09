@@ -10,4 +10,4 @@ const foodBankSchema = new mongoose.Schema({
 
 });
 
-export default mongoose.model('c', foodBankSchema);
+export default mongoose.model('foodBank', foodBankSchema);

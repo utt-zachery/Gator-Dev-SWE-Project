@@ -17,7 +17,7 @@ export const addFoodBank = async (req, res) => {
 
     if (!foodBankData) {
         return res.status(200).send({
-          error: "Reques data not found",
+          error: "Request data not found",
         });
       }
       
