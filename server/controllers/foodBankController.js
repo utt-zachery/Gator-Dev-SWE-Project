@@ -15,7 +15,7 @@ export const viewFoodBanks = async (req, res) => {
 
 
 const executeAddItem = async (foundBank, req, res) => {
-  if (!foundBank) {
+  if (foundBank.length == 0) {
       const newTuple = new FoodBank({
         name: req.body.name,
         address: req.body.address,
@@ -47,7 +47,7 @@ export const addFoodBank = async (req, res) => {
       
     console.log({ name: req.body.name,
       address: req.body.address});
-      
+
     await FoodBank.find({
       name: req.body.name,
       address: req.body.address
