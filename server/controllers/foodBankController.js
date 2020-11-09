@@ -21,6 +21,7 @@ export const addFoodBank = async (req, res) => {
         });
       }
       
+      console.log(req.body.name);
     const newTuple = new FoodBank({
       name: req.body.name,
       address: req.body.address,
