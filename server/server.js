@@ -30,7 +30,7 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 /* serve static files - see http://expressjs.com/en/starter/static-files.html */
-app.use(express.static('../'));
+app.use(express.static(path.join(__dirname, '../')));
 
 /* The next three middleware are important to the API that we are building */
 
