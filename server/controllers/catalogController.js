@@ -13,7 +13,7 @@ export const produceFoodItem = async (inputArray, finalArray, index, req, res) =
         finalArray.push(shellObject);
         
         if (index == inputArray.length) {
-            res.send(finalArray);
+            res.send(JSON.parse(finalArray));
         } else {
             produceFoodItem(inputArray, finalArray, index+1, req, res);
         }
