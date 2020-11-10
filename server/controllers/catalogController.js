@@ -25,25 +25,18 @@ export const viewCatalog = async (req, res) => {
             }
         }
 
-        var keys = Object.expirationMap(cust);
+        var keys = Object.productMap(cust);
         keys.forEach(key=>{
-        console.log(key + '|' + cust[key]);
-        });
-        console.log(" \t\t----");
-        keys = productMap.expirationMap(cust);
-        keys.forEach(key=>{
-        console.log(key + '|' + cust[key]);
+            console.log(key + '|' + cust[key]);
         });
 
-        let toReturn = ([...expirationMap].sort((a, b) => {
+        let toReturn = ([...productMap].sort((a, b) => {
             // Some sort function comparing keys with a[0] b[0] or values with a[1] b[1]
             // Be sure to return -1 if lower and, if comparing values, return 0 if equal
 
-            a.quantity = productMap[a.foodItemID];
-
-            if (expirationMap[a] < expirationMap[b]) {
+            if (a.expirationEpoch < b.expirationEpoch) {
                 return -1;
-            } else if (expirationMap[a] > expirationMap[b]) {
+            } else if (a.expirationEpoch > b.expirationEpoch) {
                 return 1;
             } else {
                 return 0;
