@@ -6,6 +6,7 @@ const updateDonationLog = async (foodID, req, res) => {
 }
 
 const updateInventory = async (foodID, req, res) => {
+    console.log("\tUpdating the inventory of item: " + foodID);
     res.send(foodID);
 }
 
