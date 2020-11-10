@@ -26,11 +26,7 @@ export const viewCatalog = async (req, res) => {
             }
         }
 
-        var keys = Object.productMap(cust);
-        keys.forEach(key=>{
-            console.log(key + '|' + cust[key]);
-        });
-
+        console.log(expirationEpoch.size);
         let array = Array.from(productMap, ([name, value]) => ({value }));
 
         array.sort(function(a,b) {
