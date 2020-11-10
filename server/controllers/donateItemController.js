@@ -2,8 +2,6 @@ import FoodItem from "../models/foodModel.js"
 import Donation from "../models/donationModel.js"
 import FoodInventory from "../models/foodInventory.js"
 
-
-
 export const updateInventory= async (donationCode, foodID, req, res) => {
     console.log("\tUpdating inventory for foodbank: " + req.body.foodBankID);
     await new FoodInventory({
