@@ -8,7 +8,6 @@ export const viewCatalog = async (req, res) => {
         let expirationMap = new Map();
         console.log(now+" Query Length: " +data.length );
         for (let i=0; i < data.length; i++) {
-
             if (expirationMap.has(data[i].foodItemID)) {
                 if (data[i].expirationEpoch < expirationMap[data[i].foodItemID]) {
                     expirationMap[data[i].foodItemID] = data[i].expirationEpoch;
@@ -23,6 +22,16 @@ export const viewCatalog = async (req, res) => {
                 productMap[data[i].foodItemID] = data[i].quantity;
             }
         }
+
+        var keys = Object.expirationMap(cust);
+        keys.forEach(key=>{
+        console.log(key + '|' + cust[key]);
+        });
+        console.log(" \t\t----");
+        keys = productMap.expirationMap(cust);
+        keys.forEach(key=>{
+        console.log(key + '|' + cust[key]);
+        });
 
         let toReturn = ([...expirationMap].sort((a, b) => {
             // Some sort function comparing keys with a[0] b[0] or values with a[1] b[1]
