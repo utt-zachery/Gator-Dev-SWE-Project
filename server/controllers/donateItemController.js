@@ -13,7 +13,7 @@ export const updateInventory= async (donationCode, foodID, req, res) => {
         foodBankID: req.body.foodBankID,
         donationID: donationCode
     }).save().then((data) => {
-        updateDonationLog(foodID, req, res);
+        res.json(data);
       })
       .catch((err) => {
         res.status(200).send(err);
