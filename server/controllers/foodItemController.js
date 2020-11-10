@@ -11,7 +11,7 @@ function updateDonationLog(foodID, req, res)  {
     }).save().then((ret) => {
         res.json(ret);
     }).catch((err)=> {
-        res.status(200).send({
+        res.send({
             message: err.message || "An unknown error occurred",
           });
     });
