@@ -4,7 +4,12 @@ import FoodItem from "../models/foodModel.js"
 export const produceFoodItem = async (inputArray, finalArray, index, req, res) => { 
     await FoodItem.findOne({_id: inputArray[index].foodItemID}).then((data) => {
 
-        finalArray[index] = data;
+        let shellObject = {
+            quantity: inputArray[index].quantity,
+            foodData: data
+        };
+
+        finalArray[index] = shellObject;
         index++;
         
         if (index == inputArray.length) {
