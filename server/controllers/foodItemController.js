@@ -10,10 +10,28 @@ const updateInventory = async (foodID, req, res) => {
 export const donateItem = async (req, res) => {
 
     const body = req.body;
-    if (!body || !body.barcode ||!body.expiration) {
-        return res.status(200).send({
-          error: "Request missing data!",
-        });
+    if (!body || !body.barcode ||!body.expiration ||!body.userID ||body.foodBankID) {
+        if (!body) {
+            return res.status(200).send({
+            error: "Missing body in request body!",
+            });
+        } else  if (!body.barcode) {
+            return res.status(200).send({
+            error: "Missing barcodre in request body!",
+            });
+        } else  if (!body.expiration) {
+            return res.status(200).send({
+            error: "Missing expiration in request body!",
+            });
+        } else  if (!body.userID) {
+            return res.status(200).send({
+            error: "Missing userID in request body!",
+            });
+        } else if (!body.foodBankID) {
+            return res.status(200).send({
+            error: "Missing foodbankID in request body!",
+            });
+        }
     }
 
     await FoodItem.findOne({ barcode: body.barcode}, (err, data) => {
