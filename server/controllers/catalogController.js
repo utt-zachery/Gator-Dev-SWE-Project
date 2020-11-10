@@ -31,10 +31,9 @@ export const viewCatalog = async (req, res) => {
             console.log(key + '|' + cust[key]);
         });
 
-        let toReturn = ([...productMap].sort((a, b) => {
+        let toReturn = new Map([...productMap].sort((a, b) => {
             // Some sort function comparing keys with a[0] b[0] or values with a[1] b[1]
             // Be sure to return -1 if lower and, if comparing values, return 0 if equal
-
             if (a.expirationEpoch < b.expirationEpoch) {
                 return -1;
             } else if (a.expirationEpoch > b.expirationEpoch) {
