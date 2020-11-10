@@ -48,7 +48,9 @@ export const newUser = async (req, res) => {
                 }).save().then((addedUser) => {
                     console.log("\tAdded User: " + addedUser._id);
                     res.json(addedUser);
-                });
+                }).catch((err) => {
+                    res.status(200).send(err);
+                  });
           } else {
             return res.status(200).send({
                 error: "User email already exists!",
