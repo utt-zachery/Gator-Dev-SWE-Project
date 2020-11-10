@@ -1,7 +1,8 @@
 import FoodItem from "../models/foodModel.js"
 import Donation from "../models/donationModel.js"
+import FoodInventory from "../controllers/foodBankController.js"
 
-const updateDonationLog = async (foodID, req, res) => {
+function updateDonationLog(foodID, req, res)  {
     console.log("\tUpdating the inventory of item: " + foodID);
     let donation = new Donation({
         userID: req.body.userID,
@@ -17,8 +18,19 @@ const updateDonationLog = async (foodID, req, res) => {
     
 }
 
-const updateInventory = async (foodID, req, res) => {
-    
+function updateInventory(foodID, req, res) {
+    let inventory = new FoodInventory({
+        expirationEpoch: req.body.expiration,
+        quantity: req.body.quantity,
+        foodItemID: foodID,
+        foodBankID: req.body.foodBankID
+    }).save().then((res) => {
+        updateDonationLog(foodID, req, res);
+    }).catch((err)=> {
+        res.status(200).send({
+            message: err.message || "An unknown error occurred",
+          });
+    });
 }
 
 //Donate Item to a foodbank
