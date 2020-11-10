@@ -1,4 +1,22 @@
 import FoodInventory from "../models/foodInventory.js"
+import FoodItem from "../models/foodModel.js"
+
+export const produceFoodItem = async (inputArray, finalArray, index, req, res) => { 
+    await FoodItem.findOne({_id: inputArray[index].foodItemID}).then((data) => {
+
+        finalArray[index] = data;
+        index++;
+        
+        if (index == inputArray.length) {
+            res.json(finalArray);
+        } else {
+            return produceFoodItem(inputArray, finalArray, index, req, res);
+        }
+    }).catch((err) => {
+        res.status(200).send(err);
+    });
+    
+};
 
 export const viewCatalog = async (req, res) => {
     let now = Date.now();
@@ -47,7 +65,9 @@ export const viewCatalog = async (req, res) => {
                 toReturn =array.slice(0,req.query.perPage);
             }
         }
-        res.json(toReturn);
+
+        let finalArray = [];
+        return produceFoodItem(toReturn,finalArray,0,req,res);
     }).catch((err) => {
             res.status(200).send(err);
     });
