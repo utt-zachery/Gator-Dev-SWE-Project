@@ -19,7 +19,7 @@ export const updateInventory= async (donationCode, foodID, req, res) => {
         res.status(200).send(err);
       });
 }
-.
+
 export const updateDonationLog = async (foodID, req, res) => {
     console.log("\tUpdating the donation history for user: " + req.body.userID);
     await new Donation({
