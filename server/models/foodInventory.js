@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const exiprationSchema = new mongoose.Schema({
+const inventorySchema = new mongoose.Schema({
 
     expirationEpoch: {type: Number, required: true},
     quantity: {type: Number, required: true},
@@ -8,4 +8,4 @@ const exiprationSchema = new mongoose.Schema({
     foodBankID: {type: String, required: true}
 });
 
-export default mongoose.model('ExpirationTracker', exiprationSchema);
+export default mongoose.model('FoodInventory', inventorySchema);

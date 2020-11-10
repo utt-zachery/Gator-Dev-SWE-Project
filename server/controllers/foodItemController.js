@@ -1,6 +1,11 @@
 import FoodItem from "../models/foodModel.js"
 
 
+
+const updateInventory = async (foodID, req, res) => {
+    
+}
+
 //Donate Item to a foodbank
 export const donateItem = async (req, res) => {
 
@@ -16,6 +21,8 @@ export const donateItem = async (req, res) => {
           return res.status(200).send({
             message: err.message || "An unknown error occurred",
           });
+
+          let foodBankID = "";
 
           if (!data) {
             console.log("\tItem not found in FoodItem!");
@@ -56,13 +63,13 @@ export const donateItem = async (req, res) => {
                     };
                 }
               
-                const toAdd = new FoodItem(tupleAdd).save();
-                console.log("\tAdded Food Item: " + body.itemName);
-                res.status(200).send(tupleAdd);
+                const toAdd = new FoodItem(tupleAdd).save().then((foodItemTuple) => {
+                    console.log("\tAdded Food Item: " + body.itemName);
+                    updateInventory(foodItemTuple._id, req, res);
+                });
           } else {
-                
                 console.log("\tItem successfully found in FoodItem!");
-                console.log(data._id);
+                updateInventory(data._id, req, res);
           }
 
          
