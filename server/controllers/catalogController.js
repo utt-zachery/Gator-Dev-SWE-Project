@@ -10,9 +10,10 @@ export const produceFoodItem = async (inputArray, finalArray, index, req, res) =
             };
 
             finalArray.push(shellObject);
-            console.log(JSON.stringify(finalArray));
+           
         }
         if (index == inputArray.length) {
+            console.log("DONE: " + JSON.stringify(finalArray));
             res.send(JSON.stringify(finalArray));
         } else {
             produceFoodItem(inputArray, finalArray, index+1, req, res);
