@@ -5,7 +5,7 @@ export const viewCatalog = async (req, res) => {
         
         let productMap = new Map();
         let expirationMap = new Map();
-
+        console.log("Query Length: " +data.length );
         for (let i=0; i < data.length; i++) {
 
             if (expirationMap.has(data[i].foodItemID)) {
