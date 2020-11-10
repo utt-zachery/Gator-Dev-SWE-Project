@@ -2,7 +2,7 @@ import FoodInventory from "../models/foodInventory.js"
 import FoodItem from "../models/foodModel.js"
 
 export const produceFoodItem = async (inputArray, finalArray, index, req, res) => { 
-    await FoodItem.findOne({_id: inputArray[index].value.foodItemID}, function (err, data) {
+    await FoodItem.findById(inputArray[index].value.foodItemID, function (err, data) {
         if (err) {
             res.status(200).send(err);
             return;
