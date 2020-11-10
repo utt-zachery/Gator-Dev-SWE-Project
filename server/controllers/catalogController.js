@@ -3,7 +3,7 @@ import FoodItem from "../models/foodModel.js"
 
 export const produceFoodItem = async (inputArray, finalArray, index, req, res) => { 
     if (index==0)
-    console.log("START" + inputArray);
+    console.log("START" + JSON.stringify(inputArray));
     await FoodItem.findOne({_id: inputArray[index].foodItemID}).then((data) => {
 
         let shellObject = {
