@@ -2,7 +2,11 @@ import FoodInventory from "../models/foodInventory.js"
 
 export const viewCatalog = async (req, res) => {
     let now = Date.now();
-    await FoodInventory.find({checkIn: true, expirationEpoch: {$gt:now }}).then((data) => {
+    if (!req.query.foodBankID) {
+        res.status("Include Foodbank ID in query string").send(err);
+    }
+
+    await FoodInventory.find({foodBankID:req.query.foodBankID, checkIn: true, expirationEpoch: {$gt:now }}).then((data) => {
         
         let productMap = new Map();
         console.log(now+" Query Length: " +data.length );
