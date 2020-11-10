@@ -3,7 +3,7 @@ import User from "../models/userModel.js";
 //Create new user
 export const newUser = async (req, res) => {
 
-    if (!req.body || !req.body.email || !req.body.address || !req.body.longitude || !req.body.latitude) {
+    if (!req.body || !req.body.email || !req.body.address || !req.body.longitude || !req.body.latitude ||!req.body.password) {
         
         if (!req.body) {
             return res.status(200).send({
@@ -24,6 +24,10 @@ export const newUser = async (req, res) => {
         } else if (!req.body.latitude) {
             return res.status(200).send({
             error: "Missing latitude in request body!",
+            });
+        } else if (!req.body.password) {
+            return res.status(200).send({
+            error: "Missing password in request body!",
             });
         }
     }
