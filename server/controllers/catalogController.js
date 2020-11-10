@@ -1,11 +1,12 @@
 import FoodInventory from "../models/foodInventory.js"
 
 export const viewCatalog = async (req, res) => {
-    await FoodInventory.find({checkIn: true, expirationEpoch: {$gt: Date.now()}}).then((data) => {
+    let now = Date.now();
+    await FoodInventory.find({checkIn: true, expirationEpoch: {$gt:now }}).then((data) => {
         
         let productMap = new Map();
         let expirationMap = new Map();
-        console.log("Query Length: " +data.length );
+        console.log(now+" Query Length: " +data.length );
         for (let i=0; i < data.length; i++) {
 
             if (expirationMap.has(data[i].foodItemID)) {
