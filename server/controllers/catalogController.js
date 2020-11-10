@@ -5,21 +5,23 @@ export const viewCatalog = async (req, res) => {
     await FoodInventory.find({checkIn: true, expirationEpoch: {$gt:now }}).then((data) => {
         
         let productMap = new Map();
-        let expirationMap = new Map();
         console.log(now+" Query Length: " +data.length );
         for (let i=0; i < data.length; i++) {
-            if (expirationMap.has(data[i].foodItemID)) {
-                if (data[i].expirationEpoch < expirationMap[data[i].foodItemID]) {
-                    expirationMap[data[i].foodItemID] = data[i].expirationEpoch;
+            if (productMap.has(data[i].barcode)) {
+                let wrapperObj = productMap.get(data[i].barcode);
+                wrapperObj.quantity = wrapperObj.quantity + data[i].quantity;
+                if (data[i].expirationEpoch < wrapperObj.expirationEpoch) {
+                    wrapperObj.expirationEpoch = data[i].expirationEpoch;
                 }
+                wrapperObj.results.push(data[i]);
             } else {
-                expirationMap[data[i].foodItemID] = data[i].expirationEpoch;
-            }
-
-            if (productMap.has(data[i].foodItemID)) {
-                productMap[data[i].foodItemID] = productMap[data[i].foodItemID]  + data[i].quantity;
-            } else {
-                productMap[data[i].foodItemID] = data[i].quantity;
+                let toAdd = {
+                    expirationEpoch: data[i].expirationEpoch,
+                    barcode: data[i].barcode,
+                    quantity: data[i].quantity,
+                    results: [data[i]]
+                };
+                productMap.set(data[i].barcode, toAdd);
             }
         }
 
