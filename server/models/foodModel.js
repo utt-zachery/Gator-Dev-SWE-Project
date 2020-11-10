@@ -4,7 +4,6 @@ const foodSchema = new mongoose.Schema({
 
     barcode: {type: Number, required: true},
     itemName: { type: String, required: true },
-    quantity: {type: Number, required: true},
 
     hasNutrition: { type: Boolean, required: true },
     itemNutrition: { type: String, required: false },
