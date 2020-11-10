@@ -6,7 +6,7 @@ export const produceFoodItem = async (inputArray, finalArray, index, req, res) =
 
         let shellObject = {
             quantity: inputArray[index].quantity,
-            foodData: data
+            foodData: JSON.stringify(data)
         };
 
         finalArray[index] = shellObject;
