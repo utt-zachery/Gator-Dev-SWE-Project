@@ -10,7 +10,7 @@ const updateInventory = async (foodID, req, res) => {
 export const donateItem = async (req, res) => {
 
     const body = req.body;
-    if (!body || !body.barcode ||!body.expiration ||!body.userID ||body.foodBankID) {
+    if (!body || !body.barcode ||!body.expiration || !body.userID ||body.foodBankID) {
         if (!body) {
             return res.status(200).send({
             error: "Missing body in request body!",
