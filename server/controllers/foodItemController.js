@@ -90,20 +90,20 @@ export const donateItem = async (req, res) => {
                 });
           } else {
                 console.log("\tItem successfully found in FoodItem!");
-                if (data.hasNutrition == false && body.hasNutrition == true && body.hasImage == false) {
+                if (data.hasNutrition == false && body.hasNutrition == true && (body.hasImage == data.hasNutrition )) {
                     console.log("\tUpdating nutrition");
                     data.updateOne({hasNutrition: true, itemNutrition: body.itemNutrition, itemNutritionLabel: body.itemNutritionLabel}).then((data) => {
                         updateInventory(data._id, req, res);
                     })
                 }
 
-                else if (data.hasImage == false && body.hasImage == true && body.hasNutrition == false) {
+                else if (data.hasImage == false && body.hasImage == true && (body.hasNutrition == data.hasNutrition)) {
                     console.log("\tUpdating image");
                     data.updateOne({hasImage: true,imageAddress: body.imageAddress}).then((data) => {
                         updateInventory(data._id, req, res);
                     })
                 }
-                
+
                 else if (data.hasImage == false && body.hasImage == true && body.hasNutrition == true && data.hasNutrition == false) {
                     console.log("\tUpdating both image and nutrition");
                     data.updateOne({hasNutrition: true, itemNutrition: body.itemNutrition, itemNutritionLabel: body.itemNutritionLabel, hasImage: true,imageAddress: body.imageAddress}).then((data) => {
