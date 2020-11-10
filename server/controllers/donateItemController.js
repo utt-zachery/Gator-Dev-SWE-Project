@@ -2,6 +2,24 @@ import FoodItem from "../models/foodModel.js"
 import Donation from "../models/donationModel.js"
 import FoodInventory from "../models/foodInventory.js"
 
+
+
+export const updateInventory= async (donationCode, foodID, req, res) => {
+    console.log("\tUpdating inventory for foodbank: " + req.body.foodBankID);
+    await new FoodInventory({
+        expirationEpoch: req.body.expiration,
+        quantity: req.body.quantity,
+        foodItemID: foodID,
+        foodBankID: req.body.foodBankID,
+        donationID: donationCode
+    }).save().then((data) => {
+        updateDonationLog(foodID, req, res);
+      })
+      .catch((err) => {
+        res.status(200).send(err);
+      });
+}
+.
 export const updateDonationLog = async (foodID, req, res) => {
     console.log("\tUpdating the donation history for user: " + req.body.userID);
     await new Donation({
@@ -10,22 +28,7 @@ export const updateDonationLog = async (foodID, req, res) => {
         foodItemID: foodID,
         donationDate: Date.now()
     }).save().then((data) => {
-        res.json(data);
-      })
-      .catch((err) => {
-        res.status(200).send(err);
-      });
-}
-
-export const updateInventory= async (foodID, req, res) => {
-    console.log("\tUpdating inventory for foodbank: " + req.body.foodBankID);
-    await new FoodInventory({
-        expirationEpoch: req.body.expiration,
-        quantity: req.body.quantity,
-        foodItemID: foodID,
-        foodBankID: req.body.foodBankID
-    }).save().then((data) => {
-        updateDonationLog(foodID, req, res);
+        updateInventory(data._id, foodID, req, res);
       })
       .catch((err) => {
         res.status(200).send(err);
@@ -113,7 +116,7 @@ export const donateItem = async (req, res) => {
               
                 const toAdd = new FoodItem(tupleAdd).save().then((foodItemTuple) => {
                     console.log("\tAdded Food Item: " + body.itemName);
-                    updateInventory(foodItemTuple._id, req, res);
+                    updateDonationLog(foodItemTuple._id, req, res);
                 }).catch((err)=> {
                     res.status(200).send({
                         message: err.message || "An unknown error occurred",
@@ -124,14 +127,14 @@ export const donateItem = async (req, res) => {
                 if (data.hasNutrition == false && body.hasNutrition == true && (body.hasImage == data.hasImage )) {
                     console.log("\tUpdating nutrition");
                     data.updateOne({hasNutrition: true, itemNutrition: body.itemNutrition, itemNutritionLabel: body.itemNutritionLabel}).then((data2) => {
-                        updateInventory(data._id, req, res);
+                        updateDonationLog(data._id, req, res);
                     })
                 }
 
                 else if (data.hasImage == false && body.hasImage == true && (body.hasNutrition == data.hasNutrition)) {
                     console.log("\tUpdating image");
                     data.updateOne({hasImage: true,imageAddress: body.imageAddress}).then((data2) => {
-                        updateInventory(data._id, req, res);
+                        updateDonationLog(data._id, req, res);
                     }).catch((err)=> {
                         res.status(200).send({
                             message: err.message || "An unknown error occurred",
@@ -142,7 +145,7 @@ export const donateItem = async (req, res) => {
                 else if (data.hasImage == false && body.hasImage == true && body.hasNutrition == true && data.hasNutrition == false) {
                     console.log("\tUpdating both image and nutrition");
                     data.updateOne({hasNutrition: true, itemNutrition: body.itemNutrition, itemNutritionLabel: body.itemNutritionLabel, hasImage: true,imageAddress: body.imageAddress}).then((data2) => {
-                        updateInventory(data._id, req, res);
+                        updateDonationLog(data._id, req, res);
                     }).catch((err)=> {
                         res.status(200).send({
                             message: err.message || "An unknown error occurred",
@@ -151,7 +154,7 @@ export const donateItem = async (req, res) => {
                 }
                 else {
                     console.log("\tUpdating no attributes of the FoodItem");
-                        updateInventory(data._id, req, res);
+                    updateDonationLog(data._id, req, res);
                 }
           }
 
