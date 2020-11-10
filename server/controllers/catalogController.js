@@ -2,9 +2,7 @@ import FoodInventory from "../models/foodInventory.js"
 import FoodItem from "../models/foodModel.js"
 
 export const produceFoodItem = async (inputArray, finalArray, index, req, res) => { 
-    if (index==0)
-    console.log("START" + JSON.stringify(inputArray));
-    await FoodItem.findOne({_id: inputArray[index].foodItemID}).then((data) => {
+    await FoodItem.findOne({_id: inputArray[index].value.foodItemID}).then((data) => {
 
         let shellObject = {
             quantity: inputArray[index].quantity,
