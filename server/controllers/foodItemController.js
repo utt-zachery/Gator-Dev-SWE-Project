@@ -3,11 +3,12 @@ import Donation from "../models/donationModel.js"
 import FoodInventory from "../models/foodInventory.js"
 
 export const updateDonationLog = async (foodID, req, res) => {
-    console.log("\tUpdating the inventory of item: " + foodID);
+    console.log("\tUpdating the donation history for user: " + req.body.userID);
     await new Donation({
         userID: req.body.userID,
         quantity: req.body.quantity,
-        foodItemID: foodID
+        foodItemID: foodID,
+        donationDate: Date.now()
     }).save().then((data) => {
         res.json(data);
       })
@@ -17,7 +18,7 @@ export const updateDonationLog = async (foodID, req, res) => {
 }
 
 export const updateInventory= async (foodID, req, res) => {
-    console.log("Updating inventory");
+    console.log("\tUpdating inventory for foodbank: " + req.body.foodBankID);
     await new FoodInventory({
         expirationEpoch: req.body.expiration,
         quantity: req.body.quantity,
