@@ -1,7 +1,7 @@
 import FoodInventory from "../models/foodInventory.js"
 
 export const viewCatalog = async (req, res) => {
-    await FoodInventory.findMany({checkIn: true, expirationEpoch: {$gt: Date.now()}}).then((data) => {
+    await FoodInventory.find({checkIn: true, expirationEpoch: {$gt: Date.now()}}).then((data) => {
         
         let productMap = new Map();
         let expirationMap = new Map();
