@@ -32,7 +32,7 @@ export const newUser = async (req, res) => {
         }
     }
 
-    await FoodItem.findOne({ barcode: body.barcode}, (err, data) => {
+    await User.findOne({ barcode: body.barcode}, (err, data) => {
         if (err)
           return res.status(200).send({
             message: err.message || "An unknown error occurred",
