@@ -12,9 +12,9 @@ export const produceFoodItem = async (inputArray, finalArray, index, req, res) =
         finalArray[index] = shellObject;
         //console.log(JSON.stringify(shellObject));
         if (index == inputArray.length) {
-            res.json(finalArray);
+            res.send(finalArray);
         } else {
-            return produceFoodItem(inputArray, finalArray, index+1, req, res);
+            produceFoodItem(inputArray, finalArray, index+1, req, res);
         }
     }).catch((err) => {
         res.status(200).send(err);
