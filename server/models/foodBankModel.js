@@ -6,6 +6,7 @@ const foodBankSchema = new mongoose.Schema({
     address: { type: String, required: true },
     longitude: { type: Number, required: true },
     latitude: { type: Number, required: true },
+    hours: {type: String, required: false},
     imageFileAddress:[String]
 
 });

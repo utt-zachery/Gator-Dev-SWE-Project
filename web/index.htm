@@ -8,6 +8,7 @@
 </head>
 
 <body>
+    <input id="expiration" value="Expiration Date"></input>
     <input id="image-file" type="file" accept="image/png,image/jpeg,image/bmp,image/gif">
     <div id="barcode-result"></div>
     <div id="lookup-name"></div>
@@ -20,7 +21,18 @@
 
     <script>
 
-    function tryAlternate(barcode) {
+    function sendItem(item) {
+      var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            //Ready to update with success message!
+        };
+        xhttp.open("POST", "../api/donateItem", true);
+        xhttp.setRequestHeader('Content-type', 'application/json');
+        xhttp.send(JSON.stringify(item));
+    }
+
+
+    function tryAlternate(barcode, nutritionScore, nutritionString) {
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (xhttp.readyState == 4 && xhttp.status == 200) {
@@ -29,6 +41,17 @@
                 var prodImage =decoded.items[0].image[0];
                 document.getElementById("lookup-name").innerHTML = prodName;
                 document.getElementById("itemIm").src = prodImage;
+
+                var toSaveObject = {
+                    barcode: barcode,
+                    itemName: prodName,
+                    hasNutrition: false,
+                    hasImage: true,
+                    imageAddress: prodImage,
+                    expiration: document.getElementById("expiration").value
+                };
+                                    
+                sendItem(toSaveObject);
             }
         };
         xhttp.open("GET", "https://cors-anywhere.herokuapp.com/https://api.upcitemdb.com/prod/trial/lookup?upc=" + barcode, true);
@@ -77,8 +100,8 @@
                 let file = this.files[0];
                 let results = await reader.decode(file);
                 for (let result of results) {
-					if (result.barcodeText) 
-						barcode_results.push(result.barcodeText);
+                  if (result.barcodeText) 
+                    barcode_results.push(result.barcodeText);
                 }
 
                 for (let validBarcode of barcode_results) {
@@ -126,7 +149,24 @@
                                     var imData = JSON.parse(xhttp.responseText);
                                     var imageLink = imData.hints[0].food.image;
                                     
+                                    if (!imageLink)
+                                      return  tryAlternate(validBarcode, prodHealthScore, JSON.stringify(nutritionData));
+
                                     document.getElementById("itemIm").src = imageLink;
+
+                                    var toSaveObject = {
+                                        barcode: validBarcode,
+                                        itemName: prodName,
+                                        hasNutrition: true,
+                                        itemNutrition: prodHealthScore,
+                                        itemNutritionLabel: JSON.stringify(nutritionData),
+                                        hasImage: true,
+                                        imageAddress: imageLink,
+                                        expiration: document.getElementById("expiration").value
+                                    };
+                                    
+                                    sendItem(toSaveObject);
+
                                 }
                             };
                             xhttp.open("GET", "https://api.edamam.com/api/food-database/v2/parser?upc=" + validBarcode + "&app_id=3845197c&app_key=4beb9027400f8e78cbd8619c42532730", true);
@@ -135,10 +175,10 @@
                             document.getElementById("food-name").innerHTML= "Data: " + JSON.stringify(nutritionData);
                             createLabel(nutritionData);
                         } else {
-
+                          tryAlternate(validBarcode, null, null);
                         }
                     } else {
-                        
+                      tryAlternate(validBarcode, null, null);
                     }
                     };
 
