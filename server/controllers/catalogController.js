@@ -22,18 +22,15 @@ export const viewCatalog = async (req, res) => {
                     results: [data[i]]
                 };
                 productMap.set(data[i].barcode, toAdd);
-                console.log("Added: " + JSON.stringify(toAdd));
             }
         }
 
-        console.log(productMap.size);
         let array = Array.from(productMap, ([name, value]) => ({value }));
-        console.log(array.size);
         array.sort(function(a,b) {
             return b.expirationEpoch - a.expirationEpoch;
         });
-        res.json(array);
 
+        res.json(array);
     }).catch((err) => {
             res.status(200).send(err);
     });
