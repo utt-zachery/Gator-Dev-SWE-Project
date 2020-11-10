@@ -6,7 +6,7 @@ const updateDonationLog = async (foodID, req, res) => {
 }
 
 const updateInventory = async (foodID, req, res) => {
-    
+    res.send(foodID);
 }
 
 //Donate Item to a foodbank
@@ -90,24 +90,28 @@ export const donateItem = async (req, res) => {
                 });
           } else {
                 console.log("\tItem successfully found in FoodItem!");
-                if (data.hasNutrition == false && body.hasNutrition == true && body.hasNutrition == false) {
+                if (data.hasNutrition == false && body.hasNutrition == true && body.hasImage == false) {
+                    console.log("\tUpdating nutrition");
                     data.updateOne({hasNutrition: true, itemNutrition: body.itemNutrition, itemNutritionLabel: body.itemNutritionLabel}).then((data) => {
                         updateInventory(data._id, req, res);
                     })
                 }
 
                 else if (data.hasImage == false && body.hasImage == true && body.hasNutrition == false) {
+                    console.log("\tUpdating image");
                     data.updateOne({hasImage: true,imageAddress: body.imageAddress}).then((data) => {
                         updateInventory(data._id, req, res);
                     })
                 }
                 
                 else if (data.hasImage == false && body.hasImage == true && body.hasNutrition == true && data.hasNutrition == false) {
+                    console.log("\tUpdating both image and nutrition");
                     data.updateOne({hasNutrition: true, itemNutrition: body.itemNutrition, itemNutritionLabel: body.itemNutritionLabel, hasImage: true,imageAddress: body.imageAddress}).then((data) => {
                         updateInventory(data._id, req, res);
                     })
                 }
                 else {
+                    console.log("\tUpdating no attributes of the FoodItem");
                         updateInventory(data._id, req, res);
                 }
           }
