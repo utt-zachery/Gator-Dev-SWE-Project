@@ -8,7 +8,7 @@ export const updateDonationLog = async (foodID, req, res) => {
         userID: req.body.userID,
         quantity: req.body.quantity,
         foodItemID: foodID
-    }, (err, data) => {
+    }.save(), (err, data) => {
         if (err) {
             res.status(200).send({
                 message: err.message || "An unknown error occurred",
@@ -26,7 +26,7 @@ export const updateInventory= async (foodID, req, res) => {
         quantity: req.body.quantity,
         foodItemID: foodID,
         foodBankID: req.body.foodBankID
-    }, (err, data) => {
+    }.save(), (err, data) => {
         if (err) {
             res.status(200).send({
                 message: err.message || "An unknown error occurred",
