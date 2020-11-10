@@ -20,6 +20,7 @@ export const updateDonationLog = async (foodID, req, res) => {
 }
 
 export const updateInventory= async (foodID, req, res) => {
+    console.log("Updating inventory");
     await new FoodInventory({
         expirationEpoch: req.body.expiration,
         quantity: req.body.quantity,
