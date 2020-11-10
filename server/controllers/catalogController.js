@@ -27,7 +27,7 @@ export const viewCatalog = async (req, res) => {
 
         let array = Array.from(productMap, ([name, value]) => ({value }));
         array.sort(function(a,b) {
-            return b.expirationEpoch - a.expirationEpoch;
+            return a.expirationEpoch- b.expirationEpoch ;
         });
 
         res.json(array);
