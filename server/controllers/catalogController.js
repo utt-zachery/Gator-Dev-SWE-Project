@@ -32,7 +32,22 @@ export const viewCatalog = async (req, res) => {
         let array = Array.from(productMap, ([name, value]) => ({value }));
         array.sort((a,b) => (a.expirationEpoch > b.expirationEpoch ? -1 : 1));
 
-        res.json(array);
+        let toReturn = [];
+
+        if (!req.query.perPage) {
+            if (req.query.page) {
+                toReturn =array.slice(req.query.page*50,req.query.page*50+50);
+            } else {
+                toReturn =array.slice(0,50);
+            }
+        }  else {
+            if (req.query.page) {
+                toReturn =array.slice(req.query.page*req.query.perPage,req.query.page*req.query.perPage+req.query.perPage);
+            } else {
+                toReturn =array.slice(0,req.query.perPage);
+            }
+        }
+        res.json(toReturn);
     }).catch((err) => {
             res.status(200).send(err);
     });
