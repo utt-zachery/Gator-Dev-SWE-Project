@@ -11,25 +11,27 @@ function updateDonationLog(foodID, req, res)  {
     }).save().then((ret) => {
         res.json(ret);
     }).catch((err)=> {
-        res.json({
+        res.status(200).send({
             message: err.message || "An unknown error occurred",
           });
     });
     
 }
 
-function updateInventory(foodID, req, res) {
-    let inventory = new FoodInventory({
+export const updateInventory= async (foodID, req, res) => {
+    await new FoodInventory({
         expirationEpoch: req.body.expiration,
         quantity: req.body.quantity,
         foodItemID: foodID,
         foodBankID: req.body.foodBankID
-    }).save().then((res) => {
-        updateDonationLog(foodID, req, res);
-    }).catch((err)=> {
-        res.status(200).send({
-            message: err.message || "An unknown error occurred",
-          });
+    }, (err, data) => {
+        if (err) {
+            res.status(200).send({
+                message: err.message || "An unknown error occurred",
+              });
+        } else {
+            updateDonationLog(foodID, req, res);
+        }
     });
 }
 
