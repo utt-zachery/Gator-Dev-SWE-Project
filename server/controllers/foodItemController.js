@@ -8,15 +8,12 @@ export const updateDonationLog = async (foodID, req, res) => {
         userID: req.body.userID,
         quantity: req.body.quantity,
         foodItemID: foodID
-    }).save(), (err, data) => {
-        if (err) {
-            res.status(200).send({
-                message: err.message || "An unknown error occurred",
-              });
-        } else {
-            res.json(data);
-        }
-    };
+    }).save().then((data) => {
+        res.json(data);
+      })
+      .catch((err) => {
+        res.status(200).send(err);
+      });
 }
 
 export const updateInventory= async (foodID, req, res) => {
@@ -26,15 +23,12 @@ export const updateInventory= async (foodID, req, res) => {
         quantity: req.body.quantity,
         foodItemID: foodID,
         foodBankID: req.body.foodBankID
-    }).save(), (err, data) => {
-        if (err) {
-            res.status(200).send({
-                message: err.message || "An unknown error occurred",
-              });
-        } else {
-            updateDonationLog(foodID, req, res);
-        }
-    };
+    }).save().then((data) => {
+        updateDonationLog(foodID, req, res);
+      })
+      .catch((err) => {
+        res.status(200).send(err);
+      });
 }
 
 //Donate Item to a foodbank
