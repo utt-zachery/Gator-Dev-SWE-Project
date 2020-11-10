@@ -2,20 +2,21 @@ import FoodItem from "../models/foodModel.js"
 import Donation from "../models/donationModel.js"
 import FoodInventory from "../models/foodInventory.js"
 
-function updateDonationLog(foodID, req, res)  {
+export const updateDonationLog = async (foodID, req, res) => {
     console.log("\tUpdating the inventory of item: " + foodID);
-    let donation = new Donation({
+    await new Donation({
         userID: req.body.userID,
         quantity: req.body.quantity,
         foodItemID: foodID
-    }).save().then((ret) => {
-        res.json(ret);
-    }).catch((err)=> {
-        res.status(200).send({
-            message: err.message || "An unknown error occurred",
-          });
+    }, (err, data) => {
+        if (err) {
+            res.status(200).send({
+                message: err.message || "An unknown error occurred",
+              });
+        } else {
+            res.json(data);
+        }
     });
-    
 }
 
 export const updateInventory= async (foodID, req, res) => {
