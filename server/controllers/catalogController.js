@@ -5,8 +5,8 @@ export const produceFoodItem = async (inputArray, finalArray, index, req, res) =
     await FoodItem.findOne({_id: inputArray[index].value.foodItemID}).then((data) => {
 
         let shellObject = {
-            quantity: inputArray[index].quantity,
-            foodData: JSON.stringify(data)
+            quantity: inputArray[index].value.quantity,
+            foodData: data
         };
 
         finalArray[index] = shellObject;
