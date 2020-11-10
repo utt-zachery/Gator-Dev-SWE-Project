@@ -32,7 +32,7 @@ export const newUser = async (req, res) => {
         }
     }
 
-    await User.findOne({ email: body.email}, (err, data) => {
+    await User.findOne({ email: req.body.email}, (err, data) => {
         if (err)
           return res.status(200).send({
             message: err.message || "An unknown error occurred",
