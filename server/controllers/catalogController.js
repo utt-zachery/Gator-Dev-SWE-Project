@@ -22,6 +22,7 @@ export const viewCatalog = async (req, res) => {
                     results: [data[i]]
                 };
                 productMap.set(data[i].barcode, toAdd);
+                console.log("Added: " + JSON.stringify(toAdd));
             }
         }
 
