@@ -1,20 +1,31 @@
 import FoodItem from "../models/foodModel.js"
-
+import Donation from "../models/donationModel.js"
 
 const updateDonationLog = async (foodID, req, res) => {
-
+    console.log("\tUpdating the inventory of item: " + foodID);
+    let donation = new Donation({
+        userID: req.body.userID,
+        quantity: req.body.quantity,
+        foodItemID: foodID
+    }).save().then((ret) => {
+        res.json(ret);
+    }).catch((err)=> {
+        res.status(200).send({
+            message: err.message || "An unknown error occurred",
+          });
+    });
+    
 }
 
 const updateInventory = async (foodID, req, res) => {
-    console.log("\tUpdating the inventory of item: " + foodID);
-    res.send(foodID);
+    
 }
 
 //Donate Item to a foodbank
 export const donateItem = async (req, res) => {
 
     const body = req.body;
-    if (!body || !body.barcode ||!body.expiration || !body.userID ||body.foodBankID) {
+    if (!body || !body.barcode ||!body.expiration || !body.userID || !body.foodBankID || !body.quantity) {
         if (!body) {
             return res.status(200).send({
             error: "Missing body in request body!",
@@ -34,6 +45,10 @@ export const donateItem = async (req, res) => {
         } else if (!body.foodBankID) {
             return res.status(200).send({
             error: "Missing foodbankID in request body!",
+            });
+        } else if (!body.quantity) {
+            return res.status(200).send({
+            error: "Missing quantity in request body!",
             });
         }
     }
@@ -88,6 +103,10 @@ export const donateItem = async (req, res) => {
                 const toAdd = new FoodItem(tupleAdd).save().then((foodItemTuple) => {
                     console.log("\tAdded Food Item: " + body.itemName);
                     updateInventory(foodItemTuple._id, req, res);
+                }).catch((err)=> {
+                    res.status(200).send({
+                        message: err.message || "An unknown error occurred",
+                      });
                 });
           } else {
                 console.log("\tItem successfully found in FoodItem!");
@@ -102,14 +121,22 @@ export const donateItem = async (req, res) => {
                     console.log("\tUpdating image");
                     data.updateOne({hasImage: true,imageAddress: body.imageAddress}).then((data2) => {
                         updateInventory(data._id, req, res);
-                    })
+                    }).catch((err)=> {
+                        res.status(200).send({
+                            message: err.message || "An unknown error occurred",
+                          });
+                    });
                 }
 
                 else if (data.hasImage == false && body.hasImage == true && body.hasNutrition == true && data.hasNutrition == false) {
                     console.log("\tUpdating both image and nutrition");
                     data.updateOne({hasNutrition: true, itemNutrition: body.itemNutrition, itemNutritionLabel: body.itemNutritionLabel, hasImage: true,imageAddress: body.imageAddress}).then((data2) => {
                         updateInventory(data._id, req, res);
-                    })
+                    }).catch((err)=> {
+                        res.status(200).send({
+                            message: err.message || "An unknown error occurred",
+                          });
+                    });
                 }
                 else {
                     console.log("\tUpdating no attributes of the FoodItem");
