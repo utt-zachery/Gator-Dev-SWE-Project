@@ -11,7 +11,8 @@ export const updateInventory= async (donationCode, foodID, req, res) => {
         quantity: req.body.quantity,
         foodItemID: foodID,
         foodBankID: req.body.foodBankID,
-        donationID: donationCode
+        donationID: donationCode,
+        checkIn: false
     }).save().then((data) => {
         res.json(data);
       })
