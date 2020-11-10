@@ -7,8 +7,8 @@ export const viewCatalog = async (req, res) => {
         let productMap = new Map();
         console.log(now+" Query Length: " +data.length );
         for (let i=0; i < data.length; i++) {
-            if (productMap.has(data[i].barcode)) {
-                let wrapperObj = productMap.get(data[i].barcode);
+            if (productMap.has(data[i].foodItemID)) {
+                let wrapperObj = productMap.get(data[i].foodItemID);
                 wrapperObj.quantity = wrapperObj.quantity + data[i].quantity;
                 if (data[i].expirationEpoch < wrapperObj.expirationEpoch) {
                     wrapperObj.expirationEpoch = data[i].expirationEpoch;
@@ -17,11 +17,11 @@ export const viewCatalog = async (req, res) => {
             } else {
                 let toAdd = {
                     expirationEpoch: data[i].expirationEpoch,
-                    barcode: data[i].barcode,
+                    foodItemID: data[i].foodItemID,
                     quantity: data[i].quantity,
                     results: [data[i]]
                 };
-                productMap.set(data[i].barcode, toAdd);
+                productMap.set(data[i].foodItemID, toAdd);
             }
         }
 
