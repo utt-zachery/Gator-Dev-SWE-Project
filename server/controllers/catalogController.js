@@ -3,14 +3,15 @@ import FoodItem from "../models/foodModel.js"
 
 export const produceFoodItem = async (inputArray, finalArray, index, req, res) => { 
     await FoodItem.findOne({_id: inputArray[index].value.foodItemID}).then((data) => {
-
+        console.log(JSON.stringify(data));
+        console.log(inputArray[index].value.foodItemID);
         let shellObject = {
             quantity: inputArray[index].value.quantity,
             foodData: data
         };
 
         finalArray[index] = shellObject;
-        //console.log(JSON.stringify(shellObject));
+        
         if (index == inputArray.length) {
             res.send(finalArray);
         } else {
