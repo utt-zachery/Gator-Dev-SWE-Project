@@ -1,6 +1,6 @@
 import FoodItem from "../models/foodModel.js"
 import Donation from "../models/donationModel.js"
-import FoodInventory from "../controllers/foodInventory.js"
+import FoodInventory from "../models/foodInventory.js"
 
 function updateDonationLog(foodID, req, res)  {
     console.log("\tUpdating the inventory of item: " + foodID);
