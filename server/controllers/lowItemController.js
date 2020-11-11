@@ -47,8 +47,8 @@ export const viewLowItems = async (req, res) => {
         }
 
         let array = Array.from(productMap, ([name, value]) => ({value}));
-        array.sort((a,b) => (a.quantity < b.quantity ? -1 : 1));
-
+        array.sort((a,b) => (a.value.quantity < b.value.quantity ? -1 : 1));
+       
         let toReturn = [];
 
         if (!req.query.perPage) {
