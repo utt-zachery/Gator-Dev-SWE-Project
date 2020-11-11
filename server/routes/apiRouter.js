@@ -8,6 +8,7 @@ import * as findFoodBankController from '../controllers/findFoodBankController.j
 import * as expirationController from '../controllers/expirationController.js'
 import * as lowItemController from '../controllers/lowItemController.js'
 import * as approvalController from '../controllers/approvalController.js'
+import * as checkoutController from '../controllers/checkoutController.js'
 
 const apiRouter = express.Router();
 
@@ -29,5 +30,7 @@ apiRouter.get('/lowItem', lowItemController.viewLowItems);
 
 apiRouter.get('/approveDonations/view', approvalController.findWaitingItems);
 apiRouter.post('/approveDonations/approve', approvalController.approveItem);
+
+apiRouter.post('/checkOut', checkoutController.checkOut); 
 
 export default apiRouter;

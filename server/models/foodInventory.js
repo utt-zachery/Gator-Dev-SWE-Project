@@ -9,6 +9,7 @@ const inventorySchema = new mongoose.Schema({
     donationID: {type: String, required: false},
     checkIn: {type: Boolean, required: true},
     location: {type: String, required: false}
+    
 });
 
 export default mongoose.model('FoodInventory', inventorySchema);

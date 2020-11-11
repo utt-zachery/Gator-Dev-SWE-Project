@@ -25,7 +25,9 @@ export const viewCatalog = async (req, res) => {
     }
 
     await FoodInventory.find({foodBankID:req.query.foodBankID, checkIn: true, expirationEpoch: {$gt:now }}).then((data) => {
-        
+        if (data.length == 0) {
+            return res.send("[]");
+        }
         let productMap = new Map();
         for (let i=0; i < data.length; i++) {
             if (productMap.has(data[i].foodItemID)) {
