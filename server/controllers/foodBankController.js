@@ -12,8 +12,6 @@ export const viewFoodBanks = async (req, res) => {
       });
 };
 
-
-
 const executeAddItem = async (foundBank, req, res) => {
   if (foundBank.length == 0) {
 

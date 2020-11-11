@@ -13,7 +13,7 @@ export const viewDonations = async(req, res) => {
         }
     }
 
-    await Donation.find({userID: req.query.userID}).then((data) => {
+    await Donation.find({userID: req.query.userID}).sort({"donationDate": -1}).then((data) => {
         return res.json(data);
     }).catch((err) => {
         return res.status(200).send({
