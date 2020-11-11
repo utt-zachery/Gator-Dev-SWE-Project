@@ -45,6 +45,12 @@ export const addFoodBank = async (req, res) => {
           error: "Request data not found",
         });
       }
+    
+      if (!req.body.name || !req.body.address || !req.body.longitude || !req.body.latitude) {
+        return res.status(200).send({
+          error: "Insufficent data in body! Requires {name, address, longitude, latitude}",
+        });
+      }
       
     console.log({ name: req.body.name,
       address: req.body.address});
