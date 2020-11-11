@@ -3,21 +3,15 @@ import FoodItem from "../models/foodModel.js"
 
 export const produceFoodItem = async (inputArray, finalArray, index, req, res) => { 
     await FoodItem.findById(inputArray[index].value.foodItemID, function (err, data) {
-        if (err) {
-            res.status(200).send(err);
-            return;
-        }
-        if (data) {
+        if (!err) {
             let shellObject = {
                 quantity: inputArray[index].value.quantity,
-                foodData: JSON.stringify(data)
+                foodData: data
             };
-
             finalArray.push(shellObject);
         }
         if (index == inputArray.length-1) {
-            console.log("DONE: " + JSON.stringify(finalArray));
-            res.send(JSON.stringify(finalArray));
+            res.json(finalArray);
         } else {
             produceFoodItem(inputArray, finalArray, index+1, req, res);
         }
@@ -33,7 +27,6 @@ export const viewCatalog = async (req, res) => {
     await FoodInventory.find({foodBankID:req.query.foodBankID, checkIn: true, expirationEpoch: {$gt:now }}).then((data) => {
         
         let productMap = new Map();
-        console.log(now+" Query Length: " +data.length );
         for (let i=0; i < data.length; i++) {
             if (productMap.has(data[i].foodItemID)) {
                 let wrapperObj = productMap.get(data[i].foodItemID);
