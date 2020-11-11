@@ -28,5 +28,6 @@ apiRouter.get('/expired', expirationController.findExpired);
 apiRouter.get('/lowItem', lowItemController.viewLowItems);
 
 apiRouter.get('/approveDonations/view', approvalController.findWaitingItems);
+apiRouter.post('/approveDonations/approve', approvalController.approveItem);
 
 export default apiRouter;

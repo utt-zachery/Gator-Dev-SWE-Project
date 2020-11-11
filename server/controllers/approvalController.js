@@ -3,11 +3,32 @@ import FoodItem from "../models/foodModel.js"
 import Donation from "../models/donationModel.js"
 import User from "../models/userModel.js"
 
+export const approveItem = async(req, res) => {
+    if (!req.body || !req.body.donationID) {
+        return res.status(200).send({"msg":"Include donationID in body of POST request"});
+    } else {
+        if (req.body.location) {
+            await FoodInventory.updateOne({_id: req.body.donationID}, {$set: {checkIn: true, location: req.body.location}}).then((data)=>{
+                res.json(data)
+            }).catch((err) => {
+                res.status(200).send(err);
+            });
+        } else {
+            await FoodInventory.updateOne({_id: req.body.donationID}, {$set: {checkIn: true}}).then((data)=>{
+                res.json(data)
+            }).catch((err) => {
+                res.status(200).send(err);
+            });
+        }
+    }
+}
+
 export const iterativeUserFinder = async(data, final, map, index, req, res) => {
     
     if (!map.has(data[index].donatedBy)) {
         await User.findById(data[index].donatedBy).then((user) => {
             let finalTuple = {
+                donationID: data[index].donationID,
                 quantity: data[index].quantity,
                 foodItem: data[index].foodItem,
                 donationDate: data[index].donationDate,
@@ -17,6 +38,7 @@ export const iterativeUserFinder = async(data, final, map, index, req, res) => {
             final.push(finalTuple);
 
             if (index == data.length -1 ){
+                final.sort((a,b) => (a.donationDate < b.donationDate ? -1 : 1));
                 res.json(final);
             } else {
                 iterativeUserFinder(data, final, map, index+1, req, res);
@@ -27,6 +49,7 @@ export const iterativeUserFinder = async(data, final, map, index, req, res) => {
         
     } else {
         let finalTuple = {
+            donationID: data[index].donationID,
             quantity: data[index].quantity,
             foodItem: data[index].foodItem,
             donationDate: data[index].donationDate,
@@ -34,6 +57,7 @@ export const iterativeUserFinder = async(data, final, map, index, req, res) => {
         };
         final.push(finalTuple);
         if (index == data.length -1 ){
+            final.sort((a,b) => (a.donationDate < b.donationDate ? -1 : 1));
             res.json(final);
         } else {
             iterativeUserFinder(data, final, map, index+1, req, res);
@@ -45,6 +69,7 @@ export const iterativeFoodItemFinder = async(data, final, map, index, req, res) 
     if (!map.has(data[index].foodItemID)) {
         await FoodItem.findById(data[index].foodItemID).then((foodItem) => {
             let finalTuple = {
+                donationID: data[index].donationID,
                 quantity: data[index].quantity,
                 foodItem: foodItem,
                 donationDate: data[index].donationDate,
@@ -66,6 +91,7 @@ export const iterativeFoodItemFinder = async(data, final, map, index, req, res) 
         
     } else {
         let finalTuple = {
+            donationID: data[index].donationID,
             quantity: data[index].quantity,
             foodItem: map.get(data[index].foodItemID),
             donationDate: data[index].donationDate,
@@ -88,6 +114,7 @@ export const iterativeDonationDateFinder = async(data, final, map, index, req, r
     if (!map.has(data[index].donationID)) {
         await Donation.findById(data[index].donationID).then((donationData) => {
             let finalTuple = {
+                donationID: data[index]._id,
                 quantity: data[index].quantity,
                 foodItemID: data[index].foodItemID,
                 donationDate: donationData.donationDate,
@@ -109,6 +136,7 @@ export const iterativeDonationDateFinder = async(data, final, map, index, req, r
         
     } else {
         let finalTuple = {
+            donationID: data[index]._id,
             quantity: data[index].quantity,
             foodItemID: data[index].foodItemID,
             donationDate: map.get(data[index].donationID).donationDate,

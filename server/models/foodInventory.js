@@ -7,8 +7,8 @@ const inventorySchema = new mongoose.Schema({
     foodItemID: {type: String, required: true},
     foodBankID: {type: String, required: true},
     donationID: {type: String, required: false},
-    checkIn: {type: Boolean, required: true}
-    
+    checkIn: {type: Boolean, required: true},
+    location: {type: String, required: false}
 });
 
 export default mongoose.model('FoodInventory', inventorySchema);
