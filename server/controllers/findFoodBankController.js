@@ -1,6 +1,12 @@
 import FoodBank from '../models/foodBankModel.js'
 import User from '../models/userModel.js'
 
+    /*
+
+         Distance calculation code is taken from https://www.geodatasource.com/developers/javascript
+
+    */
+
 function distance(lat1, lon1, lat2, lon2, unit) {
 	if ((lat1 == lat2) && (lon1 == lon2)) {
 		return 0;
@@ -39,7 +45,24 @@ export const findUserLocation = async(data, req, res) => {
             
             }
             distanceArray.sort((a,b) => (a.dist < b.dist ? -1 : 1));
-            res.json(distanceArray);
+
+            let toReturn = [];
+
+            if (!req.query.perPage) {
+                if (req.query.page) {
+                    toReturn =distanceArray.slice(req.query.page*50,req.query.page*50+50);
+                } else {
+                    toReturn =distanceArray.slice(0,50);
+                }
+            }  else {
+                if (req.query.page) {
+                    toReturn =distanceArray.slice(req.query.page*req.query.perPage,req.query.page*req.query.perPage+req.query.perPage);
+                } else {
+                    toReturn =distanceArray.slice(0,req.query.perPage);
+                }
+            }
+
+            res.json(toReturn);
 
         } else {
             return res.status(200).send({
