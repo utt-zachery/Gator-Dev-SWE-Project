@@ -6,6 +6,7 @@ import * as catalogController from '../controllers/catalogController.js'
 import * as donationController from '../controllers/donationController.js'
 import * as findFoodBankController from '../controllers/findFoodBankController.js'
 import * as expirationController from '../controllers/expirationController.js'
+import * as lowItemController from '../controllers/lowItemController.js'
 
 const apiRouter = express.Router();
 
@@ -22,5 +23,9 @@ apiRouter.get('/viewDonations', donationController.viewDonations);
 
 apiRouter.get('/findFoodBanks', findFoodBankController.viewFoodBanks);
 apiRouter.get('/expired', expirationController.findExpired);
+
+apiRouter.get('/expired', expirationController.findExpired);
+
+apiRouter.get('/lowItem', lowItemController.viewLowItems);
 
 export default apiRouter;
