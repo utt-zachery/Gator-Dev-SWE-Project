@@ -1,0 +1,68 @@
+.banner-area{
+    background-image: url(foodImage.png);
+    opacity: 75%;
+    background-position: center center;
+    -webkit-background-size: cover;
+    background-size: cover;
+    height: 100vh;
+}
+
+body
+{
+    margin: 0;
+    padding: 0;
+}
+
+header
+{
+    padding:  15px 60px;
+}
+
+.menu
+{
+    width: 42%;
+    float: right;
+    list-style: none;
+}
+
+.menu li
+{
+    width: 140px;
+    height: 70px;
+    line-height: 70px;
+    text-align: center;
+    color: #ffffff;
+    padding: 20px 0;
+    font-size: 20px;
+    float: left;
+}
+
+.menu li:hover
+{
+    background: #2727b0;
+    opacity: 50%;
+}
+
+.menu li a
+{
+    text-decoration: none;
+    font-family: Futura;
+    color: #000000;
+    text-transform: uppercase;
+}
+
+.menu li:hover a
+{
+    color: #ffffff;
+}
+
+.logo
+{
+    text-decoration: none;
+    font-family: Arial Rounded MT Bold;
+    font-size: 40px;
+    color: #0021a5;
+    padding: 45px 0;
+    width: 10%;
+    float: left;
+}
