@@ -1,12 +1,15 @@
 "use strict";
 
 /*import all libraries */
-import config from "../config/config.js";
 import mongoose from "mongoose";
-
+async function getUri() {
+  return import("../config/config.js")
+     .then(config => config.default.db.uri)
+     .catch(()=>process.env.uri)
+}
+const link = await getUri();
 /* Connect to your database using mongoose */
 const connectToDatabase = () => {
-  const link = config.db.uri;
   //see https://mongoosejs.com/docs/connections.html
   //See https://docs.atlas.mongodb.com/driver-connection/
   mongoose

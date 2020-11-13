@@ -2,10 +2,14 @@ import path from 'path';
 import express from 'express';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
-import config from '../config/config.js';
 import apiRouter from './routes/apiRouter.js';
 import {connectToDatabase} from './connectMongodb.js';
-
+async function getPort() {
+   return import("../config/config.js")
+      .then(config => config.default.port)
+      .catch(()=>5000)
+}
+const port = await getPort();
 //connect to database
 const db = connectToDatabase().on(
    "error",
@@ -48,4 +52,4 @@ app.all('/*', (req, res) => {
         
 });
 
-app.listen(config.port, () => console.log(`App now listening on port ${config.port}`));
+app.listen(port, () => console.log(`App now listening on port ${port}`));

@@ -11,7 +11,8 @@
     "dynamsoft-node-barcode": "^7.3.0-v0",
     "express": "^4.17.1",
     "mongoose": "^5.10.13",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.6"
   },
   "scripts": {
     "start": "nodemon server/server.js"
