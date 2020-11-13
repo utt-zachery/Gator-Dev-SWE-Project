@@ -12,5 +12,5 @@ Dynamsoft.BarcodeReader.productKeys = 't0068NQAAAEVstLIsgc9hWbA0o6jqlfcAR0BeZBLF
         console.log('Barcode result: ' + result.barcodeText);
     }
     reader.destroy();
-    await Dynamsoft.BarcodeReader._dbrWorker.terminate();
+    Dynamsoft.BarcodeReader._dbrWorker.terminate();
 })();
