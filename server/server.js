@@ -1,13 +1,12 @@
 import path from 'path';
 import express from 'express';
 import morgan from 'morgan';
-import bodyParser from 'body-parser';
 import apiRouter from './routes/apiRouter.js';
 import {connectToDatabase} from './connectMongodb.js';
 async function getPort() {
    return import("../config/config.js")
       .then(config => config.default.port)
-      .catch(()=>5000)
+      .catch(5000)
 }
 const port = await getPort();
 //connect to database
@@ -27,11 +26,11 @@ const app = express();
 app.use(morgan('dev'));
 
 //body parsing middleware
-app.use(bodyParser.urlencoded({
+app.use(express.urlencoded({
     extended: true
 }));
 
-app.use(bodyParser.json());
+app.use(express.json());
 
 //Serve File resources
 app.use(express.static(process.cwd()));
@@ -52,4 +51,4 @@ app.all('/*', (req, res) => {
         
 });
 
-app.listen(port, () => console.log(`App now listening on port ${port}`));
+app.listen(port, console.log(`App now listening on port ${port}`));
