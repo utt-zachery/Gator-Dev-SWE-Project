@@ -153,6 +153,33 @@ export const iterativeDonationDateFinder = async(data, final, map, index, req, r
     }
 }
 
+export const deleteInventory = async(req, res) => {
+    await FoodInventory.deleteOne({_id: req.body.inventoryID}).then(() => {
+        res.json({status: "good"});
+    }).catch((err) => {
+        res.status(200).send(err);
+    });
+}
+
+export const deleteDonation = async(donationID, req, res) => {
+    await Donation.deleteOne({_id: donationID}).then(() => {
+        deleteInventory(req, res);
+    }).catch((err) => {
+        res.status(200).send(err);
+    });
+
+}
+
+export const deleteItem = async(req, res) => {
+    if (!req.body || !req.body.inventoryID) {
+        return res.status(200).send({msg: "Needs a body inventoryID parameter"});
+    }
+    await FoodInventory.findOne({_id:req.body.inventoryID }).then((data) => {
+        return deleteDonation(data.donationID, req, res);
+    }).catch((err) => {
+        res.status(200).send(err);
+    });
+}
 
 export const findWaitingItems = async(req, res) => {
     if (!req.query || !req.query.foodBankID) {

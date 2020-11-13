@@ -1,7 +1,7 @@
 import FoodInventory from "../models/foodInventory.js"
 import FoodItem from "../models/foodModel.js"
 
-export const produceFoodItem = async (inputArray, finalArray, index, req, res) => { 
+export const produceFoodItem = async (totalSize, inputArray, finalArray, index, req, res) => { 
     await FoodItem.findById(inputArray[index].value.foodItemID, function (err, data) {
         if (!err) {
             let shellObject = {
@@ -11,7 +11,11 @@ export const produceFoodItem = async (inputArray, finalArray, index, req, res) =
             finalArray.push(shellObject);
         }
         if (index == inputArray.length-1) {
-            res.json(finalArray);
+            let returnObject= {
+                size: totalSize,
+                items: finalArray
+            }
+            res.json(returnObject);
         } else {
             produceFoodItem(inputArray, finalArray, index+1, req, res);
         }
@@ -69,7 +73,7 @@ export const viewCatalog = async (req, res) => {
         }
 
         let finalArray = [];
-        produceFoodItem(toReturn,finalArray,0,req,res);
+        produceFoodItem(data.length, toReturn,finalArray,0,req,res);
     }).catch((err) => {
             res.status(200).send(err);
     });

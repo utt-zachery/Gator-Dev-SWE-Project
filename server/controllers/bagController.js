@@ -16,6 +16,20 @@ export const bagItems = async(req, res) => {
    }
 }
 
+export const pickUpItems = async(req, res) => {
+    if (!req.body || !req.body.orderID) {
+         return res.status(200).send({msg: "Needs a body OrderID parameter"});
+    } else {
+         await Order.updateOne({_id: req.body.orderID},{bagState: 2}).then((msg) => {
+             //TODO: HOOK FOR sending Order Ready emails
+             res.json(msg);
+         }).catch((err) => {
+             res.status(200).send(err);
+         })
+ 
+    }
+ }
+
 export const generateFoodDetails = async(data, req, res) => {
     let finalArray = [];
     for (let i=0; i < data.length; i++) {
@@ -51,7 +65,7 @@ export const generateFoodDetails = async(data, req, res) => {
 }
 
 export const generateUserDetails = async(data, req, res) => {
-    
+
     let middleArray = [];
     for (let i=0; i < data.length; i++) {
         await User.findById(data[i].placedBy).then((user) => {
@@ -105,7 +119,20 @@ export const viewOutstandingOrders = async(req, res) => {
     }
 
     await Order.find({foodBankID: req.query.foodBankID, bagState: 0}).sort({orderTime: 1}).then((data) => {
-        if (data.length == 0) {
+        if (!data || data.length == 0) {
+           return res.send("[]");
+        }
+        generateOrderDetails(data, req, res);
+    })
+}
+
+export const viewReadyForPickup = async(req, res) => {
+    if (!req.query || !req.query.foodBankID) {
+        return res.status(200).send({msg: "Missing required foodBankID query paramater"});
+    }
+
+    await Order.find({foodBankID: req.query.foodBankID, bagState: 1}).sort({orderTime: 1}).then((data) => {
+        if (!data || data.length == 0) {
            return res.send("[]");
         }
         generateOrderDetails(data, req, res);

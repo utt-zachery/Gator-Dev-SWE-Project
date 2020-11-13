@@ -1,0 +1,568 @@
+<head>
+<style>
+
+    .prodIm{
+        max-width: 150px;
+        margin: 25px;
+        max-height: 125px;
+    }
+
+    .prodInfo {
+        overflow: auto;
+        max-height: 125px;
+        margin: 5px;
+    }
+
+    .foodItem {
+        height: 280px;
+        width: 250px;
+        margin: 20px;
+        text-align: center;
+        display: inline-block;
+    }
+
+    div {
+        font-family: 'Helvetica', 'Arial', sans-serif;"
+    }
+
+    .diabledButton{
+        background-color: lightgray;
+        display: inline;
+        transition:all 0.5s ease;
+        padding-top: 5px; padding-bottom: 5px; padding-right: 20px; padding-left: 20px;width: 200px; border: 1px solid black; text-align: center; 
+    }
+
+    .placeButton{
+        display: inline;
+        transition:all 0.5s ease;
+        padding-top: 5px; padding-bottom: 5px; padding-right: 20px; padding-left: 20px;width: 200px; border: 1px solid black; text-align: center; 
+    }
+
+    .placeButton:hover {
+        background: rgba(32, 110, 255, 0.4);
+        cursor: pointer;
+    }
+
+    .activeButton{
+        display: inline;
+        transition:all 0.5s ease;
+        padding-top: 10px; padding-bottom: 10px; padding-right: 30px; padding-left: 30px;width: 140px; border: 1px solid black; text-align: center; 
+    }
+
+    .activeButton:hover {
+        background: rgba(32, 110, 255, 0.4);
+        cursor: pointer;
+    }
+
+    .mainList {
+        margin-left: 20%;
+        width: 60%;
+        margin-top: 30px;
+        height: 25%;
+    }
+
+    input[type="search"] {
+        outline: 0; 
+        height:30px;
+        width: 40%;
+        margin-left: 30%;
+        background: var(--color-light);
+        padding: 0 1.6rem;
+        border-radius: var(--rad);
+        appearance: none; 
+        transition: all var(--dur) var(--bez);
+        transition-property: width, border-radius;
+        z-index: 1;
+        position: relative;
+    }
+
+    a {
+        text-decoration: none;
+        display: inline-block;
+        padding: 8px 16px;
+    }
+
+a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.previous {
+  background-color: #f1f1f1;
+  color: black;
+}
+
+.next {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.round {
+  border-radius: 50%;
+}
+</style>
+
+<script>
+  document.addEventListener('click', function(event) {
+        var isClickInside = document.getElementById("popup").contains(event.target);
+
+        if (!isClickInside && (document.getElementById("popup").style.display=="block" )) {
+            document.getElementById("popup").style.display = "none";
+            document.getElementById("popup2").style.display = "none";
+            document.getElementById("container").style.display = "none";
+            
+        }
+
+        isClickInside = document.getElementById("popup2").contains(event.target) ;
+        if (!isClickInside && document.getElementById("popup2").style.display == "block") {
+            document.getElementById("popup").style.display = "none";
+            document.getElementById("popup2").style.display = "none";
+            document.getElementById("container").style.display = "none";
+        }
+    });
+
+</script>
+<link rel="stylesheet" href="../web/nutritionSheet.css">
+<div id="popup2" style="display: none; height: 600px; width: 400px; left: calc((100% - 400px) / 2); position: fixed;  box-shadow: 5px 5px rgb(100,100,100); background-color: white; border: 2px solid black; z-index: 20; overflow: auto; text-align: center">
+    <div style="font-size: 25px; font-weight: bold; text-align: center; margin-top:20px;">Item Nutrition</div><br/>
+    
+<section class="performance-facts" style="display: inline-block;" id="nutrition">
+    <header class="performance-facts__header">
+      <h1 class="performance-facts__title">Nutrition Facts</h1>
+      <p>Serving Size <span id="servSize">1/2 cup (about 82g)</span>
+    </header>
+    <table class="performance-facts__table">
+      <thead>
+        <tr>
+          <th colspan="3" class="small-info">
+            Amount Per Serving
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th colspan="2">
+            <b>Calories</b>
+            <span id="calCount"></span>
+          </th>
+        </tr>
+        <tr class="thick-row">
+          <td colspan="3" class="small-info">
+            <b>% Daily Value*</b>
+          </td>
+        </tr>
+        <tr>
+          <th colspan="2">
+            <b>Total Fat</b>
+            <span id="totalFat">&nbsp;</span>
+          </th>
+          <td>
+            <b><span id="fatRatio">&nbsp;</span></b>
+          </td>
+        </tr>
+        <tr>
+          <td class="blank-cell">
+          </td>
+          <th>
+            Saturated Fat
+            <span id="satFat">&nbsp;</span>
+          </th>
+        </tr>
+        <tr>
+          <td class="blank-cell">
+          </td>
+          <th>
+            Trans Fat
+            <span id="transFat">&nbsp;</span>
+          </th>
+          <td>
+          </td>
+        </tr>
+        <tr>
+          <th colspan="2">
+            <b>Cholesterol</b>
+            <span id="chol">&nbsp;</span>
+          </th>
+          <td>
+            <b><span id="cholRatio"></span></b>
+          </td>
+        </tr>
+        <tr>
+          <th colspan="2">
+            <b>Sodium</b>
+            <span id="sodium">&nbsp;</span>
+          </th>
+          <td>
+            <b><span id="sodRatio">&nbsp;</span></b>
+          </td>
+        </tr>
+        <tr>
+          <th colspan="2">
+            <b>Total Carbohydrate</b>
+            <span id="carbs">&nbsp;</span>
+          </th>
+          <td>
+            <b><span id="carbRatio">&nbsp;</span></b>
+          </td>
+        </tr>
+        <tr>
+          <td class="blank-cell">
+          </td>
+          <th>
+            Dietary Fiber
+            <span id="fiber">&nbsp;</span>
+          </th>
+          <td>
+            <b><span id="fiberRatio">&nbsp;</span></b>
+          </td>
+        </tr>
+        <tr>
+          <td class="blank-cell">
+          </td>
+          <th>
+            Sugars
+            <span id="sugar">&nbsp;</span>
+          </th>
+          <td>
+          </td>
+        </tr>
+        <tr class="thick-end">
+          <th colspan="2">
+            <b>Protein</b>
+            <span id="protein">&nbsp;</span>
+          </th>
+          <td>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <table class="performance-facts__table--grid">
+      <tbody>
+        <tr>
+          <td colspan="2">
+            Vitamin A
+            <span id="vitA">&nbsp;</span>
+          </td>
+          <td>
+            Vitamin C
+            <span id="vitC">&nbsp;</span>
+          </td>
+        </tr>
+        <tr class="thin-end">
+          <td colspan="2">
+            Calcium
+            <span id="calcium">&nbsp;</span>
+          </td>
+          <td>
+            Iron
+            <span id="iron">&nbsp;</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <p class="small-info">* Percent Daily Values are based on a 2,000 calorie diet. Your daily values may be higher or lower depending on your calorie needs:</p>
+  
+    <table class="performance-facts__table--small small-info">
+      <thead>
+        <tr>
+          <td colspan="2"></td>
+          <th>Calories:</th>
+          <th>2,000</th>
+          <th>2,500</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th colspan="2">Total Fat</th>
+          <td>Less than</td>
+          <td>65g</td>
+          <td>80g</td>
+        </tr>
+        <tr>
+          <td class="blank-cell"></td>
+          <th>Saturated Fat</th>
+          <td>Less than</td>
+          <td>20g</td>
+          <td>25g</td>
+        </tr>
+        <tr>
+          <th colspan="2">Cholesterol</th>
+          <td>Less than</td>
+          <td>300mg</td>
+          <td>300 mg</td>
+        </tr>
+        <tr>
+          <th colspan="2">Sodium</th>
+          <td>Less than</td>
+          <td>2,400mg</td>
+          <td>2,400mg</td>
+        </tr>
+        <tr>
+          <th colspan="3">Total Carbohydrate</th>
+          <td>300g</td>
+          <td>375g</td>
+        </tr>
+        <tr>
+          <td class="blank-cell"></td>
+          <th colspan="2">Dietary Fiber</th>
+          <td>25g</td>
+          <td>30g</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div class="activeButton" style="display: inline-block; margin-bottom: 10px" onclick="goBack()">Back</div><br/>
+</div>
+<div id="popup" style="display: none; height: 400px; position: fixed; top: calc(50% - 200px); width: 50%; min-width: 700px; left: 25%; box-shadow: 5px 5px rgb(100,100,100); background-color: white; border: 2px solid black; z-index: 20; ">
+    <div style="font-size: 25px; font-weight: bold; text-align: center; margin-top:20px;">Find Item</div><br/><br/>
+    <input name="q" id="search" type="search"  placeholder="Item Name" /><br/>
+    <div id="catalogModule" style="height: calc(100% - 180px); overflow: auto; margin-top:10px; margin-bottom:20px; text-align: center"></div>
+    
+    <div style="position: absolute; left: 20px; display: inline-block">Items per page: 
+        <select name="perPage" id="perPage">
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="30">30</option>
+        <option value="50">50</option>
+      </select>
+    </div>
+    <div style="width: 100%; text-align: center" >
+        <div style="display: inline-block;">
+            Quantity: <INPUT TYPE="NUMBER" onclick="onComboChange()" id="quantitySpinner" MIN="1" MAX="10" STEP="1" VALUE="0" SIZE="3" disabled="true" style="width: 55px;" >
+                <div class="diabledButton" id="placeButton" onclick="placeOrder()" style="margin-left: 10px;">Place Order</div>
+        </div>
+    </div>
+    <div style="display: inline-block; position: absolute; right: 15px; bottom:17px;">
+        <a href="#" id="backButton" class="previous round">&#8249;</a>
+        <span style="margin-left: 10px; margin-right: 10px">Page <span id="currPage">0</span> of <span id="maxPage">1</span></span>
+        <a href="#" id="nextButton" class="next round">&#8250;</a>
+    </div>
+</div>
+
+
+<script>
+
+    function goBack() {
+        document.getElementById("popup2").style.display = ("none");
+        document.getElementById("popup").style.display = ("block");
+    }
+
+    function createLabel(foodData) {
+        document.getElementById("servSize").innerHTML = foodData.servingSize;
+        document.getElementById("calCount").innerHTML = foodData.calories;
+        document.getElementById("totalFat").innerHTML = foodData.totalFat;
+        document.getElementById("fatRatio").innerHTML = Math.round((parseInt(foodData.totalFat)/65.0) * 100.0) + "%";
+        document.getElementById("satFat").innerHTML = foodData.saturatedFat;
+        document.getElementById("transFat").innerHTML = foodData.transFat;
+        document.getElementById("chol").innerHTML = foodData.cholest;
+        document.getElementById("cholRatio").innerHTML = Math.round((parseInt(foodData.cholest)/300.0) * 100.0) + "%";
+        document.getElementById("sodium").innerHTML = foodData.sodium;
+        document.getElementById("sodRatio").innerHTML = Math.round((parseInt(foodData.sodium)/	2400.0) * 100.0) + "%";
+        document.getElementById("carbs").innerHTML = foodData.carb;
+        document.getElementById("carbRatio").innerHTML = Math.round((parseInt(foodData.carb)/300.0) * 100.0) + "%";
+        document.getElementById("fiber").innerHTML = foodData.fiber;
+        document.getElementById("fiberRatio").innerHTML = Math.round((parseInt(foodData.fiber)/25.0) * 100.0) + "%";
+        document.getElementById("sugar").innerHTML = foodData.sugar;
+        document.getElementById("protein").innerHTML = foodData.protein;
+        document.getElementById("vitA").innerHTML = foodData.vitA;
+        document.getElementById("vitC").innerHTML = foodData.vitC;
+        document.getElementById("iron").innerHTML = foodData.iron;
+        document.getElementById("calcium").innerHTML = foodData.calcium;
+    }
+
+function addItemButton(event) {
+    event.stopPropagation();
+    document.getElementById("container").style.display = "block";
+    document.getElementById("popup").style.display= "block";
+    document.getElementById("mouseControl").style = "pointer-events: none;";
+    executeAPI();
+}
+
+    function placeOrder() {
+        if (document.getElementById("placeButton").className == "placeButton") {
+
+            document.getElementById("popup").style.display = "none";
+            document.getElementById("container").style.display = "none";
+            document.getElementById("placeFinalButton").className = "activeButton";
+            var item = document.createElement("option");
+            item.setAttribute("value", document.getElementById("popup").getAttribute("data-id"));
+            item.setAttribute("data-qty", document.getElementById("quantitySpinner").value);
+            item.innerHTML = document.getElementById("quantitySpinner").value + "x " +document.getElementById("popup").getAttribute("data-name");
+
+            document.getElementById("itemOrder").appendChild(item);
+        }
+    }
+function onComboChange() {
+    if (document.getElementById("quantitySpinner").value > 0) {
+        document.getElementById("placeButton").className = "placeButton";
+    }
+}
+
+    function clearAll() {
+        for (var i=0; i < allItems.length; i++) {
+            allItems[i].style.backgroundColor="";
+        }
+    }
+
+    function removeAllChildNodes(parent) {
+    while (parent.firstChild) {
+        parent.removeChild(parent.firstChild);
+    }
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
+
+    let page = 0;
+    let maxPage = 0;
+    let allItems = [];
+
+    function executeAPI() {
+        allItems=[];
+        var xhttp = new XMLHttpRequest();
+        let perPage = document.getElementById("perPage").value;
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                removeAllChildNodes(document.getElementById("catalogModule"));
+                document.getElementById("placeButton").className = "diabledButton";
+                document.getElementById("quantitySpinner").disabled = true;
+                document.getElementById("quantitySpinner").value = 0;
+                document.getElementById("popup").setAttribute("data-id","");
+                let responseOBJ = JSON.parse(xhttp.responseText);
+                document.getElementById("currPage").innerHTML = (page+1);
+                document.getElementById("maxPage").innerHTML = Math.ceil(responseOBJ.size / perPage);
+                maxPage = Math.ceil(responseOBJ.size / perPage);
+                if ((page+1) == maxPage) {
+                    document.getElementById("nextButton").style.display="none";
+                } else {
+                    document.getElementById("nextButton").style.display="block";
+                }
+
+                if (page == 0) {
+                    document.getElementById("backButton").style.display="none";
+                } else {
+                    document.getElementById("backButton").style.display="block";
+                }
+
+                for (var i=0; i < responseOBJ.items.length; i++) {
+                    var div = document.createElement("div");
+                    if (document.querySelectorAll("option[value='" +responseOBJ.items[i].foodData._id + "']" ).length == 0) {
+                    div.className = "foodItem";
+                    div.setAttribute("data-id", responseOBJ.items[i].foodData._id);
+                    div.setAttribute("data-qty", responseOBJ.items[i].quantity);
+                    div.setAttribute("data-name", responseOBJ.items[i].foodData.itemName);
+                    div.onclick = function() {
+                        clearAll();
+                        document.getElementById("popup").setAttribute("data-id", this.getAttribute("data-id"));
+                        document.getElementById("popup").setAttribute("data-name", this.getAttribute("data-name"));
+                        this.style.backgroundColor = "rgba(32, 110, 255, 0.4)";
+                        document.getElementById("quantitySpinner").disabled = false;
+                        document.getElementById("quantitySpinner").setAttribute("max", this.getAttribute("data-qty"));
+                    }
+                    allItems.push(div);
+                    if (responseOBJ.items[i].foodData.hasImage) {
+                        var img = document.createElement("img");
+                        img.className = "prodIm";
+                        img.src = responseOBJ.items[i].foodData.imageAddress;
+                        div.appendChild(img);
+                    }
+
+                    var prodInfo = document.createElement("div");
+                    prodInfo.className = "prodInfo";
+                    prodInfo.innerHTML = responseOBJ.items[i].foodData.itemName + "<br/>Quantity Available: " + responseOBJ.items[i].quantity + "<br/>";
+                    div.appendChild(prodInfo);
+
+                    if (responseOBJ.items[i].foodData.hasNutrition) {
+                        var span = document.createElement("span");
+                        span.innerHTML="Nutrition Information ";
+
+                        var img2 = document.createElement("img");
+                        img2.style = "width:12px;";
+                        img2.src = "New-window-01.svg";
+                        span.appendChild(img2);
+                        div.appendChild(span);
+
+                        span.setAttribute("data", responseOBJ.items[i].foodData.itemNutritionLabel);
+                        span.style.cursor = "pointer";
+                        span.onclick = function(event) {
+                            event.stopPropagation();
+                            createLabel(JSON.parse(this.getAttribute("data")));
+                            document.getElementById("popup2").style.display= "block";
+                            document.getElementById("popup").style.display= "none";
+                        }
+                    }
+
+                    document.getElementById("catalogModule").appendChild(div);
+                }
+            }
+            }
+        };
+        xhttp.open("GET", "../api/viewCatalog?foodBankID=" + getCookie("foodBankID") + "&page=" + page + "&perPage=" + perPage, true);
+        xhttp.send();
+    }
+
+function placeFinalOrder() {
+    let cart = [];
+
+    let objectArray = document.getElementById("itemOrder").getElementsByTagName("option");
+    if (objectArray.length > 0 ){
+    for (var i=0; i < objectArray.length; i++) {
+        let item = {
+            foodItemID: objectArray[i].getAttribute("value"),
+            quantity: objectArray[i].getAttribute("data-qty")
+        }
+        cart.push(item);
+    }
+    
+    let toSend = {
+        order: cart,
+        foodBankID: getCookie("foodBankID"),
+        userID: getCookie("userID")
+    };
+
+    var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4) {
+                if (this.status == 200) {
+                    document.write("Order placed successfully." + xhttp.responseText);
+                } else {
+                    alert("Order failed. Please refresh and try again. " + xhttp.responseText);
+                }
+            }
+        };
+        xhttp.open("POST", "../api/checkOut", true);
+        xhttp.setRequestHeader("Content-Type","application/json");
+        xhttp.send(JSON.stringify(toSend));
+}
+}
+</script>
+</head>
+
+
+<body onload="executeAPI()">
+<div id="container" style="display: none; background-color: gray; pointer-events: none; height: 100%; width: 100%; z-index: 2; position: fixed; top:0px; left: 0px;opacity: 0.7;"></div>  
+<div id="mouseControl">
+<div style="width: 100%; text-align: center; margin-top: 50px; font-size: 23px; font-weight: bold;  font-family: 'Helvetica', 'Arial', sans-serif;">Place Order</div>
+</div><br/><br/><div style="text-align: center;"><div style="display: inline;margin-left: 170px;">My Order</div> <div onclick="addItemButton(event)" style="margin-left: 40px" class="activeButton">Add Item</div></div>
+
+<select name="order" id="itemOrder" class="mainList" size="5">  </select> <br/><br/><br/>
+<div style="text-align: center">
+<div  onclick="placeFinalOrder()" id="placeFinalButton" class="diabledButton">Place Order</div>
+</div>
+</div> 
+</body>

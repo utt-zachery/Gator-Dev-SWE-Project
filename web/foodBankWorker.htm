@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<head>
+<title>Food Bank Worker Dashboard</title>
+</head>
+
+<script>
+    function unPopup2() {
+        document.getElementById("popup").style.display = "block";
+            document.getElementById("popup2").style.display = "none";
+    }
+      document.addEventListener('click', function(event) {
+        var isClickInside = document.getElementById("popup").contains(event.target) || document.getElementById("popup2").contains(event.target);
+
+        if (!isClickInside && (document.getElementById("popup").style.display=="block" || document.getElementById("popup2").style.display=="block")) {
+            document.getElementById("popup").style.display = "none";
+            document.getElementById("popup2").style.display = "none";
+            document.getElementById("pickItUp").style.display = "none";
+            document.getElementById("submitOrder").style.display = "none";
+            document.getElementById("container").style = "";
+            
+        }
+
+        isClickInside = document.getElementById("popup3").contains(event.target) ;
+        if (!isClickInside && document.getElementById("popup3").style.display == "block") {
+            document.getElementById("popup3").style.display = "none";
+            document.getElementById("container").style = "";
+            document.getElementById("pickItUp").style.display = "none";
+            document.getElementById("submitOrder").style.display = "none";
+        }
+
+});
+</script>
+
+<body onload="loadAPi()">
+    <div id="popup" style="display: none; height: 400px; position: fixed; top: calc(50% - 200px); width: 300px; left: calc(50% - 150px); box-shadow: 5px 5px rgb(100,100,100); background-color: white; border: 2px solid black; z-index: 20">
+        <div style="font-size: 25px; font-weight: bold; text-align: center; margin-top:20px;">Order</div>
+        <div style="margin-top:30px;margin-left: 20px; height: 277px; overflow: auto" id="checkboxHolder"></div>
+        <div id="submitOrder" onclick="bagOrder()" class="disabled" style="display: none">Bag Items</div>
+        <div id="pickItUp" onclick="pickUpOrder()" class="activeButton" style="display: none">Pickup Order</div>
+    </div>
+
+    <div id="popup2" style="display: none; height: 400px; position: fixed; top: calc(50% - 200px); width: 300px; left: calc(50% - 150px); box-shadow: 5px 5px rgb(100,100,100); background-color: white; border: 2px solid black; z-index: 20; overflow: auto; text-align: center">
+        <div style="font-size: 25px; font-weight: bold; text-align: center; margin-top:20px;">Item Image</div><br/>
+        <img id="itemIm" style="max-height: 280px;"></img>
+        <div class="simpleButton" onclick="unPopup2()" style="width: 80%; border: 1px solid black; text-align: center; margin-left: calc(10% - 5px); margin-top:5px; padding: 5px;">Back</div>
+    </div>
+
+    <div id="popup3" style="display: none; height: 5; position: fixed; top: calc(50% - 200px); width: 300px; left: calc(50% - 150px); box-shadow: 5px 5px rgb(100,100,100); background-color: white; border: 2px solid black; z-index: 20">
+        <div style="font-size: 25px; font-weight: bold; text-align: center; margin-top:20px;">View Donation</div>
+        <div style="margin-top:20px;margin-left: 10px; margin-right: 10px;max-height: 300px; overflow: auto; text-align: center" id="donationInfo"></div>
+        <div><div  style="float: left; margin-left: 10px; margin-top:20px;">Location:</div><textarea id="itemLoc" style="float:left; margin-left: 10px;margin-top:20px;height: 57px; width: 195px; margin-bottom: 20px"></textarea></div>
+        <div id="submitOrder" onclick="processDonation(false)" class="activeButton" style="float: left; width: 40%; margin-left:4%; margin-bottom:10px;">Delete</div>
+        <div id="submitOrder" onclick="processDonation(true)" class="activeButton" style="float: left; width: 40%; margin-left:4%; margin-bottom:10px;">Approve</div>
+    </div>
+
+<div id="container" class="grayOut"></div>
+<div style="width: 100%; text-align: center; margin-top: 50px; font-size: 23px">Unbagged Orders</div>
+<div style="width:80%; margin-left: 10%; display: flex;justify-content: center; overflow: auto; margin-top:5px" id="unbagged-holder"></div>
+    <div style="width: 100%; text-align: center; margin-top: 10px; font-size: 23px">Orders Waiting to be Picked Up</div>
+    <div style="width:80%; margin-left: 10%; display: flex;justify-content: center; overflow: auto; margin-top:5px" id="bagged-holder"></div>
+        <div style="width: 100%; text-align: center; margin-top: 10px; font-size: 23px">Donations Pending Approval</div>
+        <div style="width:80%; margin-left: 10%; display: flex;justify-content: center; overflow: auto; margin-top:5px" id="approved-holder"></div>
+
+<style>
+    .grayOut {
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        opacity: 0.7;
+    }
+    .imprev {
+        max-height: 140px;
+    }
+    .disabled {
+        background-color: lightgray;
+        padding: 5px; width: 80%; margin-left: calc(10% - 5px); border: 1px solid black; text-align: center; 
+    }
+
+    .unbagged {
+        
+        float: left;
+        padding: 10px;
+        border: 1px solid black;
+        width: 200px;
+        height: 60px;
+        margin: 20px;
+        margin-top:30px;
+        text-align: center;
+        vertical-align: center;
+        overflow: auto;
+        margin-bottom: 30px;
+        transition:all 0.5s ease;
+        
+    }
+
+    .awaiting-approval {
+        
+        float: left;
+        padding: 10px;
+        border: 1px solid black;
+        width: 300px;
+        height: 200px;
+        margin: 20px;
+        margin-top:30px;
+        text-align: center;
+        vertical-align: center;
+        overflow: auto;
+        margin-bottom: 30px;
+        transition:all 0.5s ease;
+        cursor: pointer;
+    }
+
+    .simpleButton{
+        transition:all 0.5s ease;
+    }
+
+    .activeButton{
+        transition:all 0.5s ease;
+        padding: 5px; width: 80%; margin-left: calc(10% - 5px); border: 1px solid black; text-align: center; 
+    }
+
+    .activeButton:hover {
+        background: rgba(32, 110, 255, 0.4);
+        cursor: pointer;
+    }
+
+    .unbagged:hover {
+        background: rgba(32, 110, 255, 0.4);
+        cursor: pointer;
+    }
+
+    .simpleButton:hover  {
+        background: rgba(32, 110, 255, 0.4);
+        cursor: pointer;
+    }
+
+html,body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  font-family: 'Open Sans Condensed', sans-serif;
+}
+
+
+</style>
+
+<script type="text/javascript">
+/*
+
+    Code taken from w3schools
+
+*/
+
+function pickUpOrder() {
+    document.getElementById("popup").style.display = "none";
+            document.getElementById("popup2").style.display = "none";
+            document.getElementById("container").style = "";
+            document.getElementById("pickItUp").style.display = "none";
+            document.getElementById("submitOrder").style.display = "none";
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    loadAPi();
+                }
+            };
+            xhttp.open("POST", "../api/orders/pickUp", true);
+            xhttp.setRequestHeader("Content-Type","application/json");
+            xhttp.send('{"orderID": "' + document.getElementById("popup").getAttribute("current")+ '"}');
+}
+
+function bagOrder() {
+    if (document.getElementById("submitOrder").className == "activeButton") {
+            document.getElementById("popup").style.display = "none";
+            document.getElementById("popup2").style.display = "none";
+            document.getElementById("pickItUp").style.display = "none";
+            document.getElementById("submitOrder").style.display = "none";
+            document.getElementById("container").style = "";
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    loadAPi();
+                }
+            };
+            xhttp.open("POST", "../api/orders/bag", true);
+            xhttp.setRequestHeader("Content-Type","application/json");
+            xhttp.send('{"orderID": "' + document.getElementById("popup").getAttribute("current")+ '"}');
+    }
+}
+
+function setPlaceOrderState() {
+    var checkBoxes = document.getElementById("checkboxHolder").getElementsByTagName("input");
+    var didEdit = false;
+    for (var i=0; i < checkBoxes.length; i++) {
+        if (checkBoxes[i].checked != true) {
+            document.getElementById("submitOrder").className = "disabled";
+            didEdit = true;
+            break;
+        }
+    }
+    if (didEdit == false) {
+        document.getElementById("submitOrder").className = "activeButton";
+    }
+}
+
+function setCookie(cname, cvalue, exdays) {
+  var d = new Date();
+  d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+  var expires = "expires="+d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+  var name = cname + "=";
+  var ca = document.cookie.split(';');
+  for(var i = 0; i < ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+ 
+function removeAllChildNodes(parent) {
+    while (parent.firstChild) {
+        parent.removeChild(parent.firstChild);
+    }
+}
+
+    function approvePrompt(retreivedData) {
+        document.getElementById("itemLoc").value = "";
+        var d = new Date(retreivedData.donationDate);
+        let div = document.createElement("div");
+        div.innerHTML = "<b>" + retreivedData.foodItem.itemName + "</b>" + "<br/>Donated By: " + retreivedData.donatedBy.name +  "<br/>Donated On: " + d.getDate() + '/' + d.getMonth() + '/' + d.getFullYear() + "<br/><b>Quantity: " + retreivedData.quantity +"</b><br/>";
+                    if (retreivedData.foodItem.hasImage == true) {
+                        div.innerHTML = div.innerHTML+"<img class='imprev' src='" + retreivedData.foodItem.imageAddress + "'></img>";
+                    }
+        document.getElementById("donationInfo").appendChild(div);
+    }
+
+    function processDonation(didApprove){
+            document.getElementById("popup3").style.display = "none";
+            document.getElementById("container").style = "";
+            document.getElementById("pickItUp").style.display = "none";
+            document.getElementById("submitOrder").style.display = "none";
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    loadAPi();
+                }
+            };
+            if (didApprove == true)
+                xhttp.open("POST", "../api/approveDonations/approve", true);
+            else
+                xhttp.open("POST", "../api/approveDonations/delete", true);
+            xhttp.setRequestHeader("Content-Type","application/json");
+            if (didApprove == true) {
+                if (document.getElementById("itemLoc").value.length > 0) {
+                    xhttp.send('{"donationID": "' + document.getElementById("popup3").getAttribute("current")+ '", "location": "' + document.getElementById("itemLoc").value + '"}');
+                    } else {
+                    xhttp.send('{"donationID": "' + document.getElementById("popup3").getAttribute("current")+ '"}');
+                }
+                
+            }
+            else {
+                alert('{"inventoryID": "' + document.getElementById("popup3").getAttribute("current")+ '"}');
+                xhttp.send('{"inventoryID": "' + document.getElementById("popup3").getAttribute("current")+ '"}');
+            }
+    }
+
+    function addItemChecklist(itemList, addCheck) {
+        for (var a =0; a <itemList.orderItems.length; a++) {
+            var item = itemList.orderItems[a];
+            if (addCheck == true) {
+                var check = document.createElement("input");
+            
+                var key = itemList.orderID + item.foodData._id;
+                check.setAttribute("data-key",key);
+                if (getCookie(key) != "" && getCookie(key) != "false") {
+                    check.checked = getCookie(key);
+                }
+                check.onclick = function() {
+                    setCookie(this.getAttribute("data-key"), check.checked, 5);
+                    setPlaceOrderState();
+                }
+
+                check.type = "checkbox";
+                check.style = "float: left";
+                document.getElementById("checkboxHolder").appendChild(check);
+             }
+            var container = document.createElement("div");
+            if (addCheck){
+            container.style = "text-align: left; margin-left: 30px;";
+            }
+             else {
+             container.style = "text-align: left; margin-left: 0px;";
+             }
+            var details = document.createElement("ul");
+            details.style="margin-top:5px";
+            var quant = document.createElement("li");
+            if (addCheck) {
+                quant.style="margin: 0px; margin-left:20px;";
+              }
+            else {
+                quant.style="margin: 0px; margin-left:5px;";
+            }
+            quant.innerHTML = "Quantity: " + item.quantity;
+            details.appendChild(quant);
+            if (item.locations && item.locations.length>0) {
+                
+                var locLabel = document.createElement("li");
+                if (addCheck){
+                locLabel.style="margin: 0px; margin-left:20px; margin-top: 5px";
+                }
+                else {
+                locLabel.style="margin: 0px; margin-left:5px; margin-top: 5px";
+                }
+                locLabel.innerHTML = "Location:";
+                details.appendChild(locLabel);
+                for (var i=0; i < item.locations.length; i++) {
+                    var innerLabel = document.createElement("li");
+                    if (addCheck) {
+                    innerLabel.style="margin: 0px; margin-left:50px; margin-top: 5px";
+                    }
+                    else {
+                    innerLabel.style="margin: 0px; margin-left:30px; margin-top: 5px";
+                    }
+                    innerLabel.innerHTML = item.locations[i];
+                    details.appendChild(innerLabel);
+                }
+            }
+            
+            var itemTitle = document.createElement("div");
+            itemTitle.innerHTML = item.foodData.itemName;
+            if (item.foodData.hasImage == true) {
+                itemTitle.innerHTML=itemTitle.innerHTML + '<img src="image.svg" height="12px" style="margin-left: 5px"></img>'
+                itemTitle.style="font-weight: bold; cursor: pointer";
+                itemTitle.setAttribute("imgSrc", item.foodData.imageAddress);
+                itemTitle.onclick = function() {
+                    document.getElementById("popup").style.display = "none";
+                    document.getElementById("popup2").style.display = "block";
+                    document.getElementById("itemIm").src = this.getAttribute("imgSrc");
+                }
+            }
+            else {
+                 itemTitle.style="font-weight: bold";
+            }
+            container.appendChild(itemTitle);
+            document.getElementById("checkboxHolder").appendChild(container);
+            document.getElementById("checkboxHolder").appendChild(details);
+           
+        }
+        setPlaceOrderState();
+    }
+    
+function loadAPi() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var retreivedData = JSON.parse(xhttp.responseText);
+            removeAllChildNodes(document.getElementById("unbagged-holder"));
+            for (var i =0; i < retreivedData.length; i++) {
+                var total = 0;
+                
+                var div = document.createElement("div");
+                var d = new Date(retreivedData[i].orderTime);
+                div.className = "unbagged";
+                div.setAttribute("data",JSON.stringify(retreivedData[i]));
+                div.setAttribute("current",retreivedData[i].orderID );
+                for (var a=0; a < retreivedData[i].orderItems.length; a++){
+                    total+= retreivedData[i].orderItems[a].quantity;
+                }
+                    div.onclick = function(event) {
+                        removeAllChildNodes(document.getElementById("checkboxHolder"));
+                        document.getElementById("popup").style.display = "block";
+                        document.getElementById("submitOrder").style.display = "block";
+                        document.getElementById("popup").setAttribute("current",this.getAttribute("current") );
+                        document.getElementById("container").style="background-color: gray; pointer-events: none; height: 100%; width: 100%; z-index: 1;";
+                        addItemChecklist(JSON.parse(this.getAttribute("data")), true);
+                        event.stopPropagation();
+                    }
+                    
+                
+                
+                div.innerHTML = "Name: " + retreivedData[i].placedBy.name +  "<br/>Placed: " + d.getDate() + '/' + d.getMonth() + '/' + d.getFullYear() + "<br/>Items Ordered: " + total;
+              
+                document.getElementById("unbagged-holder").append(div);
+
+            }
+
+            if (retreivedData.length ==0) {
+                 document.getElementById("unbagged-holder").innerHTML = "<div style='padding-bottom: 10px'>None</div>";
+            }
+
+            loadAPITwo();
+        } 
+    };
+    xhttp.open("GET", "../api/orders/view?foodBankID=" + getCookie("foodBankID"), true);
+    xhttp.send();
+}
+
+
+function loadAPITwo() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var retreivedData = JSON.parse(xhttp.responseText);
+       
+            removeAllChildNodes(document.getElementById("bagged-holder"));
+            for (var i =0; i < retreivedData.length; i++) {
+                var total = 0;
+                
+                var div = document.createElement("div");
+                var d = new Date(retreivedData[i].orderTime);
+                div.className = "unbagged";
+                div.setAttribute("data",JSON.stringify(retreivedData[i]));
+                div.setAttribute("current",retreivedData[i].orderID );
+                for (var a=0; a < retreivedData[i].orderItems.length; a++){
+                    total+= retreivedData[i].orderItems[a].quantity;
+                }
+                    div.onclick = function(event) {
+                        removeAllChildNodes(document.getElementById("checkboxHolder"));
+                        document.getElementById("popup").style.display = "block";
+                        document.getElementById("popup").setAttribute("current",this.getAttribute("current") );
+                        document.getElementById("pickItUp").style.display = "block";
+                        document.getElementById("container").style="background-color: gray; pointer-events: none; height: 100%; width: 100%; z-index: 1;";
+                        addItemChecklist(JSON.parse(this.getAttribute("data")), false);
+                        event.stopPropagation();
+                    }
+                    
+                
+                
+                div.innerHTML = "Name: " + retreivedData[i].placedBy.name +  "<br/>Placed: " + d.getDate() + '/' + d.getMonth() + '/' + d.getFullYear() + "<br/>Items Ordered: " + total;
+              
+                document.getElementById("bagged-holder").append(div);
+
+            }
+
+            if (retreivedData.length ==0)
+                 document.getElementById("bagged-holder").innerHTML = "<div style='padding-bottom: 10px'>None</div>";
+
+                 loadAPIThree();
+        }
+    };
+    xhttp.open("GET", "../api/orders/viewReady?foodBankID=" + getCookie("foodBankID"), true);
+    xhttp.send();
+}
+
+function loadAPIThree() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var retreivedData = JSON.parse(xhttp.responseText);
+            removeAllChildNodes(document.getElementById("approved-holder"));
+            for (var i =0; i < retreivedData.length; i++) {
+                var div = document.createElement("div");
+                var d = new Date(retreivedData[i].donationDate);
+                div.className = "awaiting-approval";
+                div.setAttribute("data",JSON.stringify(retreivedData[i]));
+                div.setAttribute("current",retreivedData[i].donationID );
+                
+                    div.onclick = function(event) {
+                        removeAllChildNodes(document.getElementById("donationInfo"));
+                        document.getElementById("popup3").style.display = "block";
+                        document.getElementById("popup3").setAttribute("current",this.getAttribute("current") );
+                        document.getElementById("container").style="background-color: gray; pointer-events: none; height: 100%; width: 100%; z-index: 1;";
+                        approvePrompt(JSON.parse(this.getAttribute("data")), false);
+                        event.stopPropagation();
+                    }
+                    
+                div.innerHTML = "Donated By: " + retreivedData[i].donatedBy.name +  "<br/>Donated On: " + d.getDate() + '/' + d.getMonth() + '/' + d.getFullYear() + "<br/>Quantity: " + retreivedData[i].quantity +"<br/>";
+                    if (retreivedData[i].foodItem.hasImage == true) {
+                        div.innerHTML = div.innerHTML+"<img class='imprev' src='" + retreivedData[i].foodItem.imageAddress + "'></img><br/>";
+                    } else {
+                        div.innerHTML = div.innerHTML+"<br/>";
+                    }
+                    div.innerHTML = div.innerHTML+ "<b>" + retreivedData[i].foodItem.itemName + "</b>";
+                document.getElementById("approved-holder").append(div);
+
+            }
+
+            if (retreivedData.length ==0)
+                 document.getElementById("approved-holder").innerHTML = "<div style='padding-bottom: 10px'>None</div>";
+        }
+    };
+    xhttp.open("GET", "../api/approveDonations/view?foodBankID=" + getCookie("foodBankID"), true);
+    xhttp.send();
+}
+</script>
+
+</body>
+</DOCTYPE>

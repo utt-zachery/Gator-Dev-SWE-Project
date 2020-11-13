@@ -31,10 +31,17 @@ apiRouter.get('/lowItem', lowItemController.viewLowItems);
 
 apiRouter.get('/approveDonations/view', approvalController.findWaitingItems);
 apiRouter.post('/approveDonations/approve', approvalController.approveItem);
+apiRouter.post('/approveDonations/delete', approvalController.deleteItem);
 
 apiRouter.post('/checkOut', checkoutController.checkOut); 
 
 apiRouter.get('/orders/view',bagController.viewOutstandingOrders);
-apiRouter.post('/orders/bag', bagController.bagItems)
+apiRouter.post('/orders/bag', bagController.bagItems);
+apiRouter.post('/orders/pickUp', bagController.pickUpItems);
+apiRouter.get('/orders/viewReady', bagController.viewReadyForPickup);
+
+
+
+
 
 export default apiRouter;
