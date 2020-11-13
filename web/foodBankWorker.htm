@@ -3,7 +3,13 @@
 <title>Food Bank Worker Dashboard</title>
 </head>
 
+<body onload="init()">
 <script>
+    
+    function init() {
+        loadAPi();
+        setInterval(loadAPi, 3000);
+    }
     function unPopup2() {
         document.getElementById("popup").style.display = "block";
             document.getElementById("popup2").style.display = "none";
@@ -31,7 +37,7 @@
 });
 </script>
 
-<body onload="loadAPi()">
+
     <div id="popup" style="display: none; height: 400px; position: fixed; top: calc(50% - 200px); width: 300px; left: calc(50% - 150px); box-shadow: 5px 5px rgb(100,100,100); background-color: white; border: 2px solid black; z-index: 20">
         <div style="font-size: 25px; font-weight: bold; text-align: center; margin-top:20px;">Order</div>
         <div style="margin-top:30px;margin-left: 20px; height: 277px; overflow: auto" id="checkboxHolder"></div>
@@ -54,13 +60,14 @@
     </div>
 
 <div id="container" class="grayOut"></div>
+<div style="display: table">
 <div style="width: 100%; text-align: center; margin-top: 50px; font-size: 23px">Unbagged Orders</div>
 <div style="width:80%; margin-left: 10%; display: flex;justify-content: center; overflow: auto; margin-top:5px" id="unbagged-holder"></div>
     <div style="width: 100%; text-align: center; margin-top: 10px; font-size: 23px">Orders Waiting to be Picked Up</div>
     <div style="width:80%; margin-left: 10%; display: flex;justify-content: center; overflow: auto; margin-top:5px" id="bagged-holder"></div>
         <div style="width: 100%; text-align: center; margin-top: 10px; font-size: 23px">Donations Pending Approval</div>
         <div style="width:80%; margin-left: 10%; display: flex;justify-content: center; overflow: auto; margin-top:5px" id="approved-holder"></div>
-
+    </div>
 <style>
     .grayOut {
         position: fixed;
@@ -270,7 +277,7 @@ function removeAllChildNodes(parent) {
                 
             }
             else {
-                alert('{"inventoryID": "' + document.getElementById("popup3").getAttribute("current")+ '"}');
+                
                 xhttp.send('{"inventoryID": "' + document.getElementById("popup3").getAttribute("current")+ '"}');
             }
     }
@@ -389,7 +396,7 @@ function loadAPi() {
                     
                 
                 
-                div.innerHTML = "Name: " + retreivedData[i].placedBy.name +  "<br/>Placed: " + d.getDate() + '/' + d.getMonth() + '/' + d.getFullYear() + "<br/>Items Ordered: " + total;
+                div.innerHTML = "Name: " + retreivedData[i].placedBy.name +  "<br/>Placed: " +(1+d.getMonth()) + '/'+ d.getDate() + '/' +  + d.getFullYear() + "<br/>Items Ordered: " + total;
               
                 document.getElementById("unbagged-holder").append(div);
 

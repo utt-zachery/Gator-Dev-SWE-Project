@@ -34,6 +34,9 @@ export const viewDonations = async(req, res) => {
     }
 
     await Donation.find({userID: req.query.userID}).sort({"donationDate": -1}).then((data) => {
+        if (data.length == 0) {
+            return res.status(200).send("[]");
+        }
         return resolveFoodItems(data, req, res);
     }).catch((err) => {
         return res.status(200).send({
