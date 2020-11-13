@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 async function getUri() {
   return import("../config/config.js")
      .then(config => config.default.db.uri)
-     .catch(()=>process.env.uri)
+     .catch(process.env.uri)
 }
 const link = await getUri();
 /* Connect to your database using mongoose */
