@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+	<meta charset="UTF-8">
+	<head>
+		<title>Food Bank Catalog</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+		<style>
+		*{
+			box-sizing:border-box;
+		}
+		body {
+			margin:0;
+			padding:0;
+			background:gray;
+			background-size:cover;
+			font-family:sans-serif;
+		}
+		nav{
+			background:#594848;
+			width:100%;
+			overflow:hidden;
+		}
+		ul{
+			margin:0;
+			padding:0;
+			list-style:none;
+		}
+		li{
+			float:left;
+		}
+		nav a{
+			width:120px;
+			display:block;
+			text-decoration:none;
+			text-align:center;
+			background:#594848;
+			font-size:17px;
+			color:#fff;
+			padding:25px 20px;
+			font-family:Arial;
+		}
+		nav a:hover{
+			background:skyblue;
+			color:black;
+		}
+		a.active{
+			background:linear-gradient(#a60813,#000);
+		}
+		h2 {
+			text-align:center;
+			max-width:1200px;
+			margin:auto;
+			background:auto;
+			overflow:auto;
+			color:black;
+		}
+		.container{
+			text-align:center;
+			margin-left: 150px;
+		}
+		.gallery{
+			text-align:left;
+			margin-left: 150px;
+		}
+		.Para{
+			text-align:left;
+			margin-left:100px;
+		}
+
+		footer{
+			padding:10px;
+			font-size:17px;
+			font-weight:bold;
+			text-align:center;
+			background:#594848;
+			color:white;
+			font-family:Arial;
+		}
+		.search-container{
+			text-align :center;
+			float: center;
+			margin-center:20px;
+		}
+		input[type=text]{
+			padding:6px;
+			margin-top:16px;
+			font-size:17px;
+			border:none;
+		}	
+		button{
+			padding:6px 10px;
+			margin-top:16px;
+			margin-right:16px;
+			background:purple;
+			font-size:17px;
+			border:none;
+			cursor:pointter;
+			color:#fff;
+		}
+		button:hover{
+			background:#f5cc0c;
+		}
+		
+		.addItem{
+			text-align :center;
+			float: center;
+			margin-center:20px;
+		}
+		
+		.btn{
+			padding:6px 10px;
+			margin-top:16px;
+			margin-right:16px;
+			background:purple;
+			font-size:17px;
+			border:none;
+			cursor:pointter;
+			color:#fff;
+			width: 320px;
+		}
+		.btn:hover{
+			background:#f5cc0c;
+		}
+		.side{
+			background:purple;
+			color:#fff;
+		}
+		.side:hover{
+			background:#f5cc0c;			
+		}
+		</style>
+	<head>
+	
+	<boby>
+		<nav>
+			<ul>
+				
+				<li><a href ="#"> Home </a></li>
+				<li><a class="active" href ="#"> Catalog </a></li>
+				<li><a href ="#"> Download </a></li>
+				<li><a href ="#"> Contact </a></li>
+				<li><a href ="#"> Feedback </a></li>
+				<li><a href ="#"> About </a></li>
+				
+			</ul>
+		</nav>
+		<br>
+		<h2> Find Item</h2>
+		
+		<div class ="search-container">
+			<form>
+				<input type ="text" placeholder ="Item Name..">
+				<button> Search</button>
+			</form>
+		</div>
+		<br><br><br>
+		
+		<div class ="container">
+		
+			<table>
+				<!-- first row -->
+				<tr>
+					<td><img width="200" height="200" src ="banana.jpeg" hspace="100"></td>
+
+				
+					<td><img width="200" height="200" src ="brocoli.jpeg" hspace="100"></td>
+
+					
+					<td><img width="200" height="200" src ="bread.jpeg" hspace="100"></td>
+				</tr>
+				
+				<!-- second row -->
+				<tr>
+					<!-- first column -->
+					<td>
+						<p> <strong>Banana</strong> <br> <strong> Quantity:</strong> 50 <br> 
+							<strong> Nutrition information </strong> <input type="submit" name="submitbutton" class="side" value="Click">
+						</p>
+					
+					</td>
+					
+					<!-- second column -->
+					<td>
+						<p> <strong>Brocoli</strong> <br> <strong> Quantity:</strong> 35 <br> 
+							<strong> Nutrition information </strong> <input type="submit" name="submitbutton" class="side" value="Click">
+						</p>
+					</td>
+					
+					<!-- third column -->
+					<td>
+						<p> <strong>Bread</strong> <br> <strong> Quantity:</strong> 63 <br> 
+							<strong> Nutrition information </strong> <input type="submit" name="submitbutton" class="side" value="Click">
+						</p>
+					</td>	
+				
+				
+				</tr>
+			
+				<!-- third row -->
+				<tr>
+					<td><img width="200" height="200" src ="hotdog.jpeg" hspace="100"></td>
+
+				
+					<td><img width="200" height="200" src ="pizza.jpeg" hspace="100"></td>
+
+					
+					<td><img width="200" height="200" src ="tomato.jpeg" hspace="100"></td>	
+				</tr>
+				
+				<!-- fourth row -->
+				<tr>
+					<!-- first column -->
+					<td>
+						<p> <strong>Hotdog</strong> <br> <strong> Quantity:</strong> 10 <br> 
+							<strong> Nutrition information </strong> <input type="submit" name="submitbutton" class="side" value="Click">
+						</p>
+					
+					</td>
+					
+					<!-- second column -->
+					<td>
+						<p> <strong>Pizza</strong> <br> <strong> Quantity:</strong> 15 <br> 
+							<strong> Nutrition information </strong> <input type="submit" name="submitbutton" class="side" value="Click">
+						</p>
+					</td>
+					
+					<!-- third column -->
+					<td>
+						<p> <strong>Tomato</strong> <br> <strong> Quantity:</strong> 30 <br> 
+							<strong> Nutrition information </strong> <input type="submit" name="submitbutton" class="side" value="Click">
+						</p>
+					</td>	
+				
+				
+				</tr>
+				
+				<!-- fifth row -->
+				<tr>
+					<td><img width="200" height="200" src ="cheese.jpg" hspace="100"></td>
+
+				
+					<td><img width="200" height="200" src ="lays.jpg" hspace="100"></td>
+
+					
+					<td><img width="200" height="200" src ="peanut_butter.jpg" hspace="100"></td>	
+				</tr>
+				
+				<!-- sixth row -->
+				<tr>
+					<!-- first column -->
+					<td>
+						<p> <strong>Cheese</strong> <br> <strong> Quantity:</strong> 70 <br> 
+							<strong> Nutrition information </strong> <input type="submit" name="submitbutton" class="side" value="Click">
+						</p>
+					
+					</td>
+					
+					<!-- second column -->
+					<td>
+						<p> <strong>Lays Potato Chips</strong> <br> <strong> Quantity:</strong> 75 <br> 
+							<strong> Nutrition information </strong> <input type="submit" name="submitbutton" class="side" value="Click">
+						</p>
+					</td>
+					
+					<!-- third column -->
+					<td>
+						<p> <strong>Peanut Butter</strong> <br> <strong> Quantity:</strong> 100 <br> 
+							<strong> Nutrition information </strong> <input type="submit" name="submitbutton" class="side" value="Click">
+						</p>
+					</td>	
+				
+				
+				</tr>
+			
+			</table>
+					
+		
+		</div>
+		
+		<br><br><br><br>
+		
+		<div class ="addItem">
+			<form action="" method="">
+			
+			<input type="submit" name="submitbutton" class="btn" value="Add Item">
+			
+			</form>
+			
+		</div>
+		
+		<br><br>
+		
+	</body>
+</html>
