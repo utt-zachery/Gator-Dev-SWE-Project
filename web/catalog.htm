@@ -314,7 +314,7 @@ a:hover {
     </table>
   </section>
 
-  <div class="activeButton" style="display: inline-block; margin-bottom: 10px" onclick="goBack()">Back</div><br/>
+  <div class="activeButton" style="display: inline-block; margin-bottom: 10px" onclick="goBack(event)">Back</div><br/>
 </div>
 <div id="popup" style="display: none; height: 400px; position: fixed; top: calc(50% - 200px); width: 50%; min-width: 700px; left: 25%; box-shadow: 5px 5px rgb(100,100,100); background-color: white; border: 2px solid black; z-index: 20; ">
     <div style="font-size: 25px; font-weight: bold; text-align: center; margin-top:20px;">Find Item</div><br/><br/>
@@ -345,7 +345,9 @@ a:hover {
 
 <script>
 
-    function goBack() {
+    function goBack(event) {
+      event.stopPropagation();
+
         document.getElementById("popup2").style.display = ("none");
         document.getElementById("popup").style.display = ("block");
     }
