@@ -75,7 +75,11 @@ export async function update(req, res) {
     .then(async data => {
       if (data) {
         data[type] = req.body[type];
-        await User.findOneAndUpdate({ _id: req.body._id }, data);
+        await User.findOneAndUpdate({ _id: req.body._id }, data, {
+          new: true
+        })
+          .then(modifiedData => res.json(modifiedData))
+          .catch(err => res.status(200).send(err));
       } else {
         res.status(200).send({
           error: "User id does not exist!",

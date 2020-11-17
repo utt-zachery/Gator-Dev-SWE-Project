@@ -19,8 +19,8 @@ apiRouter.post('/addFoodBank', foodBankController.addFoodBank);
 
 apiRouter.post('/donateItem', donateItemController.donateItem);
 apiRouter.post('/addUser', userController.newUser);
-apiRouter.get('/reset/email', userController.update);
-apiRouter.get('/reset/password', userController.update);
+apiRouter.post('/reset/email', userController.update);
+apiRouter.post('/reset/password', userController.update);
 apiRouter.get('/viewCatalog', catalogController.viewCatalog);
 
 apiRouter.get('/viewDonations', donationController.viewDonations);
