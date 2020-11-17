@@ -62,5 +62,24 @@ export const newUser = async (req, res) => {
             });
           }
     });
+};
 
+export async function update(req, res) {
+  const type = req.url.substr(7);
+  await User.findOne({ _id: req.body._id })
+    .catch(err =>
+      res.status(200).send({
+        message: err.message || "An unknown error occurred",
+      })
+    )
+    .then(async data => {
+      if (data) {
+        data[type] = req.body[type];
+        await User.findOneAndUpdate({ _id: req.body._id }, data);
+      } else {
+        res.status(200).send({
+          error: "User id does not exist!",
+        });
+      }
+    });
 }
