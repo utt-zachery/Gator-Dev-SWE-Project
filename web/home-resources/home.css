@@ -1,0 +1,41 @@
+@charset "utf-8";
+/* CSS Document */
+
+.mainImage {
+	height: 100vh;
+	width: 100vw;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.85) , rgba(255, 255, 255, 0) 50%),url("body.jpeg");
+	background-repeat: no-repeat;
+	background-size: cover;
+	z-index: -1;
+}
+
+.mission {
+	position: absolute; 
+	left: 0px;
+	top: 0px;
+	width: 25%;
+	min-width: 200px;
+
+	background-color: #263360;
+	color: white;
+	height: 50px;
+	line-height: 50px;
+	font-size: 20px;
+	font-family:Constantia, "Lucida Bright", "DejaVu Serif", Georgia, "serif";
+	text-align: right;
+	vertical-align: middle;
+}
+
+.mainMenu {
+	background-color: #4b7438;
+	height: 150px;
+	width: 60%;
+	position: absolute;
+	left: 20%;
+	top: 100px;
+	border-radius: 20px;
+}

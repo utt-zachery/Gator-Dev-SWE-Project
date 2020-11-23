@@ -1,5 +1,5 @@
 {
-  "name": "js-barcode-ocr",
+  "name": "PassItOn-GatorDev-Project",
   "version": "1.0.0",
   "description": "",
   "author": "utt-zachery",
@@ -7,6 +7,7 @@
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "bootstrap": "^4.5.3",
     "dynamsoft-javascript-barcode": "^7.3.0-v2",
     "dynamsoft-node-barcode": "^7.3.0-v0",
     "express": "^4.17.1",
