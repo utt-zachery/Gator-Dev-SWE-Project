@@ -17,9 +17,8 @@
 	position: absolute; 
 	left: 0px;
 	top: 0px;
-	width: 25%;
+	width: 35%;
 	min-width: 200px;
-
 	background-color: #263360;
 	color: white;
 	height: 50px;
@@ -38,4 +37,124 @@
 	left: 20%;
 	top: 100px;
 	border-radius: 20px;
+	min-width: 800px;
+	max-width: 1200px;
 }
+
+@media only screen and (max-width: 1333px) {
+  .mainMenu {
+    left: calc(50% - 400px) !important;
+  }
+}
+
+@media only screen and (min-width: 2000px) {
+  .mainMenu {
+    left: calc(50% - 600px) !important;
+  }
+}
+
+/* ~~~~~~~ INIT. BTN ~~~~~~~ */
+.inital {
+ -webkit-transition: none !important;
+ -moz-transition: none !important;
+ -ms-transition: none !important;
+ -o-transition: none !important;
+}
+
+.btn {	
+	color: white;
+	z-index: 2;
+	font-size: 40px;
+	font-family:Constantia, "Lucida Bright", "DejaVu Serif", Georgia, "serif";
+	position: relative;
+	padding: 5% 5%;
+	padding-right: 5%;
+	color: white;
+	transition: all 500ms cubic-bezier(0.77, 0, 0.175, 1);	
+	cursor: pointer;
+	user-select: none;
+}
+
+.btn:before, .btn:after {
+	content: '';
+	position: absolute;	
+	transition: inherit;
+	z-index: -1;
+}
+
+.btn:hover {
+	transition-delay: .5s;
+}
+
+.btn:hover:before {
+	transition-delay: 0s;
+}
+
+.btn:hover:after {
+	/*background: var(--inv); */
+	transition-delay: .35s;
+}
+
+/* From Top */
+
+.from-top:before, 
+.from-top:after {
+	left: 0;
+	height: 0;
+	width: 100%;
+}
+
+.from-top:before {
+	bottom: 0;	
+	border: 1px white;
+	border-top: 0;
+	border-bottom: 0;
+}
+
+.from-top:after {
+	top: 0;
+	height: 0;
+}
+
+.from-top:hover:before,
+.from-top:hover:after {
+	height: 100%;
+}
+
+/* From center */
+
+.from-center:before {
+	top: 0;
+	left: 50%;
+	height: 100%;
+	width: 0;
+	border: 1px solid white;
+	border-left: 0;
+	border-right: 0;
+}
+
+.from-center:after {
+	bottom: 0;
+	left: 0;
+	height: 0;
+	width: 100%;
+	/*background: var(--inv);*/
+}
+
+.from-center:hover:before {
+	left: 0;
+	width: 100%;
+}
+
+.from-center:hover:after {
+	top: 0;
+	height: 100%;
+}
+
+
+/* ~~~~~~~~~~~~ GLOBAL SETTINGS ~~~~~~~~~~~~ */
+
+*, *:before, *:after {
+	box-sizing: border-box;
+}
+
