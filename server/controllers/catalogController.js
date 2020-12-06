@@ -70,7 +70,8 @@ export const viewCatalog = async (req, res) => {
             }
         }  else {
             if (req.query.page) {
-                toReturn =array.slice(req.query.page*req.query.perPage,req.query.page*req.query.perPage+req.query.perPage);
+                toReturn =array.slice(req.query.page*req.query.perPage, parseInt(req.query.page*req.query.perPage) + parseInt(req.query.perPage));
+                
             } else {
                 toReturn =array.slice(0,req.query.perPage);
             }

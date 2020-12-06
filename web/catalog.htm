@@ -220,11 +220,11 @@
     <div id="catalogModule" style="height: calc(100% - 135px); overflow: auto; margin-top:10px; margin-bottom:20px; text-align: center"></div>
     
     <div style="position: absolute; left: 20px; bottom: 21px;display: inline-block">Items per page: 
-        <select name="perPage" id="perPage">
-        <option value="10">10</option>
-        <option value="20">20</option>
-        <option value="30">30</option>
-        <option value="50">50</option>
+        <select name="perPage" id="perPage" onchange="perPageChange()">
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="30">30</option>
+          <option value="50">50</option>
       </select>
     </div>
     <div style="width: 100%; text-align: center" >
@@ -234,14 +234,28 @@
         </div>
     </div>
     <div style="display: inline-block; position: absolute; right: 15px; bottom:17px;">
-        <a href="#" id="backButton" class="aPrime previous round">&#8249;</a>
+        <a href="#" id="backButton" onclick="backPage()" class="aPrime previousER roundER">&#8249;</a>
         <span style="margin-left: 10px; margin-right: 10px">Page <span id="currPage">0</span> of <span id="maxPage">1</span></span>
-        <a href="#" id="nextButton" class="aPrime next round">&#8250;</a>
+        <a href="#" id="nextButton" onclick="nextPage()" class="aPrime nextER roundER">&#8250;</a>
     </div>
 </div>
 
 
 <script>
+  function perPageChange() {
+    page = 0;
+    executeAPI();
+  }
+
+  function backPage() {
+    page--;
+    executeAPI();
+  }
+
+  function nextPage() {
+    page++;
+    executeAPI();
+  }
 
     function goBack(event) {
       event.stopPropagation();
@@ -352,13 +366,13 @@ function getCookie(cname) {
                   if ((page+1) == maxPage) {
                       document.getElementById("nextButton").style.display="none";
                   } else {
-                      document.getElementById("nextButton").style.display="block";
+                      document.getElementById("nextButton").style.display="inline-block";
                   }
 
                   if (page == 0) {
                       document.getElementById("backButton").style.display="none";
                   } else {
-                      document.getElementById("backButton").style.display="block";
+                      document.getElementById("backButton").style.display="inline-block";
                   }
                   for (var i=0; i < responseOBJ.items.length; i++) {
                     var div = document.createElement("div");
@@ -374,16 +388,20 @@ function getCookie(cname) {
                         document.getElementById("popup").setAttribute("data-name", this.getAttribute("data-name"));
                         this.style.backgroundColor = "rgba(32, 110, 255, 0.4)";
                         document.getElementById("quantitySpinner").disabled = false;
+                        document.getElementById("quantitySpinner").value = 0;
                         document.getElementById("quantitySpinner").setAttribute("max", this.getAttribute("data-qty"));
+                        document.getElementById("placeButton").className = "diabledButton";
                     }
                     allItems.push(div);
-                    if (responseOBJ.items[i].foodData.hasImage) {
-                        var img = document.createElement("img");
+                    var img = document.createElement("img");
                         img.className = "prodIm";
+                    if (responseOBJ.items[i].foodData.hasImage) {
                         img.src = responseOBJ.items[i].foodData.imageAddress;
-                        div.appendChild(img);
+                    } else {
+                      img.src = "../web/web-resources/catalog-resources/No_image_available.svg";
                     }
 
+                    div.appendChild(img);
                     var prodInfo = document.createElement("div");
                     prodInfo.className = "prodInfo";
                     prodInfo.innerHTML = responseOBJ.items[i].foodData.itemName + "<br/>Quantity Available: " + responseOBJ.items[i].quantity + "<br/>";
@@ -452,16 +470,15 @@ function placeFinalOrder() {
                     alert("While you were placing your order, one or more items became unavailable. Your order was not placed. Please try again.");
                     location.reload();
                   }
-
-                if (this.status == 200) {
-                    let orderCred = JSON.parse(xhttp.responseText);
-                    removeAllChildNodes(document.getElementById("mouseControl"));
-                    removeAllChildNodes(document.getElementById("orderStuff"));
-                    
-                    var htmlString= '<div style="text-align: center"><h3>Your order has been placed successfully.</h3><br/><h4>Order ID: '+ orderCred.orderID +'<br/><h4>You will receive an email when your order is bagged and ready to be picked up at the food bank.</h4><br/><div onclick="location.reload()" class="activeButton">Return Home</div><div onclick="location.reload()" style="margin-left: 30px;" class="activeButton">Place another Order</div></div>';
-                    document.getElementById("mouseControl").innerHTML = htmlString;
-                    document.getElementById("mouseControl").setAttribute("style","");
-                  } else {
+                    else if (this.status == 200) {
+                      let orderCred = JSON.parse(xhttp.responseText);
+                      removeAllChildNodes(document.getElementById("mouseControl"));
+                      removeAllChildNodes(document.getElementById("orderStuff"));
+                      
+                      var htmlString= '<div style="text-align: center"><h3>Your order has been placed successfully.</h3><br/><h4>Order ID: '+ orderCred.orderID +'<br/><h4>You will receive an email when your order is bagged and ready to be picked up at the food bank.</h4><br/><div onclick="location.reload()" class="activeButton">Return Home</div><div onclick="location.reload()" style="margin-left: 30px;" class="activeButton">Place another Order</div></div>';
+                      document.getElementById("mouseControl").innerHTML = htmlString;
+                      document.getElementById("mouseControl").setAttribute("style","");
+                    } else {
                     alert("Order failed. Please refresh and try again. " + xhttp.responseText);
                     location.reload();
                 }

@@ -43,6 +43,10 @@ app.get('/catalog', function(req, res) {
    Page.buildPage(req, res, "catalog", 1);
 });
 
+app.get('/manage', function(req, res) {
+   Page.buildPage(req, res, "manage", 2);
+});
+
 app.get('/template', function(req, res) {
    Page.buildPage(req, res, "templateText", 1);
 });

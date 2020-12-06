@@ -56,7 +56,7 @@ export const findUserLocation = async(data, req, res) => {
                 }
             }  else {
                 if (req.query.page) {
-                    toReturn =distanceArray.slice(req.query.page*req.query.perPage,req.query.page*req.query.perPage+req.query.perPage);
+                    toReturn =distanceArray.slice(req.query.page*req.query.perPage,parseInt(req.query.page*req.query.perPage)+parseInt(req.query.perPage));
                 } else {
                     toReturn =distanceArray.slice(0,req.query.perPage);
                 }

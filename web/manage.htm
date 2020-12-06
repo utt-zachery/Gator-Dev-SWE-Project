@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<head>
-<title>Food Bank Worker Dashboard</title>
-</head>
-
-<body onload="init()">
 <script>
-    
     function init() {
         loadAPi();
         setInterval(loadAPi, 3000);
@@ -40,33 +33,33 @@
 
     <div id="popup" style="display: none; height: 400px; position: fixed; top: calc(50% - 200px); width: 300px; left: calc(50% - 150px); box-shadow: 5px 5px rgb(100,100,100); background-color: white; border: 2px solid black; z-index: 20">
         <div style="font-size: 25px; font-weight: bold; text-align: center; margin-top:20px;">Order</div>
-        <div style="margin-top:30px;margin-left: 20px; height: 277px; overflow: auto" id="checkboxHolder"></div>
+        <div style="margin-top:30px;margin-left: 20px; height: 260px; overflow: auto" id="checkboxHolder"></div>
         <div id="submitOrder" onclick="bagOrder()" class="disabled" style="display: none">Bag Items</div>
-        <div id="pickItUp" onclick="pickUpOrder()" class="activeButton" style="display: none">Pickup Order</div>
+        <div id="pickItUp" onclick="pickUpOrder()" class="activeButton" style="display: none; margin-left: 10%;">Pickup Order</div>
     </div>
 
     <div id="popup2" style="display: none; height: 400px; position: fixed; top: calc(50% - 200px); width: 300px; left: calc(50% - 150px); box-shadow: 5px 5px rgb(100,100,100); background-color: white; border: 2px solid black; z-index: 20; overflow: auto; text-align: center">
         <div style="font-size: 25px; font-weight: bold; text-align: center; margin-top:20px;">Item Image</div><br/>
         <img id="itemIm" style="max-height: 280px;"></img>
-        <div class="simpleButton" onclick="unPopup2()" style="width: 80%; border: 1px solid black; text-align: center; margin-left: calc(10% - 5px); margin-top:5px; padding: 5px;">Back</div>
+        <div class="simpleButton" onclick="unPopup2()" style="width: 80%; border: 1px solid black; text-align: center; margin-left: 10%; margin-right:10%; margin-top:5px; padding: 5px; margin-bottom:15px;">Back</div>
     </div>
 
     <div id="popup3" style="display: none; height: 5; position: fixed; top: calc(50% - 200px); width: 300px; left: calc(50% - 150px); box-shadow: 5px 5px rgb(100,100,100); background-color: white; border: 2px solid black; z-index: 20">
         <div style="font-size: 25px; font-weight: bold; text-align: center; margin-top:20px;">View Donation</div>
         <div style="margin-top:20px;margin-left: 10px; margin-right: 10px;max-height: 300px; overflow: auto; text-align: center" id="donationInfo"></div>
         <div><div  style="float: left; margin-left: 10px; margin-top:20px;">Location:</div><textarea id="itemLoc" style="float:left; margin-left: 10px;margin-top:20px;height: 57px; width: 195px; margin-bottom: 20px"></textarea></div>
-        <div id="submitOrder" onclick="processDonation(false)" class="activeButton" style="float: left; width: 40%; margin-left:4%; margin-bottom:10px;">Delete</div>
-        <div id="submitOrder" onclick="processDonation(true)" class="activeButton" style="float: left; width: 40%; margin-left:4%; margin-bottom:10px;">Approve</div>
+        <div id="submitOrder" onclick="processDonation(false)" class="activeButton" style="float: left; width: 40%; margin-left:6%; margin-bottom:10px;">Delete</div>
+        <div id="submitOrder" onclick="processDonation(true)" class="activeButton" style="float: left; width: 40%; margin-left:6; margin-bottom:10px;">Approve</div>
     </div>
 
 <div id="container" class="grayOut"></div>
-<div style="display: table">
-<div style="width: 100%; text-align: center; margin-top: 50px; font-size: 23px">Unbagged Orders</div>
-<div style="width:80%; margin-left: 10%; display: flex;justify-content: center; overflow: auto; margin-top:5px" id="unbagged-holder"></div>
+<div style="display: block">
+<h1 style="width: 100%; text-align: center; margin-top: 20px;">Unbagged Orders</h1>
+<div style=" display: flex;justify-content: center; overflow: auto; margin-top:5px; font-size: 12px;" id="unbagged-holder"></div>
     <div style="width: 100%; text-align: center; margin-top: 10px; font-size: 23px">Orders Waiting to be Picked Up</div>
-    <div style="width:80%; margin-left: 10%; display: flex;justify-content: center; overflow: auto; margin-top:5px" id="bagged-holder"></div>
+    <div style="width:80%; margin-left: 10%; display: flex;justify-content: center; overflow: auto; margin-top:5px; font-size: 12px;" id="bagged-holder"></div>
         <div style="width: 100%; text-align: center; margin-top: 10px; font-size: 23px">Donations Pending Approval</div>
-        <div style="width:80%; margin-left: 10%; display: flex;justify-content: center; overflow: auto; margin-top:5px" id="approved-holder"></div>
+        <div style="width:80%; margin-left: 10%; display: flex;justify-content: center; overflow: auto; margin-top:5px; font-size: 12px;" id="approved-holder"></div>
     </div>
 <style>
     .grayOut {
@@ -77,6 +70,8 @@
     }
     .imprev {
         max-height: 140px;
+        margin-top:10px;
+        margin-bottom:10px;
     }
     .disabled {
         background-color: lightgray;
@@ -89,7 +84,7 @@
         padding: 10px;
         border: 1px solid black;
         width: 200px;
-        height: 60px;
+        height: 75px;
         margin: 20px;
         margin-top:30px;
         text-align: center;
@@ -141,25 +136,19 @@
         cursor: pointer;
     }
 
-html,body {
+.localBody {
   height: 100%;
   width: 100%;
   margin: 0;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  font-family: 'Open Sans Condensed', sans-serif;
 }
 
 
 </style>
 
 <script type="text/javascript">
-/*
-
-    Code taken from w3schools
-
-*/
 
 function pickUpOrder() {
     document.getElementById("popup").style.display = "none";
@@ -244,7 +233,7 @@ function removeAllChildNodes(parent) {
         document.getElementById("itemLoc").value = "";
         var d = new Date(retreivedData.donationDate);
         let div = document.createElement("div");
-        div.innerHTML = "<b>" + retreivedData.foodItem.itemName + "</b>" + "<br/>Donated By: " + retreivedData.donatedBy.name +  "<br/>Donated On: " + d.getDate() + '/' + d.getMonth() + '/' + d.getFullYear() + "<br/><b>Quantity: " + retreivedData.quantity +"</b><br/>";
+        div.innerHTML = "<b>" + retreivedData.foodItem.itemName + "</b>" + "<br/>Donated By: " + retreivedData.donatedBy.name +  "<br/>Donated On: " + (1+d.getMonth()) + '/' + d.getDate() + '/' + d.getFullYear() + "<br/><b>Quantity: " + retreivedData.quantity +"</b><br/>";
                     if (retreivedData.foodItem.hasImage == true) {
                         div.innerHTML = div.innerHTML+"<img class='imprev' src='" + retreivedData.foodItem.imageAddress + "'></img>";
                     }
@@ -299,7 +288,7 @@ function removeAllChildNodes(parent) {
                 }
 
                 check.type = "checkbox";
-                check.style = "float: left";
+                check.style = "float: left; margin-top: 8px";
                 document.getElementById("checkboxHolder").appendChild(check);
              }
             var container = document.createElement("div");
@@ -320,7 +309,7 @@ function removeAllChildNodes(parent) {
             }
             quant.innerHTML = "Quantity: " + item.quantity;
             details.appendChild(quant);
-            if (item.locations && item.locations.length>0) {
+            if (item.locations != "" && item.locations.length>0) {
                 
                 var locLabel = document.createElement("li");
                 if (addCheck){
@@ -347,7 +336,7 @@ function removeAllChildNodes(parent) {
             var itemTitle = document.createElement("div");
             itemTitle.innerHTML = item.foodData.itemName;
             if (item.foodData.hasImage == true) {
-                itemTitle.innerHTML=itemTitle.innerHTML + '<img src="web-resources/worker-resources/image.svg" height="12px" style="margin-left: 5px"></img>'
+                itemTitle.innerHTML=itemTitle.innerHTML + '<img src="web/web-resources/worker-resources/image.svg" height="12px" style="margin-left: 8px; margin-bottom: 3px;"></img>'
                 itemTitle.style="font-weight: bold; cursor: pointer";
                 itemTitle.setAttribute("imgSrc", item.foodData.imageAddress);
                 itemTitle.onclick = function() {
@@ -444,7 +433,7 @@ function loadAPITwo() {
                     
                 
                 
-                div.innerHTML = "Name: " + retreivedData[i].placedBy.name +  "<br/>Placed: " + d.getDate() + '/' + d.getMonth() + '/' + d.getFullYear() + "<br/>Items Ordered: " + total;
+                div.innerHTML = "Name: " + retreivedData[i].placedBy.name +  "<br/>Placed: " + (1+d.getMonth()) + '/' + d.getDate() + '/' + d.getFullYear() + "<br/>Items Ordered: " + total;
               
                 document.getElementById("bagged-holder").append(div);
 
@@ -500,7 +489,5 @@ function loadAPIThree() {
     xhttp.open("GET", "../api/approveDonations/view?foodBankID=" + getCookie("foodBankID"), true);
     xhttp.send();
 }
+init();
 </script>
-
-</body>
-</DOCTYPE>
