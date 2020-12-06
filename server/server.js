@@ -55,6 +55,9 @@ app.get('/foodBank', function(req, res) {
    Page.buildPage(req, res, "ViewFoodBank", 1);
 });
 
+app.get('/home', function(req, res) {
+   Page.buildHome(req,res);
+});
 
 //404 - resource not found
 app.all('/*', (req, res) => {

@@ -5,23 +5,49 @@
 <title>PassItOn - Home</title>
 
 </head>
+<title>PassItOn</title>
+<link rel="icon" type="image/svg+xml" href="web-resources/global-resources/fork.svg">
 
+<link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+<script src="../node_modules/jquery/dist/jquery.min.js"></script>
+<script src="../node_modules/bootstrap/dist/js/bootstrap.js"></script>
 <link rel="stylesheet" href="web-resources/home-resources/home.css">
-	
+<link rel="stylesheet" href="web-resources/global-resources/template.css">
+
+<nav class="navbar navbar-fixed-top  navbar-expand-lg navbar-light bg-light; height: 90px;" style="z-index: 2; -webkit-box-shadow: 0 4px 3px -3px #999; -moz-box-shadow: 0 4px 3px -3px #999; box-shadow: 0 4px 3px -3px #999;">
+	<a class="navbar-brand" href="home" style="color: #007bff; margin-left: 20px;"><img src="web-resources/global-resources/fork.svg"  height="50" > <span style='position: relative; top: 2px; font-size: 16px; left: 5px; font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji" !important'>PassItOn</span></img></a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+	  <span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse" id="navbarText">
+	  <ul class="navbar-nav mr-auto">
+		<li class="nav-item">
+		  <a class="nav-link" href="donate" style='font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji" !important'>Make a Donation<span class="sr-only">(current)</span></a>
+		</li>
+		<li class="nav-item">
+		  <a class="nav-link" href="catalog" style='font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji" !important'>Place an Order</a>
+		</li>
+		<li class="nav-item">
+		  <a class="nav-link" href="manage" style='font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji" !important'>Manage a Food Bank</a>
+		</li>
+	  </ul>
+	  <div class="navbar-text logButton" onclick="location.href='login'">
+		Log In
+	  </div>
+	</div>
+  </nav>
+
 <body >
 	<div class="mainImage"></div>
-	<div class="mission inital">
+	<div class="mission inital" onclick="location.href='mission'">
 		<div style="margin-right: 20px;">
 			<span style="margin-right: 30px;">Read Our Mission</span>
-			<div style="margin-left: 10px;margin-top: -47px;">
+			<div style="margin-left: 10px;margin-top: -51px;">
 				<img height="20" class="arrow inital" src="web-resources/home-resources/right-arrow-next-svgrepo-com.svg"></img>
 			</div>
 		</div> 
 	</div>
-	<div class="text-choices">
-		Register a Food Bank
-		<div class="login">Login</div>
-	</div>
+	
 	<div class="mainMenu" style="text-align: center">
 	
 		<div style="height: 150px; margin-top: 30px; position: absolute; left: 0px">
@@ -29,12 +55,12 @@
 			<div style='color: white; position: absolute; left: 95px; top: 20px; font-size: 40px;'>PassItOn</div>
 		</div>
 
-		<div class="main-nav do-nav" style="max-width: 280px; width: 25%;  display: inline-block; font-size: 25px; margin-top: 12px">
-			<div class="btn from-center inital" >Make a Donation</div>
+		<div class="main-nav do-nav" style="max-width: 280px; width: 25%;  display: inline-block; font-size: 25px; margin-top: 8px">
+			<div class="btn from-center inital" onclick="location.href='donate'">Make a Donation</div>
 		</div>
-	
-		<div class="main-nav" style="position: absolute; right: 30px; max-width: 280px; width: 25%;  text-align: center; font-size: 25px;">
-			<div class="btn from-center inital" >Place an Order</div>
+		
+		<div class="main-nav" style="position: absolute; right: 30px; max-width: 280px; width: 25%;  text-align: center; font-size: 25px; top: 10px;">
+			<div class="btn from-center inital"onclick="location.href='catalog'" >Place an Order</div>
 		</div>
 	</div>
 
@@ -44,4 +70,5 @@
 		</div>
 <script type="text/javascript"> </script>
 </body>
+
 </html>

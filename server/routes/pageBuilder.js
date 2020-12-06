@@ -2,7 +2,7 @@ import * as fs from "fs";
 
 
 
-export const buildPage2 = async (receptor1, packageData, req, res, pageNum, shouldAppendFoodBank)  => {
+export const buildPage2 = async (receptor1, foodBankData, packageData, req, res, pageNum, shouldAppendFoodBank)  => {
     await fs.readFile("web/receptor2.htm", "utf8", (err, data) => {
         if (!err) {
             
@@ -20,8 +20,8 @@ export const buildPage2 = async (receptor1, packageData, req, res, pageNum, shou
                         receptor1 = receptor1 + inter[i];
                 }
             }
-            let pageString = receptor1.replace(/web-resources/g,"web/web-resources/") + packageData + data.replace(/web-resources/g,"web/web-resources/");
-
+                let pageString = receptor1.replace(/web-resources/g,"web/web-resources/") + packageData + data.replace(/web-resources/g,"web/web-resources/");
+                pageString = pageString.replace("<!-- INSERT AT HERE -->",foodBankData);
                 res.status(200).send(pageString);
            
         } else {
@@ -34,13 +34,13 @@ export const middleWare = async (receptor1, packageData, req, res, pageNum, shou
     if (shouldAppendFoodBank) {
         await fs.readFile("web/ViewFoodBank.htm", "utf8", (err, data) => {
             if (!err) {
-                buildPage2(receptor1, packageData+data, req, res, pageNum, shouldAppendFoodBank);
+                buildPage2(receptor1, data, packageData, req, res, pageNum, shouldAppendFoodBank);
             } else {
                 res.status(200).send(err);
             }
         });
     } else {
-        buildPage2(receptor1, packageData, req, res, pageNum, shouldAppendFoodBank);
+        buildPage2(receptor1, "", packageData, req, res, pageNum, shouldAppendFoodBank);
     }
 }
 
@@ -73,3 +73,13 @@ export const buildPageWithFoodBank = async (req, res, fileName, pageNum)  => {
         }
     });
 };
+
+export const buildHome = async(req, res) => {
+    await fs.readFile("web/home.htm", "utf8", (err, data) => {
+        if (!err) {
+            res.status(200).send(data.replace(/web-resources/g,"web/web-resources/"));
+        } else {
+            res.status(200).send(err);
+        }
+    });
+}
