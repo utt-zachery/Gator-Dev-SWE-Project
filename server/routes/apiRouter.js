@@ -14,7 +14,7 @@ import * as bagController from '../controllers/bagController.js'
 const apiRouter = express.Router();
 
 
-apiRouter.get('/getFoodBanks', foodBankController.viewFoodBanks);
+apiRouter.get('/getFoodBank', foodBankController.viewFoodBanks);
 apiRouter.post('/addFoodBank', foodBankController.addFoodBank);
 
 apiRouter.post('/donateItem', donateItemController.donateItem);

@@ -40,21 +40,20 @@ app.use(express.static(process.cwd()));
 app.use('/api/', apiRouter);
 
 app.get('/catalog', function(req, res) {
-   Page.buildPage(req, res, "catalog", 1);
+   Page.buildPageWithFoodBank(req, res, "catalog", 1);
 });
 
 app.get('/manage', function(req, res) {
-   Page.buildPage(req, res, "manage", 2);
+   Page.buildPageWithFoodBank(req, res, "manage", 2);
 });
 
 app.get('/template', function(req, res) {
    Page.buildPage(req, res, "templateText", 1);
 });
-/*
-app.get('/catalog', function (req, res) {
-   res.send('GET request to the homepage')
+
+app.get('/foodBank', function(req, res) {
+   Page.buildPage(req, res, "ViewFoodBank", 1);
 });
-*/
 
 
 //404 - resource not found

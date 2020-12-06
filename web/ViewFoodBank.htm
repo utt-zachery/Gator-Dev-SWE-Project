@@ -1,0 +1,64 @@
+<script>
+    function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
+
+    function executeAPI() {
+        var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    let allData = JSON.parse(xhttp.responseText);
+                    document.getElementById("foodBankIm").src = allData.foodBankData.imageFileAddress[0];
+                    document.getElementById("foodAdress").innerHTML = allData.foodBankData.address;
+                    document.getElementById("foodDistance").innerHTML = Math.round(allData.distance) + " mi";
+                }
+            };
+            xhttp.open("GET", "../api/getFoodBank?foodBankID=" + getCookie("foodBankID") + "&userID=" + getCookie("userID"), true);
+            xhttp.send();
+        }
+        executeAPI();
+</script>
+<style>
+    .foodBankIm {
+        object-fit: cover;
+        height: 120px;
+        width: 170px;
+    }
+</style>
+<br/>
+<div class="border-top my-3" style="width: 50%; margin-left: 25%; margin-top: 10%; margin-bottom:10%;"></div>
+<div style="text-align: center">Food bank Selected</div><br/>
+
+<div>
+
+
+    <div class="container">
+<div class="row">
+    <div class="col-lg" style="text-align: center;">
+        <img class="foodBankIm" id="foodBankIm" style="text-align: center; vertical-align: middle; margin-top: 10px;"></img>
+    </div>
+    <div class="col-lg" >
+        <h2 style="text-align: center; margin: 0px; margin-top: 5px; margin-bottom: 5px">Houston Food Bank</h2>
+        <div style="line-height: 15px; margin-top: 10px;">
+            
+            <img height="20" style="float: left; margin-top: 3px;" src="../web/web-resources/global-resources/placeholder.svg"></img><div style="margin-top: 5px; margin-left: 35px; margin-top:9px;" id="foodAdress"></div><br/>
+            <img height="20" style="float:left; margin-top: 2px; " src="../web/web-resources/global-resources/distance.svg"></img><div style="margin-top: 0px; margin-left: 35px; margin-top:5px;" id="foodDistance"></div>
+        </div>
+    </div>
+    <div class="col-lg">
+    </div>
+  </div>
+</div>
+</div>
+<br/>

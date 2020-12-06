@@ -34,7 +34,7 @@
     <div id="popup" style="display: none; height: 400px; position: fixed; top: calc(50% - 200px); width: 300px; left: calc(50% - 150px); box-shadow: 5px 5px rgb(100,100,100); background-color: white; border: 2px solid black; z-index: 20">
         <div style="font-size: 25px; font-weight: bold; text-align: center; margin-top:20px;">Order</div>
         <div style="margin-top:30px;margin-left: 20px; height: 260px; overflow: auto" id="checkboxHolder"></div>
-        <div id="submitOrder" onclick="bagOrder()" class="disabled" style="display: none">Bag Items</div>
+        <div id="submitOrder" onclick="bagOrder()" class="disabled" style="display: none; margin-left: 10%">Bag Items</div>
         <div id="pickItUp" onclick="pickUpOrder()" class="activeButton" style="display: none; margin-left: 10%;">Pickup Order</div>
     </div>
 
@@ -53,8 +53,9 @@
     </div>
 
 <div id="container" class="grayOut"></div>
-<div style="display: block">
-<h1 style="width: 100%; text-align: center; margin-top: 20px;">Unbagged Orders</h1>
+<div style="display: block;">
+    <h1 style="text-align: center; margin-top: 20px;">Manage Food Bank</h1>
+    <div style="width: 100%; text-align: center; margin-top: 40px;font-size: 23px">Unbagged Orders</div>
 <div style=" display: flex;justify-content: center; overflow: auto; margin-top:5px; font-size: 12px;" id="unbagged-holder"></div>
     <div style="width: 100%; text-align: center; margin-top: 10px; font-size: 23px">Orders Waiting to be Picked Up</div>
     <div style="width:80%; margin-left: 10%; display: flex;justify-content: center; overflow: auto; margin-top:5px; font-size: 12px;" id="bagged-holder"></div>

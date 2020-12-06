@@ -1,6 +1,8 @@
 import * as fs from "fs";
 
-export const buildPage2 = async (receptor1, packageData, req, res, pageNum)  => {
+
+
+export const buildPage2 = async (receptor1, packageData, req, res, pageNum, shouldAppendFoodBank)  => {
     await fs.readFile("web/receptor2.htm", "utf8", (err, data) => {
         if (!err) {
             
@@ -20,17 +22,32 @@ export const buildPage2 = async (receptor1, packageData, req, res, pageNum)  => 
             }
             let pageString = receptor1.replace(/web-resources/g,"web/web-resources/") + packageData + data.replace(/web-resources/g,"web/web-resources/");
 
-            res.status(200).send(pageString);
+                res.status(200).send(pageString);
+           
         } else {
             res.status(200).send(err);
         }
     });
 };
 
-export const buildPage1 = async (packageData, req, res, pageNum)  => {
+export const middleWare = async (receptor1, packageData, req, res, pageNum, shouldAppendFoodBank)  => {
+    if (shouldAppendFoodBank) {
+        await fs.readFile("web/ViewFoodBank.htm", "utf8", (err, data) => {
+            if (!err) {
+                buildPage2(receptor1, packageData+data, req, res, pageNum, shouldAppendFoodBank);
+            } else {
+                res.status(200).send(err);
+            }
+        });
+    } else {
+        buildPage2(receptor1, packageData, req, res, pageNum, shouldAppendFoodBank);
+    }
+}
+
+export const buildPage1 = async (packageData, req, res, pageNum, shouldAppendFoodBank)  => {
     await fs.readFile("web/receptor1.htm", "utf8", (err, data) => {
         if (!err) {
-            buildPage2(data, packageData, req, res, pageNum);
+            middleWare(data, packageData, req, res, pageNum, shouldAppendFoodBank);
         } else {
             res.status(200).send(err);
         }
@@ -40,7 +57,17 @@ export const buildPage1 = async (packageData, req, res, pageNum)  => {
 export const buildPage = async (req, res, fileName, pageNum)  => {
     await fs.readFile("web/"+ fileName +'.htm', "utf8", (err, data) => {
         if (!err) {
-            buildPage1(data, req, res, pageNum);
+            buildPage1(data, req, res, pageNum, false);
+        } else {
+            res.status(200).send(err);
+        }
+    });
+};
+
+export const buildPageWithFoodBank = async (req, res, fileName, pageNum)  => {
+    await fs.readFile("web/"+ fileName +'.htm', "utf8", (err, data) => {
+        if (!err) {
+            buildPage1(data, req, res, pageNum, true);
         } else {
             res.status(200).send(err);
         }
