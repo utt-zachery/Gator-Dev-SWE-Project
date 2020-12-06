@@ -2,6 +2,7 @@ import path from 'path';
 import express from 'express';
 import morgan from 'morgan';
 import apiRouter from './routes/apiRouter.js';
+import * as Page from './routes/pageBuilder.js'
 import {connectToDatabase} from './connectMongodb.js';
 async function getPort() {
    return import("../config/config.js")
@@ -38,17 +39,23 @@ app.use(express.static(process.cwd()));
 //Serves the API
 app.use('/api/', apiRouter);
 
+app.get('/catalog', function(req, res) {
+   Page.buildPage(req, res, "catalog", 1);
+});
+
+app.get('/template', function(req, res) {
+   Page.buildPage(req, res, "templateText", 1);
+});
+/*
+app.get('/catalog', function (req, res) {
+   res.send('GET request to the homepage')
+});
+*/
+
+
 //404 - resource not found
 app.all('/*', (req, res) => {
-
-    /*Add YOUR CODE HERE
-       see https://expressjs.com/en/api.html#res.sendFile
-       see https://nodejs.org/api/path.html
-       The path.resolve() method returns a string and resolves a sequence of paths or path segments into an absolute path.
-       If no path segments are passed, path.resolve() will return the absolute path of the current working directory.
-    */
-   res.statusCode === 404 ? res.send('Sorry, information not available') : res.sendFile(path.resolve('./web/index.htm'))
-        
+   res.statusCode === 404 ? res.send('Sorry, information not available') : res.sendFile(path.resolve('./web/index.htm'))    
 });
 
 app.listen(port, console.log(`App now listening on port ${port}`));

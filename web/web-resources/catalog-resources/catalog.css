@@ -1,0 +1,96 @@
+    .prodIm{
+        max-width: 150px;
+        margin: 25px;
+        max-height: 125px;
+    }
+
+    .prodInfo {
+        overflow: auto;
+        max-height: 125px;
+        margin: 5px;
+    }
+
+    .foodItem {
+        height: 280px;
+        width: 250px;
+        margin: 20px;
+        text-align: center;
+        display: inline-block;
+    }
+
+
+    .diabledButton{
+        background-color: lightgray;
+        display: inline;
+        transition:all 0.5s ease;
+        padding-top: 10px; padding-bottom: 10px; padding-right: 20px; padding-left: 20px;width: 200px; border: 1px solid black; text-align: center; 
+    }
+
+    .placeButton{
+        display: inline;
+        transition:all 0.5s ease;
+        padding-top: 10px; padding-bottom: 10px; padding-right: 20px; padding-left: 20px;width: 200px; border: 1px solid black; text-align: center; 
+    }
+
+    .placeButton:hover {
+        background: rgba(32, 110, 255, 0.4);
+        cursor: pointer;
+    }
+
+    .activeButton{
+        display: inline;
+        transition:all 0.5s ease;
+        padding-top: 10px; padding-bottom: 10px; padding-right: 30px; padding-left: 30px;width: 140px; border: 1px solid black; text-align: center; 
+    }
+
+    .activeButton:hover {
+        background: rgba(32, 110, 255, 0.4);
+        cursor: pointer;
+    }
+
+    .mainList {
+        margin-left: 20%;
+        width: 60%;
+        margin-top: 30px;
+        height: 25%;
+    }
+
+    input[type="search"] {
+        outline: 0; 
+        height:30px;
+        width: 40%;
+        margin-left: 30%;
+        background: var(--color-light);
+        padding: 0 1.6rem;
+        border-radius: var(--rad);
+        appearance: none; 
+        transition: all var(--dur) var(--bez);
+        transition-property: width, border-radius;
+        z-index: 1;
+        position: relative;
+    }
+
+    .aPrime {
+        text-decoration: none;
+        display: inline-block;
+        padding: 8px 16px;
+    }
+
+.aPrime:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.previous {
+  background-color: #f1f1f1;
+  color: black;
+}
+
+.next {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.round {
+  border-radius: 50%;
+}

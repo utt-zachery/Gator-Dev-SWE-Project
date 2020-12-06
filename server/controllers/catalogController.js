@@ -29,6 +29,7 @@ export const viewCatalog = async (req, res) => {
     let now = Date.now();
     if (!req.query.foodBankID) {
         res.status(200).send("Include Foodbank ID in query string");
+        return;
     }
 
     await FoodInventory.find({foodBankID:req.query.foodBankID, checkIn: true, expirationEpoch: {$gt:now }}).then((data) => {

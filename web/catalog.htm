@@ -1,106 +1,6 @@
-<head>
-<style>
 
-    .prodIm{
-        max-width: 150px;
-        margin: 25px;
-        max-height: 125px;
-    }
-
-    .prodInfo {
-        overflow: auto;
-        max-height: 125px;
-        margin: 5px;
-    }
-
-    .foodItem {
-        height: 280px;
-        width: 250px;
-        margin: 20px;
-        text-align: center;
-        display: inline-block;
-    }
-
-    div {
-        font-family: 'Helvetica', 'Arial', sans-serif;"
-    }
-
-    .diabledButton{
-        background-color: lightgray;
-        display: inline;
-        transition:all 0.5s ease;
-        padding-top: 5px; padding-bottom: 5px; padding-right: 20px; padding-left: 20px;width: 200px; border: 1px solid black; text-align: center; 
-    }
-
-    .placeButton{
-        display: inline;
-        transition:all 0.5s ease;
-        padding-top: 5px; padding-bottom: 5px; padding-right: 20px; padding-left: 20px;width: 200px; border: 1px solid black; text-align: center; 
-    }
-
-    .placeButton:hover {
-        background: rgba(32, 110, 255, 0.4);
-        cursor: pointer;
-    }
-
-    .activeButton{
-        display: inline;
-        transition:all 0.5s ease;
-        padding-top: 10px; padding-bottom: 10px; padding-right: 30px; padding-left: 30px;width: 140px; border: 1px solid black; text-align: center; 
-    }
-
-    .activeButton:hover {
-        background: rgba(32, 110, 255, 0.4);
-        cursor: pointer;
-    }
-
-    .mainList {
-        margin-left: 20%;
-        width: 60%;
-        margin-top: 30px;
-        height: 25%;
-    }
-
-    input[type="search"] {
-        outline: 0; 
-        height:30px;
-        width: 40%;
-        margin-left: 30%;
-        background: var(--color-light);
-        padding: 0 1.6rem;
-        border-radius: var(--rad);
-        appearance: none; 
-        transition: all var(--dur) var(--bez);
-        transition-property: width, border-radius;
-        z-index: 1;
-        position: relative;
-    }
-
-    a {
-        text-decoration: none;
-        display: inline-block;
-        padding: 8px 16px;
-    }
-
-a:hover {
-  background-color: #ddd;
-  color: black;
-}
-
-.previous {
-  background-color: #f1f1f1;
-  color: black;
-}
-
-.next {
-  background-color: #4CAF50;
-  color: white;
-}
-
-.round {
-  border-radius: 50%;
-}
-</style>
+  <link rel="stylesheet" href="../web/web-resources/catalog-resources/nutritionSheet.css">
+  <link rel="stylesheet" href="../web/web-resources/catalog-resources/catalog.css">
 
 <script>
   document.addEventListener('click', function(event) {
@@ -120,10 +20,9 @@ a:hover {
             document.getElementById("container").style.display = "none";
         }
     });
-
 </script>
-<link rel="stylesheet" href="../web/web-resources/catalog-resources/nutritionSheet.css">
-<div id="popup2" style="display: none; height: 600px; width: 400px; left: calc((100% - 400px) / 2); position: fixed;  box-shadow: 5px 5px rgb(100,100,100); background-color: white; border: 2px solid black; z-index: 20; overflow: auto; text-align: center">
+
+<div id="popup2" style="display: none; height: 75vh; width: 400px; left: calc((100% - 400px) / 2); position: fixed; top: 12.5vh; box-shadow: 5px 5px rgb(100,100,100); background-color: white; border: 2px solid black; z-index: 20; overflow: auto; text-align: center">
     <div style="font-size: 25px; font-weight: bold; text-align: center; margin-top:20px;">Item Nutrition</div><br/>
     
 <section class="performance-facts" style="display: inline-block;" id="nutrition">
@@ -317,11 +216,10 @@ a:hover {
   <div class="activeButton" style="display: inline-block; margin-bottom: 10px" onclick="goBack(event)">Back</div><br/>
 </div>
 <div id="popup" style="display: none; height: 400px; position: fixed; top: calc(50% - 200px); width: 50%; min-width: 700px; left: 25%; box-shadow: 5px 5px rgb(100,100,100); background-color: white; border: 2px solid black; z-index: 20; ">
-    <div style="font-size: 25px; font-weight: bold; text-align: center; margin-top:20px;">Find Item</div><br/><br/>
-    <input name="q" id="search" type="search"  placeholder="Item Name" /><br/>
-    <div id="catalogModule" style="height: calc(100% - 180px); overflow: auto; margin-top:10px; margin-bottom:20px; text-align: center"></div>
+    <div style="font-size: 25px; text-align: center; margin-top:20px;">Add Item</div>
+    <div id="catalogModule" style="height: calc(100% - 135px); overflow: auto; margin-top:10px; margin-bottom:20px; text-align: center"></div>
     
-    <div style="position: absolute; left: 20px; display: inline-block">Items per page: 
+    <div style="position: absolute; left: 20px; bottom: 21px;display: inline-block">Items per page: 
         <select name="perPage" id="perPage">
         <option value="10">10</option>
         <option value="20">20</option>
@@ -332,13 +230,13 @@ a:hover {
     <div style="width: 100%; text-align: center" >
         <div style="display: inline-block;">
             Quantity: <INPUT TYPE="NUMBER" onclick="onComboChange()" id="quantitySpinner" MIN="1" MAX="10" STEP="1" VALUE="0" SIZE="3" disabled="true" style="width: 55px;" >
-                <div class="diabledButton" id="placeButton" onclick="placeOrder()" style="margin-left: 10px;">Place Order</div>
+                <div class="diabledButton" id="placeButton" onclick="placeOrder()" style="margin-left: 10px;">Add to Order</div>
         </div>
     </div>
     <div style="display: inline-block; position: absolute; right: 15px; bottom:17px;">
-        <a href="#" id="backButton" class="previous round">&#8249;</a>
+        <a href="#" id="backButton" class="aPrime previous round">&#8249;</a>
         <span style="margin-left: 10px; margin-right: 10px">Page <span id="currPage">0</span> of <span id="maxPage">1</span></span>
-        <a href="#" id="nextButton" class="next round">&#8250;</a>
+        <a href="#" id="nextButton" class="aPrime next round">&#8250;</a>
     </div>
 </div>
 
@@ -446,23 +344,25 @@ function getCookie(cname) {
                 document.getElementById("quantitySpinner").value = 0;
                 document.getElementById("popup").setAttribute("data-id","");
                 let responseOBJ = JSON.parse(xhttp.responseText);
-                document.getElementById("currPage").innerHTML = (page+1);
-                document.getElementById("maxPage").innerHTML = Math.ceil(responseOBJ.size / perPage);
-                maxPage = Math.ceil(responseOBJ.size / perPage);
-                if ((page+1) == maxPage) {
-                    document.getElementById("nextButton").style.display="none";
-                } else {
-                    document.getElementById("nextButton").style.display="block";
-                }
+                
+                if (responseOBJ.items ) {
+                  document.getElementById("currPage").innerHTML = (page+1);
+                  document.getElementById("maxPage").innerHTML = Math.ceil(responseOBJ.size / perPage);
+                  maxPage = Math.ceil(responseOBJ.size / perPage);
+                  if ((page+1) == maxPage) {
+                      document.getElementById("nextButton").style.display="none";
+                  } else {
+                      document.getElementById("nextButton").style.display="block";
+                  }
 
-                if (page == 0) {
-                    document.getElementById("backButton").style.display="none";
-                } else {
-                    document.getElementById("backButton").style.display="block";
-                }
-
-                for (var i=0; i < responseOBJ.items.length; i++) {
+                  if (page == 0) {
+                      document.getElementById("backButton").style.display="none";
+                  } else {
+                      document.getElementById("backButton").style.display="block";
+                  }
+                  for (var i=0; i < responseOBJ.items.length; i++) {
                     var div = document.createElement("div");
+
                     if (document.querySelectorAll("option[value='" +responseOBJ.items[i].foodData._id + "']" ).length == 0) {
                     div.className = "foodItem";
                     div.setAttribute("data-id", responseOBJ.items[i].foodData._id);
@@ -495,7 +395,7 @@ function getCookie(cname) {
 
                         var img2 = document.createElement("img");
                         img2.style = "width:12px;";
-                        img2.src = "web-resources/catalog-resources/New-window-01.svg";
+                        img2.src = "../web/web-resources/catalog-resources/New-window-01.svg";
                         span.appendChild(img2);
                         div.appendChild(span);
 
@@ -512,6 +412,14 @@ function getCookie(cname) {
                     document.getElementById("catalogModule").appendChild(div);
                 }
             }
+                } else {
+                  document.getElementById("currPage").innerHTML = "0";
+                  document.getElementById("maxPage").innerHTML = "0";
+                  document.getElementById("nextButton").style.display="none";
+                  document.getElementById("backButton").style.display="none";
+                  document.getElementById("catalogModule").innerHTML="<div style='width:100%; height: 30px'></div><h3>No food items to display</h3>"
+                }
+                
             }
         };
         xhttp.open("GET", "../api/viewCatalog?foodBankID=" + getCookie("foodBankID") + "&page=" + page + "&perPage=" + perPage, true);
@@ -540,10 +448,22 @@ function placeFinalOrder() {
     var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4) {
+                  if (xhttp.responseText.indexOf("insufficent items") >-1) {
+                    alert("While you were placing your order, one or more items became unavailable. Your order was not placed. Please try again.");
+                    location.reload();
+                  }
+
                 if (this.status == 200) {
-                    document.write("Order placed successfully." + xhttp.responseText);
-                } else {
+                    let orderCred = JSON.parse(xhttp.responseText);
+                    removeAllChildNodes(document.getElementById("mouseControl"));
+                    removeAllChildNodes(document.getElementById("orderStuff"));
+                    
+                    var htmlString= '<div style="text-align: center"><h3>Your order has been placed successfully.</h3><br/><h4>Order ID: '+ orderCred.orderID +'<br/><h4>You will receive an email when your order is bagged and ready to be picked up at the food bank.</h4><br/><div onclick="location.reload()" class="activeButton">Return Home</div><div onclick="location.reload()" style="margin-left: 30px;" class="activeButton">Place another Order</div></div>';
+                    document.getElementById("mouseControl").innerHTML = htmlString;
+                    document.getElementById("mouseControl").setAttribute("style","");
+                  } else {
                     alert("Order failed. Please refresh and try again. " + xhttp.responseText);
+                    location.reload();
                 }
             }
         };
@@ -552,19 +472,22 @@ function placeFinalOrder() {
         xhttp.send(JSON.stringify(toSend));
 }
 }
+
 </script>
-</head>
 
 
-<body onload="executeAPI()">
 <div id="container" style="display: none; background-color: gray; pointer-events: none; height: 100%; width: 100%; z-index: 2; position: fixed; top:0px; left: 0px;opacity: 0.7;"></div>  
 <div id="mouseControl">
-<div style="width: 100%; text-align: center; margin-top: 50px; font-size: 23px; font-weight: bold;  font-family: 'Helvetica', 'Arial', sans-serif;">Place Order</div>
-</div><br/><br/><div style="text-align: center;"><div style="display: inline;margin-left: 160px;">My Order</div> <div onclick="addItemButton(event)" style="margin-left: 40px" class="activeButton">Add Item</div></div>
+<h1 style="width: 100%; text-align: center; margin-top: 20px;">Place Order</h1>
+</div>
+<div id="orderStuff">
+<br/><br/><div style="text-align: center;"><div style="display: inline;margin-left: 160px;">My Order</div> <div onclick="addItemButton(event)" style="margin-left: 40px" class="activeButton">Add Item</div></div>
 
 <select name="order" id="itemOrder" class="mainList" size="5">  </select> <br/><br/><br/>
 <div style="text-align: center">
 <div  onclick="placeFinalOrder()" id="placeFinalButton" class="diabledButton">Place Order</div>
-</div>
-</div> 
-</body>
+</div></div>
+<br/>
+<script>
+  executeAPI();
+</script>
