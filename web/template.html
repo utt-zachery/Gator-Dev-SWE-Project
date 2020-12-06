@@ -1,26 +1,262 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<title>PassItOn</title>
-	<link rel="stylesheet" href="web-resources/global-resources/template.css">
-</head>
+ 
+  <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="../node_modules/bootstrap/dist/js/bootstrap.js"></script>
+  
+  <style>
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
 
-<body>
-	<div class="header-main">
-	<div class="mission inital">
-		<div style="margin-right: 20px;">
-			<span style="margin-right: 30px;">Read Our Mission</span>
-			<div style="margin-left: 10px;margin-top: -47px;">
-				<img height="20" class="arrow inital" src="web-resources/home-resources/right-arrow-next-svgrepo-com.svg"></img>
-			</div>
-		</div> 
-	</div>
-	<div class="text-choices">
-		Register a Food Bank
-		<div class="login">Login</div>
-	</div>
+main {
+  flex: 1 0 auto;
+  min-height: auto;
+}
+
+.site-footer
+{
+  background-color:#26272b;
+  padding:25px 0 20px;
+  font-size:15px;
+  line-height:24px;
+  color:#737373;
+}
+.site-footer hr
+{
+  border-top-color:#bbb;
+  opacity:0.5
+}
+.site-footer hr.small
+{
+  margin:20px 0
+}
+.site-footer h6
+{
+  color:#fff;
+  font-size:16px;
+  text-transform:uppercase;
+  margin-top:5px;
+  letter-spacing:2px
+}
+.site-footer a
+{
+  color:#737373;
+}
+.site-footer a:hover
+{
+  color:#007bff;
+  text-decoration:none;
+}
+.footer-links
+{
+  padding-left:0;
+  list-style:none
+}
+.footer-links li
+{
+  display:block
+}
+.footer-links a
+{
+  color:#737373
+}
+.footer-links a:active,.footer-links a:focus,.footer-links a:hover
+{
+  color:#007bff;
+  text-decoration:none;
+}
+.footer-links.inline li
+{
+  display:inline-block
+}
+.site-footer .social-icons
+{
+  text-align:right
+}
+.site-footer .social-icons a
+{
+  width:40px;
+  height:40px;
+  line-height:40px;
+  margin-left:6px;
+  margin-right:0;
+  border-radius:100%;
+  background-color:#33353d
+}
+.copyright-text
+{
+  margin:0
+}
+@media (max-width:991px)
+{
+  .site-footer [class^=col-]
+  {
+    margin-bottom:30px
+  }
+}
+@media (max-width:767px)
+{
+  .site-footer
+  {
+    padding-bottom:0
+  }
+  .site-footer .copyright-text,.site-footer .social-icons
+  {
+    text-align:center
+  }
+}
+
+    /* Remove the navbar's default margin-bottom and rounded borders */ 
+    .navbar {
+      margin-bottom: 0;
+	  border-radius: 0;
+	  background-color: #fff;
+    }
+    
+    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+    .row.content {height: 100%}
+	
+	.nav-item {
+		margin-left: 10px;
+	}
+    /* Set gray background color and 100% height */
+    .sidenav {
+      padding-top: 20px;
+      background-color: #f1f1f1;
+      height: 100%;
+    }
+    
+    /* Set black background color, white text and some padding */
+    footer {
+      background-color: #555;
+      color: white;
+	  padding: 15px;
+	}
+
+    /* On small screens, set height to 'auto' for sidenav and grid */
+    @media screen and (max-width: 767px) {
+      .sidenav {
+        height: auto;
+        padding: 15px;
+      }
+      .row.content {height: auto} 
+	}
+	
+	body {
+		background-color: #f1f1f1;;
+	}
+
+	.logButton {
+		padding: 8px 15px 8px 15px; 
+		background-color: #007bff; 
+		color: white !important; 
+		border-radius: 4px; 
+		cursor: pointer;
+		transition: 0.4s;
+		border: solid 1px #007bff;
+		margin-left: 10px;
+	}
+
+	.logButton:hover {
+		padding: 8px 15px 8px 15px; 
+		background-color: white; 
+		color: #007bff !important; 
+		border-radius: 4px; 
+		cursor: pointer;
+		border: solid 1px #007bff;
+	}
+  </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+	<nav class="navbar navbar-fixed-top  navbar-expand-lg navbar-light bg-light; height: 90px;" style="z-index: 2; -webkit-box-shadow: 0 4px 3px -3px #999; -moz-box-shadow: 0 4px 3px -3px #999; box-shadow: 0 4px 3px -3px #999;">
+		<a class="navbar-brand" href="#" style="color: #007bff; margin-left: 20px;"><img src="web-resources/global-resources/fork.svg"  height="50" > <span style="position: relative; top: 2px; font-size: 16px; left: 3px;">PassItOn</span></img></a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+		  <span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarText">
+		  <ul class="navbar-nav mr-auto">
+			<li class="nav-item active">
+			  <a class="nav-link" href="#">Make a Donation<span class="sr-only">(current)</span></a>
+			</li>
+			<li class="nav-item">
+			  <a class="nav-link" href="#">Place an Order</a>
+			</li>
+			<li class="nav-item">
+			  <a class="nav-link" href="#">Manage a Food Bank</a>
+			</li>
+		  </ul>
+		  <div class="navbar-text logButton">
+			Log In
+		  </div>
+		</div>
+	  </nav>
+
+
+<div style="width: 100%; height: 40px; background-color: #f1f1f1"></div>
+<div class="container-fluid text-center; " style="height:100%" >    
+  <div class="row content">
+    <div class="col-sm-2 sidenav">
+    </div>
+	<div class="col-sm-8 text-left" style="background-color: #f1f1f1; padding: 0px; "> 
+		<div style="background-color: #fff; padding: 20px;">
+      <h1>Welcome</h1>
+      <p>Lorem ipsum dolor sit ecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      <hr>
+      <h3>Test</h3>
+	  <p>Lorem ipsum...</p>
+		</div>
 	</div>
 	
+    <div class="col-sm-2 sidenav">
+      <div class="well">
+        
+      </div>
+    </div>
+  </div>
+</div>
+<main></main>
 </body>
+
+<footer class="site-footer container-fluid text-center mt-auto" style="margin-top:40px !important;">
+	<div class="container">
+	  <div class="row">
+		<div class="col-md-2">
+		</div>
+
+		<div class="col-xs-6 col-md-5">
+		  <h6>About</h6>
+		  <p class="text-justify">At PassItOn, we believe that running a food bank is hard enough without worrying about tracking inventory, managing orders, and item nutrition. At PassItOn, we beleive in empowering users tools to make healthy lifestyle decisons.</p>
+		</div>
+
+
+		<div class="col-xs-6 col-md-4">
+		  <h6>Quick Links</h6>
+			<span><a href="http://scanfcode.com/about/">About Us</a></span><br/>
+			<span><a href="http://scanfcode.com/contact/">Contact Us</a></span><br/>
+			<span><a href="http://scanfcode.com/contribute-at-scanfcode/">Contribute</a></span><br/>
+			<span><a href="http://scanfcode.com/privacy-policy/">Privacy Policy</a></span><br/>
+			<span><a href="http://scanfcode.com/sitemap/">Sitemap</a></span>
+		 
+		</div>
+	  </div>
+	  <hr>
+	</div>
+	<div class="container">
+	  <div class="row">
+		<div class="col-md-12">
+		  <p class="copyright-text">Copyright &copy; 2020 All Rights Reserved by PassItOn.
+		  </p>
+		</div>
+
+	  </div>
+	</div>
+</footer>
+
+
 </html>
