@@ -1,0 +1,148 @@
+<h1 style="text-align: center; margin-top: 10px;">Search for a Food Bank</h1>
+<br/>
+
+<style>
+.foodBankIm {
+    object-fit: cover;
+    height: 120px;
+    width: 170px;
+}
+
+.previousER {
+  background-color: #f1f1f1;
+  color: black;
+}
+
+.nextER {
+  background-color: #007bff;
+  color: white;
+}
+
+.roundER {
+  border-radius: 50%;
+  width:50px;
+  height: 50px;
+  text-decoration: none;
+  cursor: pointer;
+}
+</style>
+
+<div style="width: calc(70% - 80px); margin-left: calc(15% + 40px);">
+    <div class="previousER roundER" onclick="backPage()" style="display: inline-block;text-align: center"><div style="position: relative; top: 12px;"><</div></div>
+    <div style="display: inline-block; position: relative; top: 12px; text-align: center; width: calc(100% - 100px)">Page <span id="currPage">0</span> of <span id="maxPage">0</span></div>
+    <div class="nextER roundER" onclick="nextPage()" style="display: inline-block;text-align: center; position: absolute; right: calc(15% + 40px)"><div style="position: relative; top: 12px; ">></div></div>
+</div>
+<br/>
+
+<script>
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
+
+  function setCookie(cname, cvalue, exdays) {
+  var d = new Date();
+  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+  var expires = "expires="+ d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+  let currentPage = 0;
+  let maxPage = 0;
+  let perPage = 10;
+
+  function nextPage() {
+    if (currentPage != (maxPage-1)) {
+        currentPage++;
+        executeAPI();
+    }
+  }
+
+  function backPage() {
+    if (currentPage != 0) {
+        currentPage--;
+        executeAPI();
+    }
+  }
+
+    function executeAPI() {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    let data = JSON.parse(this.responseText);
+                    $(".foodBankHit").remove();
+                    document.getElementById("currPage").innerHTML = (currentPage+1);
+                    maxPage = Math.ceil(data.totalResults / parseFloat(perPage));
+                    document.getElementById("maxPage").innerHTML = maxPage;
+                    for (var i=0; i < data.results.length; i++) {
+                            var div3 = document.createElement("div");
+                            div3.className = "row content foodBankHit";
+
+                                var div4 = document.createElement("div");
+                                div4.className = "col-sm-2 sidenav";
+
+                                    var div5 = document.createElement("well");
+                                    div5.className="well";
+                                    div4.appendChild(div5);
+
+                                div3.appendChild(div4);
+
+                                var div6 = document.createElement("div");
+                                div6.className = "col-sm-8 text-left";
+                                div6.style= "background-color: #fff; padding: 0px; margin-top: 20px; margin-bottom: 20px; padding-bottom:20px;";
+                        
+                                div6.innerHTML = '<br/><div> <div class="container" style="padding-top: 20px;"> <div class="row"> <div class="col-lg" style="text-align: center;"> <img class="foodBankIm" id="foodBankIm" style="text-align: center; vertical-align: middle; margin-top: 10px;"></img> </div> <div class="col-lg" > <h2 style="text-align: center; margin: 0px; margin-top: 3px; margin-bottom: 5px">Houston Food Bank</h2> <div style="line-height: 13px; margin-top: 13px;"> <img height="20" style="float: left; margin-top: 5px;" src="../web/web-resources/global-resources/placeholder.svg"></img><div style="position: relative; top: 2px;margin-top: 5px; margin-left: 35px; margin-top:9px; line-height: 20px;" id="foodAdress"><span></span></div><br/> <img height="20" style="float:left; margin-top: 2px; " src="../web/web-resources/global-resources/distance.svg"></img><div style="position: relative; top: 2px; margin-top: 0px; margin-left: 35px; margin-top:5px;" id="foodDistance"><span></span></div> </div> </div> <div class="col-lg" > <button style="left: calc(55% - 114px); width: 100px; vertical-align: bottom; position: absolute; top: 50%; transform: translateY(-50%); background-color: #007bff; color: white; padding: 10px 20px; font-size:17px; border: none">Select</button> </div> </div> </div> </div><br/><br/>';
+                                // FOOD BANK CONTENT GOES INTO DIV 6
+                                if (data.results[i].foodBank.imageFileAddress.length>0)
+                                    div6.getElementsByTagName("img")[0].src = data.results[i].foodBank.imageFileAddress[0];
+                                else
+                                     div6.getElementsByTagName("img")[0].src =  "../web/web-resources/catalog-resources/No_image_available.svg";
+                               
+                                div6.getElementsByTagName("h2")[0].innerHTML = data.results[i].foodBank.name;
+                                div6.getElementsByTagName("span")[0].innerHTML = data.results[i].foodBank.address;
+                                div6.getElementsByTagName("span")[1].innerHTML = Math.round(data.results[i].dist) + " mi";
+
+                                div6.getElementsByTagName("button")[0].setAttribute("data-foodID", data.results[i].foodBank._id);
+                                div6.getElementsByTagName("button")[0].addEventListener("click", function(){
+                                    setCookie("foodBankID", this.getAttribute("data-foodID"), 10);
+                                    window.history.go(-1);
+                                }, false);
+
+                                div3.appendChild(div6);
+
+                                var div7 = document.createElement("div");
+                                div7.className = "col-sm-2 sidenav";
+
+                                    var div8 = document.createElement("div");
+                                    div8.className = "well";
+                                    div7.appendChild(div8);
+
+                                div3.appendChild(div7);
+                            
+                            document.getElementsByClassName("container-fluid")[0].appendChild(div3);
+                            document.getElementsByClassName("container-fluid")[0].style.paddingBottom ="40px";
+                            document.getElementsByClassName("col-sm-8 text-left")[0].style.paddingBottom ="30px";
+                            
+                    }
+                    
+                }
+            };
+            xhttp.open("GET", "../api/findFoodBanks?userID=" + getCookie("userID") +"&perPage=" + perPage +"&page="+currentPage, true);
+            xhttp.send();
+
+        
+    }
+
+    executeAPI();
+</script>

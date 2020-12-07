@@ -62,7 +62,8 @@ export const findUserLocation = async(data, req, res) => {
                 }
             }
 
-            res.json(toReturn);
+            res.json({totalResults: data.length,
+                    results: toReturn});
 
         } else {
             return res.status(200).send({

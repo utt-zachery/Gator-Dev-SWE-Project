@@ -47,10 +47,6 @@ app.get('/manage', function(req, res) {
    Page.buildPageWithFoodBank(req, res, "manage", 2);
 });
 
-app.get('/template', function(req, res) {
-   Page.buildPage(req, res, "templateText", 1);
-});
-
 app.get('/foodBank', function(req, res) {
    Page.buildPage(req, res, "ViewFoodBank", 1);
 });
@@ -61,6 +57,10 @@ app.get('/home', function(req, res) {
 
 app.get('/donate', function(req, res) {
    Page.buildPageWithFoodBank(req, res, "donate", 0);
+});
+
+app.get('/search', function(req, res) {
+   Page.buildPage(req,res, "search", -1);
 });
 
 //404 - resource not found

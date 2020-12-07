@@ -104,8 +104,8 @@ button:hover {
   <!-- One "tab" for each step in the form: -->
   <div class="tab" style="text-align: center; "> <div name="doBtn" class="undoneBtn"><span style="font-size: 35px; position: absolute; top:3px;left:26px;">1</span></div> <h1 style="display: inline-block; position: relative; right:30px;">Food Item Barcode</h1><br/><br/>
     <p><div class="custom-file mb-3" style="border-radius: 0px; ">
-        <input type="file" class="custom-file-input" id="customFile" name="filename"  style="border-radius: 0px; " onchange="validateButton()">
-        <label class="custom-file-label text-left" for="customFile" id="fileLabel"  style="border-radius: 0px; ">Choose file</label>
+        <input type="file" class="custom-file-input" id="customFile" name="filename"  style="border-radius: 0px; " onchange="preValidate()">
+        <label class="custom-file-label text-left" for="customFile" id="fileLabel"  style="border-radius: 0px; ">Upload Image of Item BarcodeChoose file</label>
       </div></p><div style="text-align: center">
         <span><div style="border-top: 1px solid gray; width: 20%; display: inline-block; margin-right: 15px; margin-bottom:5px;"></div>OR<div style="margin-bottom:5px;margin-left: 15px; border-top: 1px solid gray; width: 20%; display: inline-block"></div></span>
     </div><br/>
@@ -125,7 +125,7 @@ button:hover {
   <div style="overflow:auto;">
     <div style="float:right;">
       <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
-      <button type="button" id="nextBtn" onclick="nextPrev(1)">Next</button>
+      <button type="button" id="nextBtn" style="width: 100px" onclick="nextPrev(1)">Next</button>
     </div>
   </div>
   <!-- Circles which indicates the steps of the form: -->
@@ -137,6 +137,12 @@ button:hover {
 </form>
 </div>
 <script>
+function preValidate() {
+    if (document.getElementsByName("filename")[0].value.length > 0) {
+        document.getElementsByName("lname")[0].value = "";
+    }
+    validateButton();
+}
 
 function isFutureDate(idate){
     if (idate.length == 0)
@@ -173,7 +179,7 @@ if (result == false) {
 function validateButton() {
     if (document.getElementsByName("lname")[0].value.length > 0) {
         document.getElementsByName("doBtn")[currentTab].className = "doneBtn";
-        document.getElementById("fileLabel").innerHTML="Choose file";
+        document.getElementById("fileLabel").innerHTML="Upload Image of Item Barcode";
         document.getElementsByName("filename")[0].value = "";
     } else if (document.getElementsByName("filename")[0].value.length > 0) {
         document.getElementsByName("doBtn")[currentTab].className = "doneBtn";

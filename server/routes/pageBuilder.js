@@ -22,6 +22,13 @@ export const buildPage2 = async (receptor1, foodBankData, packageData, req, res,
             }
                 let pageString = receptor1.replace(/web-resources/g,"web/web-resources/") + packageData + data.replace(/web-resources/g,"web/web-resources/");
                 pageString = pageString.replace("<!-- INSERT AT HERE -->",foodBankData);
+
+                if (foodBankData.length == 0) {
+                    let pageString2 = pageString.substring(0,"<!-- START FOODBANK -->".length + pageString.indexOf("<!-- START FOODBANK -->"));
+                    let pageString3 = pageString.substring(pageString.indexOf("<!-- END FOODBANK-->"));
+                    pageString = pageString2 + pageString3;
+                }
+
                 res.status(200).send(pageString);
            
         } else {

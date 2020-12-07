@@ -19,7 +19,12 @@
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
                     let allData = JSON.parse(xhttp.responseText);
-                    document.getElementById("foodBankIm").src = allData.foodBankData.imageFileAddress[0];
+
+                    if (allData.foodBankData.imageFileAddress.length>0)
+                        document.getElementById("foodBankIm").src = allData.foodBankData.imageFileAddress[0];
+                    else
+                    document.getElementById("foodBankIm").src = "../web/web-resources/catalog-resources/No_image_available.svg";
+                    document.getElementById("fbName").innerHTML = allData.foodBankData.name;
                     document.getElementById("foodAdress").innerHTML = allData.foodBankData.address;
                     document.getElementById("foodDistance").innerHTML = Math.round(allData.distance) + " mi";
                 }
@@ -40,22 +45,21 @@
 <div style="text-align: center">Food bank Selected</div><br/>
 
 <div>
-
-
     <div class="container">
 <div class="row">
     <div class="col-lg" style="text-align: center;">
         <img class="foodBankIm" id="foodBankIm" style="text-align: center; vertical-align: middle; margin-top: 10px;"></img>
     </div>
     <div class="col-lg" >
-        <h2 style="text-align: center; margin: 0px; margin-top: 3px; margin-bottom: 5px">Houston Food Bank</h2>
+        <h2 style="text-align: center; margin: 0px; margin-top: 3px; margin-bottom: 5px" id="fbName">Houston Food Bank</h2>
         <div style="line-height: 13px; margin-top: 13px;">
             
-            <img height="20" style="float: left; margin-top: 3px;" src="../web/web-resources/global-resources/placeholder.svg"></img><div style="margin-top: 5px; margin-left: 35px; margin-top:9px; line-height: 20px;" id="foodAdress"></div><br/>
+            <img height="20" style="float: left; margin-top: 5px;" src="../web/web-resources/global-resources/placeholder.svg"></img><div style="margin-top: 5px; margin-left: 35px; margin-top:9px; line-height: 20px;" id="foodAdress"></div><br/>
             <img height="20" style="float:left; margin-top: 2px; " src="../web/web-resources/global-resources/distance.svg"></img><div style="margin-top: 0px; margin-left: 35px; margin-top:5px;" id="foodDistance"></div>
         </div>
     </div>
-    <div class="col-lg">
+    <div class="col-lg" >
+        <button onclick="location.href='search'" style="left: calc(55% - 114px); width: 100px; vertical-align: bottom; position: absolute; top: 50%; transform: translateY(-50%); background-color: #007bff; color: white; padding: 10px 20px; font-size:17px; border: none">Change</button>
     </div>
   </div>
 </div>
