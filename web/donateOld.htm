@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+
+<link rel="stylesheet" href="../web/nutritionSheet.css">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+</head>
+
+<body onload="loadAPI()">    
+  <div style="width: 100%; text-align: center; margin-top: 50px; font-size: 23px">My Donations</div>
+    Quantity: <INPUT TYPE="NUMBER" MIN="1" id="quantity" MAX="999" STEP="1" VALUE="1"></input>
+    Expiration: <input id="expiration" type="date" value="Expiration Date"></input>
+    Barcode: <input id="image-file" type="file" accept="image/png,image/jpeg,image/bmp,image/gif">
+    <div id="barcode-result" style="display: none"></div>
+    <div id="lookup-name" style="display: none"></div>
+    <div id="food-name" style="display: none"></div>
+	  <div id="health-rating" style="display: none"></div>
+	  <div id="food-image" style="display: none"></div>
+  
+    <div id="my-history"></div>
+    <script src="../node_modules/dynamsoft-javascript-barcode/dist/dbr.js"
+        data-productKeys="t0076xQAAAIjKUUiAy33ls/u0gA1c4Qe3JQjCrVqWCBmrObJiePN3jQb9gahDa4/IoZVw4D3eLoStdirOwCfEYWYCCjUMeDH2ZRsdbDwqcw=="></script>
+
+    <script>
+function removeAllChildNodes(parent) {
+    while (parent.firstChild) {
+        parent.removeChild(parent.firstChild);
+    }
+}
+
+
+function loadAPI() {
+  var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            let donationHistory = JSON.parse(xhttp.responseText);
+            removeAllChildNodes(document.getElementById("my-history"));
+            for (var i=0; i < donationHistory.length; i++) {
+              
+                let imGo = document.createElement("img");
+                if (donationHistory[i].foodItem.hasImage) {
+                  imGo.src=donationHistory[i].foodItem.imageAddress;
+                }
+                imGo.style="float: left; height:50px; width;50px";
+                let div = document.createElement("div");
+                let info = document.createElement("div");
+                let d = new Date(donationHistory[i].donationDate);
+                info.innerHTML = "<div style='float:left '>Item Quantity: " + donationHistory[i].quantity + "<br/>Item Name: " + donationHistory[i].foodItem.itemName+"<br/>Date Donated: "+ ((1+d.getMonth()) + '/' + d.getDate() + '/' + d.getFullYear()) +"</div>";
+                info.style="float: left";
+                div.style="padding:50px;"
+                div.appendChild(imGo);
+                div.appendChild(info);
+                document.getElementById("my-history").appendChild(div);
+            }
+
+
+        };
+        xhttp.open("GET", "../api/viewDonations?userID=" + getCookie("userID"), true);
+        xhttp.setRequestHeader('Content-type', 'application/json');
+        xhttp.send();
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
+  
+    function sendItem(item) {
+      var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+           loadAPI();
+        };
+        xhttp.open("POST", "../api/donateItem", true);
+        xhttp.setRequestHeader('Content-type', 'application/json');
+        xhttp.send(JSON.stringify(item));
+    }
+
+
+    function tryAlternate(barcode, nutritionScore, nutritionString) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (xhttp.readyState == 4 && xhttp.status == 200) {
+                var decoded = JSON.parse(xhttp.responseText);
+                var prodName = decoded.items[0].title;
+                var prodImage =decoded.items[0].image[0];
+                
+                var someDate = new Date(document.getElementById("expiration").value);
+
+                var toSaveObject = {
+                    barcode: barcode,
+                    itemName: prodName,
+                    hasNutrition: false,
+                    hasImage: true,
+                    imageAddress: prodImage,
+                    expiration: someDate.getTime(),
+                    userID: getCookie("userID"),
+                    quantity: document.getElementById("quantity").value,
+                    foodBankID: getCookie("foodBankID")
+                };               
+                  sendItem(toSaveObject);
+            }
+        };
+        xhttp.open("GET", "https://cors-anywhere.herokuapp.com/https://api.upcitemdb.com/prod/trial/lookup?upc=" + barcode, true);
+        xhttp.send();
+    }
+
+
+	function brokenCode() {
+            alert("Bad Read");
+    }
+
+	function isValidBarcode(barcode) {
+  // check length
+  if (barcode.length < 8 || barcode.length > 18 ||
+      (barcode.length != 8 && barcode.length != 13 &&
+      barcode.length != 14 && barcode.length != 18)) {
+    return false;
+  }
+
+  var lastDigit = Number(barcode.substring(barcode.length - 1));
+  var checkSum = 0;
+  if (isNaN(lastDigit)) { return false; } // not a valid upc/ean
+
+  var arr = barcode.substring(0,barcode.length - 1).split("").reverse();
+  var oddTotal = 0, evenTotal = 0;
+
+  for (var i=0; i<arr.length; i++) {
+    if (isNaN(arr[i])) { return false; } // can't be a valid upc/ean we're checking for
+
+    if (i % 2 == 0) { oddTotal += Number(arr[i]) * 3; }
+    else { evenTotal += Number(arr[i]); }
+  }
+  checkSum = 10 - ((evenTotal + oddTotal) % 10);
+
+  // true if they are equal
+  return checkSum == lastDigit;
+}
+
+        let reader = null;
+
+        document.getElementById('image-file').addEventListener('change', async function () {
+            try {
+               
+                reader = reader || await Dynamsoft.BarcodeReader.createInstance();
+                let barcode_results = [];
+                let file = this.files[0];
+                let results = await reader.decode(file);
+                for (let result of results) {
+                  if (result.barcodeText) 
+                    barcode_results.push(result.barcodeText);
+                }
+
+                for (let validBarcode of barcode_results) {
+
+                    let xhr = new XMLHttpRequest();
+
+                    // 2. Configure it: GET-request for the URL /article/.../load
+                    xhr.open('GET', 'https://world.openfoodfacts.org/api/v0/product/' + validBarcode + '.json');
+
+                    // 3. Send the request over the network
+                    xhr.send();
+
+                    // 4. This will be called after the response is received
+                    xhr.onload = function() {
+                    if (xhr.status == 200) { // analyze HTTP status of the response
+                        if (xhr.responseText.indexOf("Not a valid UPC code") == -1) {
+                            var prodData = JSON.parse(xhr.responseText);
+
+                            var nutritionData = {
+                                servingSize: prodData.product.serving_size,
+                                calories: prodData.product.nutriments["energy-kcal_serving"],
+                                totalFat: prodData.product.nutriments["fat_serving"],
+                                saturatedFat:prodData.product.nutriments["saturated-fat"],
+                                transFat:prodData.product.nutriments["trans-fat"],
+                                polyFat: prodData.product.nutriments["polyunsaturated-fat_serving"],
+                                monoFat: prodData.product.nutriments["monounsaturated-fat_serving"],
+                                cholest: prodData.product.nutriments["cholesterol_serving"],
+                                sodium: prodData.product.nutriments["sodium_serving"],
+                                carb: prodData.product.nutriments["carbohydrates_serving"],
+                                fiber: prodData.product.nutriments["fiber_serving"],
+                                sugar: prodData.product.nutriments["sugars_serving"],
+                                protein: prodData.product.nutriments["proteins_serving"],
+                                vitA: prodData.product.nutriments["vitamin-a_serving"],
+                                vitC: prodData.product.nutriments["vitamin-c_serving"],
+                                calcium: prodData.product.nutriments["calcium_serving"],
+                                iron: prodData.product.nutriments["iron_serving"] 
+                            };
+
+                            var prodName = prodData.product.product_name_en_imported;
+                            var prodHealthScore =prodData.product.nutriments["nutrition-score-fr"];
+                            document.getElementById("lookup-name").innerHTML = prodName;
+                            var xhttp = new XMLHttpRequest();
+                            xhttp.onreadystatechange = function() {
+                                if (xhttp.readyState == 4 && xhttp.status == 200) {
+                                    var imData = JSON.parse(xhttp.responseText);
+                                    var imageLink = imData.hints[0].food.image;
+                                    
+                                    if (!imageLink)
+                                      return  tryAlternate(validBarcode, prodHealthScore, JSON.stringify(nutritionData));
+
+                                    var someDate = new Date(document.getElementById("expiration").value);
+                                    var toSaveObject = {
+                                        barcode: validBarcode,
+                                        itemName: prodName,
+                                        hasNutrition: true,
+                                        itemNutrition: prodHealthScore,
+                                        itemNutritionLabel: JSON.stringify(nutritionData),
+                                        hasImage: true,
+                                        imageAddress: imageLink,
+                                        expiration:someDate.getTime(),
+                                        userID: getCookie("userID"),
+                                        quantity: document.getElementById("quantity").value,
+                                        foodBankID: getCookie("foodBankID")
+                                    };  
+                                    sendItem(toSaveObject);
+
+                                }
+                            };
+                            xhttp.open("GET", "https://api.edamam.com/api/food-database/v2/parser?upc=" + validBarcode + "&app_id=3845197c&app_key=4beb9027400f8e78cbd8619c42532730", true);
+                            xhttp.send();
+
+                          
+                            loadAPI();
+                        } else {
+                          tryAlternate(validBarcode, null, null);
+                        }
+                    } else {
+                      tryAlternate(validBarcode, null, null);
+                    }
+                    };
+
+                }
+                
+				
+                document.getElementById("barcode-result").innerText = 'Barcode result: ' + barcode_results.join('\n');
+
+            
+            } catch (ex) {
+                alert(ex.message);
+                throw ex;
+            }
+        });
+    </script>
+
+</html>

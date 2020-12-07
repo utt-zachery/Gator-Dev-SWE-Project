@@ -59,6 +59,10 @@ app.get('/home', function(req, res) {
    Page.buildHome(req,res);
 });
 
+app.get('/donate', function(req, res) {
+   Page.buildPageWithFoodBank(req, res, "donate", 0);
+});
+
 //404 - resource not found
 app.all('/*', (req, res) => {
    res.statusCode === 404 ? res.send('Sorry, information not available') : res.sendFile(path.resolve('./web/index.htm'))    
