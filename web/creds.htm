@@ -1,2 +1,14 @@
+<script>
+window.addEventListener( "pageshow", function ( event ) {
+  var historyTraversal = event.persisted || 
+                         ( typeof window.performance != "undefined" && 
+                              window.performance.navigation.type === 2 );
+  if ( historyTraversal ) {
+    // Handle page restore.
+    window.location.reload();
+  }
+});
+    </script>
+
 <h1 style="text-align: center; margin-top: 10px; padding-bottom: 10px;">Access Denied</h1><br/>
-Our records suggest that you are not a food bank employee. If this is incorrect, please contact our help staff to get assigned to a food bank. You can go <a href="home">Home</a>.
+Our records suggest that you are not a food bank employee at this particular location. If this is incorrect, please contact our help staff to get assigned to a food bank. You can go <a href="home">Home</a>, or <a href="search">select a different food bank</a> that you have authorization to manage.

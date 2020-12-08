@@ -2,6 +2,7 @@ import ItemOrder from '../models/itemOrder.js'
 import Order from '../models/orderModel.js'
 import User from '../models/userModel.js'
 import FoodItem from '../models/foodModel.js'
+import * as Email from "../controllers/emailController.js"
 
 export const bagItems = async(req, res) => {
    if (!req.body || !req.body.orderID) {
@@ -21,7 +22,7 @@ export const pickUpItems = async(req, res) => {
          return res.status(200).send({msg: "Needs a body OrderID parameter"});
     } else {
          await Order.updateOne({_id: req.body.orderID},{bagState: 2}).then((msg) => {
-             //TODO: HOOK FOR sending Order Ready emails
+             Email.processEmails(null, null);
              res.json(msg);
          }).catch((err) => {
              res.status(200).send(err);

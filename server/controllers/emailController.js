@@ -34,9 +34,9 @@ export const doEmail = async(req, res, email, order, isLast,itemsOrdered, foodBa
     }, (error, response) => {
         if (!error) {
             Order.findByIdAndUpdate(order._id, {bagState: 3}, (err, data) => {
-                if (err)
+                if (err && res != null) 
                     return res.status(200).json(err);
-                if (isLast) {
+                if (isLast && res != null) {
                     return res.status(200).json({msg: "done"});
                 }
             });
@@ -50,7 +50,7 @@ export const doEmail = async(req, res, email, order, isLast,itemsOrdered, foodBa
 export const resolveFoodItem = async(req, res, email, order, isLast,itemsOrdered, foodBank) => {
     for (var i=0;i<itemsOrdered.length; i++) {
         await FoodItem.findById(itemsOrdered[i].foodItemID, (err, data) => {
-            if (!data) {
+            if (!data && res != null) {
                 return res.status(200).json({msg: "couldn't find FoodBank with ID " + order.foodBankID});
             }
             if (!err) {
@@ -60,7 +60,8 @@ export const resolveFoodItem = async(req, res, email, order, isLast,itemsOrdered
                 }
             }
             else {
-                return res.status(200).json(err);
+                if (res != null)
+                    return res.status(200).json(err);
             }
             
         });
@@ -68,26 +69,26 @@ export const resolveFoodItem = async(req, res, email, order, isLast,itemsOrdered
 }
 export const resolveFoodBank = async(req, res, email, order, isLast, itemsOrdered) => {
     await FoodBank.findById(order.foodBankID, (err, data) => {
-        if (!data) {
+        if (!data && res != null) {
             return res.status(200).json({msg: "couldn't find FoodBank with ID " + order.foodBankID});
         }
         if (!err) {
             resolveFoodItem(req, res,email, order,isLast,itemsOrdered,data);
         }
-        else
+        else if (res != null)
                 return res.status(200).json(err);
     })
 }
 
 export const resolveOrder = async(req, res, email, order, isLast) => {
     await ItemOrder.find({"orderModelID": order._id}, (err, data) => {
-        if (!data) {
+        if (!data && res != null) {
             return res.status(200).json({msg: "couldn't find an items with with ID " + order._id});
         }
         if (!err) {
             resolveFoodBank(req, res, email, order,isLast,data);
         }
-        else
+        else if (res != null)
                 return res.status(200).json(err);
     })
 }
@@ -96,13 +97,13 @@ export const resolveEmail = async(req, res, orderData) => {
     for (var i=0; i < orderData.length; i++) {
         await User.findById(orderData[i].placedBy, (err, data) => {
            
-            if (!data) {
+            if (!data && res != null) {
                 return res.status(200).json({msg: "couldn't find user with ID " + orderData[i].placedBy});
             }
             if (!err) {
                 resolveOrder(req, res, data,  orderData[i], i==orderData.length-1);
             }
-            else
+            else if (res != null)
                 return res.status(200).json(err);
         });
     }
@@ -110,13 +111,13 @@ export const resolveEmail = async(req, res, orderData) => {
 
 export const processEmails = async(req, res) => {
     await Order.find({bagState: 2}, (err, data) => {
-        if (!data || data.length ==0) {
+        if ((!data || data.length ==0) && res != null) {
             return res.status(200).json({msg: "done"});
         }
 
         if (!err)
              resolveEmail(req, res, data);
-        else
+        else if (res != null)
             return res.status(200).json(err);
     });
 }

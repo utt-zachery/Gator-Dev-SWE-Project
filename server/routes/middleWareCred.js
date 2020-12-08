@@ -9,8 +9,7 @@ export const process = async(req, res) => {
     }
 
     await Manages.findOne( {"userID": req.cookies["userID"] }, (err, data) => {
-        console.log(req.cookies["userID"]);
-        if (err || !data) {
+        if (err || !data || req.cookies["foodBankID"] != data.foodBankID) {
             Page.buildPage(req, res, "creds", -1);
             return false;
         } else {
