@@ -1,30 +1,36 @@
 import Order from "../models/orderModel.js"
 import User from "../models/userModel.js"
-import mailgun from "mailgun-js";
+import * as Config from "../../config/config.js"
+import nodemailer from "nodemailer"
 
 export const doEmail = async(req, res, email, orderID, isLast) => {
-    console.log("try");
-    const DOMAIN = "sandboxa651d1324d5442afa29aa85b00fa0583.mailgun.org";
-    const mg = mailgun({apiKey: "0d615ce4364ea0c76f454e9d6544c76d-4879ff27-2442fd64", domain: DOMAIN});
-    const data = {
-        from: "orders@sandbox.mgsend.net",
-        to: email,
-        subject: "Order Ready",
-        text: "Greetings!<br/>Recently, you placed an order at the "
-    };
-    mg.messages().send(data, function (error, body) {
-        if (!error) {
-            Order.findByIdAndUpdate(orderID, {bagState: 3}, (err, data) => {
-                if (err)
-                    return res.status(200).json(err);
-                if (isLast) {
-                    return res.status(200).json({msg: "done"});
-                }
-            });
-        }
-        else {
-            return res.status(200).json(error);
-        }
+    // create reusable transporter object using the default SMTP transport
+    let transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 587,
+        secure: false, // true for 465, false for other ports
+        auth: {
+            user: Config.default.Gmail.address, // generated ethereal user
+            pass: Config.default.Gmail.password, // generated ethereal password
+        },
+    });
+
+    // send mail with defined transport object
+    let info = await transporter.sendMail({
+        from: 'orders.PassItOn@gmail.com', // sender address
+        to: "utt.zachery@ufl.edu", // list of receivers
+        subject: "Hello ✔", // Subject line
+        text: "Hello world?", // plain text body
+        html: "<b>Hello world?</b>", // html body
+    }, (response) => {
+        console.log(response);
+        Order.findByIdAndUpdate(orderID, {bagState: 3}, (err, data) => {
+            if (err)
+                return res.status(200).json(err);
+            if (isLast) {
+                return res.status(200).json({msg: "done"});
+            }
+        });
     });
 }
 
