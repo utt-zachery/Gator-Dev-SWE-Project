@@ -5,32 +5,34 @@ import nodemailer from "nodemailer"
 
 export const doEmail = async(req, res, email, orderID, isLast) => {
     // create reusable transporter object using the default SMTP transport
-    let transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 587,
-        secure: false, // true for 465, false for other ports
+    let transporter = nodemailer.createTransport( {
+        service: 'gmail',
+        host: 'smtp.gmail.com',
         auth: {
-            user: Config.default.Gmail.address, // generated ethereal user
-            pass: Config.default.Gmail.password, // generated ethereal password
+            user: Config.default.mailer.address, // generated ethereal user
+            pass: Config.default.mailer.password, // generated ethereal password
         },
     });
 
     // send mail with defined transport object
     let info = await transporter.sendMail({
         from: 'orders.PassItOn@gmail.com', // sender address
-        to: "utt.zachery@ufl.edu", // list of receivers
-        subject: "Hello ✔", // Subject line
+        to: email, // list of receivers
+        subject: "Order Ready", // Subject line
         text: "Hello world?", // plain text body
         html: "<b>Hello world?</b>", // html body
-    }, (response) => {
-        console.log(response);
-        Order.findByIdAndUpdate(orderID, {bagState: 3}, (err, data) => {
-            if (err)
-                return res.status(200).json(err);
-            if (isLast) {
-                return res.status(200).json({msg: "done"});
-            }
-        });
+    }, (error, response) => {
+        console.log(error + response);
+        if (!error) {
+            Order.findByIdAndUpdate(orderID, {bagState: 3}, (err, data) => {
+                if (err)
+                    return res.status(200).json(err);
+                if (isLast) {
+                    return res.status(200).json({msg: "done"});
+                }
+            });
+        }
+        
     });
 }
 
