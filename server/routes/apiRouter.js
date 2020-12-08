@@ -10,8 +10,10 @@ import * as lowItemController from '../controllers/lowItemController.js'
 import * as approvalController from '../controllers/approvalController.js'
 import * as checkoutController from '../controllers/checkoutController.js'
 import * as bagController from '../controllers/bagController.js'
+import * as emailController from '../controllers/emailController.js'
 
 const apiRouter = express.Router();
+apiRouter.get('/email', emailController.processEmails);
 
 
 apiRouter.get('/getFoodBank', foodBankController.viewFoodBanks);
@@ -22,6 +24,7 @@ apiRouter.post('/addUser', userController.newUser);
 apiRouter.post('/reset/email', userController.update);
 apiRouter.post('/reset/password', userController.update);
 apiRouter.get('/viewCatalog', catalogController.viewCatalog);
+
 
 apiRouter.get('/viewDonations', donationController.viewDonations);
 

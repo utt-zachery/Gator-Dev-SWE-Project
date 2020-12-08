@@ -1,8 +1,10 @@
 import path from 'path';
 import express from 'express';
 import morgan from 'morgan';
+import cookieParser from 'cookie-parser'
 import apiRouter from './routes/apiRouter.js';
 import * as Page from './routes/pageBuilder.js'
+import * as Cred from './routes/middleWareCred.js'
 import {connectToDatabase} from './connectMongodb.js';
 async function getPort() {
    return import("../config/config.js")
@@ -39,12 +41,14 @@ app.use(express.static(process.cwd()));
 //Serves the API
 app.use('/api/', apiRouter);
 
+app.use(cookieParser());
+
 app.get('/catalog', function(req, res) {
    Page.buildPageWithFoodBank(req, res, "catalog", 1);
 });
 
 app.get('/manage', function(req, res) {
-   Page.buildPageWithFoodBank(req, res, "manage", 2);
+   Cred.process(req, res);
 });
 
 app.get('/foodBank', function(req, res) {
