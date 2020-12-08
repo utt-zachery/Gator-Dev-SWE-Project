@@ -7,4 +7,4 @@ const managesSchema = new mongoose.Schema({
 
 });
 
-export default mongoose.model('Maintains', managesSchema);
+export default mongoose.model('Manages', managesSchema);

@@ -1,4 +1,4 @@
-import Manages from '../models/userModel.js'
+import Manages from '../models/managesModel.js'
 import * as Page from '../routes/pageBuilder.js'
 
 export const process = async(req, res) => {
@@ -9,7 +9,7 @@ export const process = async(req, res) => {
     }
 
     await Manages.findOne( {"userID": req.cookies["userID"] }, (err, data) => {
-
+        console.log(req.cookies["userID"]);
         if (err || !data) {
             Page.buildPage(req, res, "creds", -1);
             return false;
