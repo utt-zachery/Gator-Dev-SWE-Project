@@ -1,4 +1,3 @@
-import path from 'path';
 import express from 'express';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser'
@@ -68,8 +67,10 @@ app.get('/search', function(req, res) {
 });
 
 //404 - resource not found
-app.all('/*', (req, res) => {
-   res.statusCode === 404 ? res.send('Sorry, information not available') : res.sendFile(path.resolve('./web/index.htm'))    
-});
+app.all("/*", (req, res) => {
+   res.statusCode === 404
+     ? res.send("Sorry, information not available")
+     : res.redirect("/home");
+ });
 
 app.listen(port, console.log(`App now listening on port ${port}`));
