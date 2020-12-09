@@ -484,7 +484,7 @@ function loadAPIThree() {
                         event.stopPropagation();
                     }
                     
-                div.innerHTML = "Donated By: " + retreivedData[i].donatedBy.name +  "<br/>Donated On: " + d.getDate() + '/' + d.getMonth() + '/' + d.getFullYear() + "<br/>Quantity: " + retreivedData[i].quantity +"<br/>";
+                div.innerHTML = "Donated By: " + retreivedData[i].donatedBy.name +  "<br/>Donated On: " + d.getMonth() + '/' + (1+d.getDate()) + '/' + d.getFullYear() + "<br/>Quantity: " + retreivedData[i].quantity +"<br/>";
                     if (retreivedData[i].foodItem.hasImage == true) {
                         div.innerHTML = div.innerHTML+"<img class='imprev' src='" + retreivedData[i].foodItem.imageAddress + "'></img><br/>";
                     } else {
