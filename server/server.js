@@ -5,7 +5,9 @@ import apiRouter from './routes/apiRouter.js';
 import * as Page from './routes/pageBuilder.js'
 import * as Cred from './routes/middleWareCred.js'
 import {connectToDatabase} from './connectMongodb.js';
-import path from "path"
+import path from "path";
+import * as Auth0 from 'express-openid-connect';
+
 
 async function getPort() {
    return import("../config/config.js")
@@ -35,6 +37,18 @@ app.use(express.urlencoded({
 }));
 
 app.use(express.json());
+
+//Connect to Autho
+app.use(
+   Auth0.default.auth({
+        authRequired: false,
+        auth0Logout: true,
+        issuerBaseURL: process.env.ISSUER_BASE_URL,
+        baseURL: process.env.BASE_URL,
+        clientID: process.env.CLIENT_ID,
+        secret: process.env.SECRET,
+    })
+);
 
 //Serve File resources, while lockingdown server information
 let __dirname = path.resolve(path.dirname(''));
