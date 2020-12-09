@@ -10,9 +10,7 @@ import * as Auth0 from 'express-openid-connect';
 import * as User from './controllers/userController.js'
 
 async function getPort() {
-   return import("../config/config.js")
-      .then(config => config.default.port)
-      .catch(5000)
+   return process.env.PORT || 5000;
 }
 const port = await getPort();
 //connect to database

@@ -21,10 +21,8 @@
   },
   "scripts": {
     "dev": "nodemon server/server.js",
-    "start": "node backend/server.js",
+    "start": "node server/server.js",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install npm && run build"
   },
-  "engines": {
-    "node": "10.16.0"
-}
+  "main":  "server/server.js"
 }
