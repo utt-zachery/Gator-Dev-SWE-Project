@@ -22,7 +22,7 @@ export const buildPage2 = async (receptor1, foodBankData, packageData, req, res,
                 let pageString = receptor1.replace(/web-resources/g,"web/web-resources/") + packageData + data.replace(/web-resources/g,"web/web-resources/");
                 pageString = pageString.replace("<!-- INSERT AT HERE -->",foodBankData);
                 pageString = pageString.replace("<!-- INSERT BARCODE KEY !-->", process.env.barcode);
-                pageString = pageString.replace("<-- MAPQUESTKEY -->", process.env.mapQuest-api);
+                pageString = pageString.replace("<-- MAPQUESTKEY -->", process.env.mapQuest_api);
 
                 if (req.oidc.user != undefined) {
                     pageString = pageString.replace("<!-- Login -->", "Log Out");

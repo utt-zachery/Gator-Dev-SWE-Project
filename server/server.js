@@ -41,10 +41,10 @@ app.use(
    Auth0.default.auth({
         authRequired: false,
         auth0Logout: true,
-        issuerBaseURL: process.env.autho-ISSUER_BASE_URL,
-        baseURL: process.env.autho-BASE_URL,
-        clientID: process.env.autho-CLIENT_ID,
-        secret: process.env.autho-SECRET,
+        issuerBaseURL: process.env.autho_ISSUER_BASE_URL,
+        baseURL: process.env.autho_BASE_URL,
+        clientID: process.env.autho_CLIENT_ID,
+        secret: process.env.autho_SECRET,
     })
 );
 

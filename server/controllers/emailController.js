@@ -11,8 +11,8 @@ export const doEmail = async(req, res, email, order, isLast,itemsOrdered, foodBa
         service: 'gmail',
         host: 'smtp.gmail.com',
         auth: {
-            user: process.env.mailer-address, // generated ethereal user
-            pass: process.env.mailer-password, // generated ethereal password
+            user: process.env.mailer_address, // generated ethereal user
+            pass: process.env.mailer_password, // generated ethereal password
         },
     });
 
