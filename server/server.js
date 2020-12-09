@@ -90,6 +90,14 @@ app.get('/search', Auth0.default.requiresAuth(), function (req, res,next) { User
    Page.buildPage(req,res, "search", -1);
 });
 
+app.get('/test', function(req, res) {
+   if (db) {
+      return req.statusCode(200).send("Mongo Conencted Successfully");
+   } else {
+      return req.statusCode(500).send("Mongo Connection Failed");
+   }
+});
+
 //404 - resource not found
 app.all("/*", (req, res) => {
    res.statusCode === 404
