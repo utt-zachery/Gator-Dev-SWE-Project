@@ -21,7 +21,7 @@ export const process = async(req, res) => {
     }
 
     await Manages.findOne( {"userID": req.cookies["userID"] }, (err, data) => {
-        if (err || !data) {
+        if (err) {
             Page.buildPage(req, res, "creds", -1);
             return false;
         } else if (req.cookies["foodBankID"] == data.foodBankID){
