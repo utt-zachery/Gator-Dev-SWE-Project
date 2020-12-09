@@ -14,13 +14,14 @@ async function getPort() {
 }
 const port = await getPort();
 //connect to database
+let MongoState = false;
 const db = connectToDatabase().on(
    "error",
    console.error.bind(console, "MongoDB connection error:")
  );
  db.once("open", () => {
    console.log("Successfully connected to mongoose database!");
-   
+   MongoState = true;
  });
 
 //initialize app
@@ -91,7 +92,7 @@ app.get('/search', Auth0.default.requiresAuth(), function (req, res,next) { User
 });
 
 app.get('/test', function(req, res) {
-   if (db) {
+   if (MongoState) {
       return req.statusCode(200).send("Mongo Conencted Successfully");
    } else {
       return req.statusCode(500).send("Mongo Connection Failed");
