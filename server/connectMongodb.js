@@ -3,9 +3,7 @@
 /*import all libraries */
 import mongoose from "mongoose";
 async function getUri() {
-  return import("../config/config.js")
-     .then(config => process.env.mongo-uri)
-     .catch(process.env.uri)
+  return process.env.mongo-uri;
 }
 const link = await getUri();
 /* Connect to your database using mongoose */
