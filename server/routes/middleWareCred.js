@@ -24,6 +24,8 @@ export const process = async(req, res) => {
         if (err) {
             Page.buildPage(req, res, "creds", -1);
             return false;
+        } else if (!data) {
+            return checkGod(req, res);
         } else if (req.cookies["foodBankID"] == data.foodBankID){
             Page.buildPageWithFoodBank(req, res, "manage", 2);
             return true;
