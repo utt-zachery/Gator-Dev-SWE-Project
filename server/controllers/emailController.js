@@ -5,6 +5,31 @@ import ItemOrder from "../models/itemOrder.js"
 import FoodBank from '../models/foodBankModel.js'
 import FoodItem from "../models/foodModel.js"
 
+export const doTest = async(req, res) => {
+    let transporter = nodemailer.createTransport( {
+        service: 'gmail',
+        host: 'smtp.gmail.com',
+        auth: {
+            user: process.env.mailer_address, // generated ethereal user
+            pass: process.env.mailer_password, // generated ethereal password
+        },
+    });
+
+    
+    let info = await transporter.sendMail({
+        from: 'orders.PassItOn@gmail.com', // sender address
+        to: "orders.PassItOn@gmail.com", // list of receivers
+        subject: "Automated Test", // Subject line
+        html: "This is an automated test to see if an email can be sent AND received", // html body
+    }, (error, response) => {
+        if (error) {
+            res.status(500).json(error);
+        } else {
+            res.status(200).json(response);
+        }
+    });
+}
+
 export const doEmail = async(req, res, email, order, isLast,itemsOrdered, foodBank) => {
     // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport( {

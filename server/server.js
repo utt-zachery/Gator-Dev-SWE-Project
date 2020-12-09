@@ -8,6 +8,7 @@ import {connectToDatabase} from './connectMongodb.js';
 import path from "path";
 import * as Auth0 from 'express-openid-connect';
 import * as User from './controllers/userController.js'
+import * as Email from './controllers/emailController.js'
 
 async function getPort() {
    return process.env.PORT || 5000;
@@ -98,6 +99,10 @@ app.get('/test', function(req, res) {
    } else {
       return res.status(500).send("Mongo Connection Failed");
    }
+});
+
+app.get('/test/email', function(req, res) {
+   Email.doTest(req, res);
 });
 
 //404 - resource not found
