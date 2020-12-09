@@ -108,7 +108,7 @@ button:hover {
     }
 
     function submitAddress() {
-        var url = "http://www.mapquestapi.com/geocoding/v1/address?key=<-- MAPQUESTKEY -->&location=" + encodeURI(document.getElementById("location").value);
+        var url = "https://www.mapquestapi.com/geocoding/v1/address?key=<-- MAPQUESTKEY -->&location=" + encodeURI(document.getElementById("location").value);
         if (document.getElementById("location").value.length >0) {
             let xm = new XMLHttpRequest();
             xm.onload  = function() {
