@@ -6,7 +6,7 @@ export const buildPage2 = async (receptor1, foodBankData, packageData, req, res,
     await fs.readFile("web/receptor2.htm", "utf8", (err, data) => {
         if (!err) {
             
-            if (pageNum >-1) {
+            if (pageNum > -1) {
                 let inter = receptor1.split('class="nav-item"');
                 receptor1 = "";
                 
