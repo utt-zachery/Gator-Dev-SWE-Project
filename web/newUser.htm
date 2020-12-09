@@ -1,0 +1,146 @@
+<style>
+#regForm {
+ margin-left: 15%;
+  width: 70%;
+  min-width: 300px;
+  display: inline-block;
+}
+
+input {
+  padding: 10px;
+  width: 100%;
+  font-size: 17px;
+  font-family: Raleway;
+  border: 1px solid #aaaaaa;
+}
+
+input.invalid {
+  background-color: #ffdddd;
+}
+
+button {
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 17px;
+  font-family: Raleway;
+  cursor: pointer;
+}
+
+
+button:hover {
+  opacity: 0.8;
+}
+
+.undoneBtn {
+    border: 2px solid #007bff;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: inline-block;
+    position: relative; right:50px;
+    top:25px;
+    color:  #007bff;
+}
+
+.doneBtn {
+    border: 2px solid white;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: inline-block;
+    position: relative; right:50px;
+    top:25px;
+    background-color: #007bff;
+    color:  white;
+}
+</style>
+
+<h1 style="text-align: center; margin-top: 10px;">New User Registration</h1>
+<br/>
+<tab>
+<div id="regForm">
+<div class="tab" style="text-align: center; "> <div name="doBtn" class="undoneBtn"><span style="font-size: 35px; position: absolute; top:5px;left:23px;">1</span></div> <h1 style="display: inline-block; position: relative; right:30px;">Full Name</h1><br/><br/>
+<br/>
+<input id="name" onkeyup="validate1()" placeholder="Please enter your full name"></input><br/><br/><div style="text-align: right"><button onclick="next()">Next</button></div><br/>
+</div></div>
+</tab>
+
+<tab style="display: none">
+<div id="regForm">
+    <div class="tab" style="text-align: center; "> <div name="doBtn" class="undoneBtn"><span style="font-size: 35px; position: absolute; top:5px;left:23px;">2</span></div> <h1 style="display: inline-block; position: relative; right:30px;">Address</h1><br/><br/>
+    <br/>
+    <input id="location" onkeyup="validate()" placeholder="Please enter your address"></input><br/><br/><div style="text-align: right"><button onclick="submitAddress()">Submit</button></div><br/>
+    </div></div>
+</tab>
+</div>
+<br/><br/>
+<script>
+
+    let userinfo = '<!-- USER INFO -->';
+    let creds = JSON.parse(userinfo);
+
+    function validate1() {
+        if (document.getElementById("name").value.length > 0) {
+            document.getElementsByName("doBtn")[0].className = "doneBtn";
+            return true;
+        } else {
+            document.getElementsByName("doBtn")[0].className = "undoneBtn";
+            return false;
+        }
+    }
+
+    
+    function next() {
+        if (validate1()) {
+            document.getElementsByTagName("tab")[0].style.display = "none";
+            document.getElementsByTagName("tab")[1].style.display = "block";
+        }
+    }
+
+    function validate() {
+        if (document.getElementById("location").value.length >0 ){
+            document.getElementsByName("doBtn")[1].className = "doneBtn";
+        } else {
+            document.getElementsByName("doBtn")[1].className = "undoneBtn";
+        }
+    }
+
+    function submitAddress() {
+        var url = "http://www.mapquestapi.com/geocoding/v1/address?key=<-- MAPQUESTKEY -->&location=" + encodeURI(document.getElementById("location").value);
+        if (document.getElementById("location").value.length >0) {
+            let xm = new XMLHttpRequest();
+            xm.onload  = function() {
+                if (xm.readyState == 4 && xm.status == 200) {
+                    let responseText = JSON.parse(xm.responseText);
+                    if (responseText && responseText.results && responseText.results.length > 0 && responseText.results[0].locations.length > 0) {
+                        let lattitude = responseText.results[0].locations[0].latLng.lat;
+                        let longitude = responseText.results[0].locations[0].latLng.lng;
+                        let toSend = {
+                            email: creds.email,
+                            name: document.getElementById("name").value,
+                            address: document.getElementById("location").value,
+                            longitude: longitude,
+                            latitude: lattitude
+                        };
+                        let xml = new XMLHttpRequest();
+                        xml.onload = function() {
+                            if (xml.readyState == 4 && xml.status == 200 ){
+                               location.href = "home";
+                            }
+                        };
+                        xml.open("POST","../api/addUser", true);
+                        xml.setRequestHeader("Content-Type","application/json");
+                        xml.send(JSON.stringify(toSend));
+                    } else {
+                        alert("Address not found. Please try again.");
+                    }
+                }
+            };
+
+            xm.open("GET", url, true);
+            xm.send();
+        }
+    }
+</script>

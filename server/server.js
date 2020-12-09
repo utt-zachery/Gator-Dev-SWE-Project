@@ -8,6 +8,7 @@ import {connectToDatabase} from './connectMongodb.js';
 import path from "path";
 import * as Auth0 from 'express-openid-connect';
 import * as Config from '../config/config.js'
+import * as User from './controllers/userController.js'
 
 async function getPort() {
    return import("../config/config.js")
@@ -60,16 +61,20 @@ app.use('/api/', apiRouter);
 
 app.use(cookieParser());
 
-app.get('/catalog', function(req, res) {
-   Page.buildPageWithFoodBank(req, res, "catalog", 1);
+//Auth0.default.requiresAuth()
+app.get('/newUser', function(req, res) {
+   
+   console.log(req.oidc.user);
+   Page.buildPage(req, res, "newUser", -1);
 });
 
-app.get('/manage', function(req, res) {
+app.get('/catalog', Auth0.default.requiresAuth(), 
+    function (req, res,next) {User.resolveUserID(req,res, next)},  function(req, res) {
+            Page.buildPageWithFoodBank(req, res, "catalog", 1);
+});
+
+app.get('/manage', Auth0.default.requiresAuth(),  function (req, res,next){User.resolveUserID(req,res, next)}, function(req, res) {
    Cred.process(req, res);
-});
-
-app.get('/foodBank', function(req, res) {
-   Page.buildPage(req, res, "ViewFoodBank", 1);
 });
 
 app.get('/mission', function(req, res) {
@@ -80,11 +85,11 @@ app.get('/home', function(req, res) {
    Page.buildHome(req,res);
 });
 
-app.get('/donate', function(req, res) {
+app.get('/donate', Auth0.default.requiresAuth(),  function (req, res,next){  User.resolveUserID(req,res,next) }, function(req, res) {
    Page.buildPageWithFoodBank(req, res, "donate", 0);
 });
 
-app.get('/search', function(req, res) {
+app.get('/search', Auth0.default.requiresAuth(), function (req, res,next) { User.resolveUserID(req,res, next) }, function(req, res) {
    Page.buildPage(req,res, "search", -1);
 });
 

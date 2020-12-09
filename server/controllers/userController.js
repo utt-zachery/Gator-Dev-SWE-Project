@@ -1,5 +1,23 @@
 import User from "../models/userModel.js";
 
+
+export const resolveUserID = async(req, res, next) =>{
+    await User.findOne({email: req.oidc.user.email}, (err, data) => {
+        if (!data) {
+           res.redirect("newUser");
+           return false;
+        } else if (err){
+          res.json(err);
+          return false;
+        } else {
+          let miniString = JSON.stringify(data._id);
+          miniString=miniString.substring(1,miniString.length-1);
+          res.cookie('userID',miniString, {httpOnly: false});
+          return next();
+        }
+    });
+}
+
 //Create new user
 export const newUser = async (req, res) => {
 
@@ -24,10 +42,6 @@ export const newUser = async (req, res) => {
         } else if (!req.body.latitude) {
             return res.status(200).send({
             error: "Missing latitude in request body!",
-            });
-        } else if (!req.body.password) {
-            return res.status(200).send({
-            error: "Missing password in request body!",
             });
         } else if (!req.body.name) {
             return res.status(200).send({

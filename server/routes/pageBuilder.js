@@ -23,6 +23,17 @@ export const buildPage2 = async (receptor1, foodBankData, packageData, req, res,
                 let pageString = receptor1.replace(/web-resources/g,"web/web-resources/") + packageData + data.replace(/web-resources/g,"web/web-resources/");
                 pageString = pageString.replace("<!-- INSERT AT HERE -->",foodBankData);
                 pageString = pageString.replace("<!-- INSERT BARCODE KEY !-->", Config.default.barcode);
+                pageString = pageString.replace("<-- MAPQUESTKEY -->", Config.default.mapQuest.api);
+
+                if (req.oidc.user != undefined) {
+                    pageString = pageString.replace("<!-- Login -->", "Log Out");
+                    pageString = pageString.replace("<!-- Login Code -->", "location.href='logout'");
+                    pageString = pageString.replace("<!-- USER INFO -->", JSON.stringify(req.oidc.user));
+                } else {
+                    pageString = pageString.replace("<!-- Login -->", "Log In");
+                    pageString = pageString.replace("<!-- Login Code -->", "location.href='login'");
+                }
+
                 if (foodBankData.length == 0) {
                     let pageString2 = pageString.substring(0,"<!-- START FOODBANK -->".length + pageString.indexOf("<!-- START FOODBANK -->"));
                     let pageString3 = pageString.substring(pageString.indexOf("<!-- END FOODBANK-->"));
@@ -84,7 +95,16 @@ export const buildPageWithFoodBank = async (req, res, fileName, pageNum)  => {
 export const buildHome = async(req, res) => {
     await fs.readFile("web/home.htm", "utf8", (err, data) => {
         if (!err) {
-            res.status(200).send(data.replace(/web-resources/g,"web/web-resources/"));
+            if (req.oidc.user != undefined) {
+                let pageString = data.replace("<!-- Login -->", "Log Out");
+                pageString = pageString.replace("<!-- Login Code -->", "location.href='logout'");
+                pageString = pageString.replace("<!-- USER INFO -->", JSON.stringify(req.oidc.user));
+                pageString = pageString.replace(/web-resources/g,"web/web-resources/")
+                res.status(200).send(pageString);
+            } else {
+                res.status(200).send(data.replace(/web-resources/g,"web/web-resources/"));
+            }
+            
         } else {
             res.status(200).send(err);
         }
