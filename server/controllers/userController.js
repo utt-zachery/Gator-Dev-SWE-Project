@@ -2,20 +2,25 @@ import User from "../models/userModel.js";
 
 
 export const resolveUserID = async(req, res, next) =>{
+  if (req.oidc.user != undefined) {
     await User.findOne({email: req.oidc.user.email}, (err, data) => {
-        if (!data) {
-           res.redirect("newUser");
-           return false;
-        } else if (err){
-          res.json(err);
-          return false;
-        } else {
-          let miniString = JSON.stringify(data._id);
-          miniString=miniString.substring(1,miniString.length-1);
-          res.cookie('userID',miniString, {httpOnly: false});
-          return next();
-        }
-    });
+      if (!data) {
+         res.redirect("newUser");
+         return false;
+      } else if (err){
+        res.json(err);
+        return false;
+      } else {
+        let miniString = JSON.stringify(data._id);
+        miniString=miniString.substring(1,miniString.length-1);
+        res.cookie('userID',miniString, {httpOnly: false});
+        return next();
+      }
+  });
+  }
+  else {
+    return next();
+  }
 }
 
 //Create new user

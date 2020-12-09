@@ -102,7 +102,9 @@ export const buildHome = async(req, res) => {
                 pageString = pageString.replace(/web-resources/g,"web/web-resources/")
                 res.status(200).send(pageString);
             } else {
-                res.status(200).send(data.replace(/web-resources/g,"web/web-resources/"));
+                let pageString = data.replace("<!-- Login -->", "Log In");
+                pageString = pageString.replace("<!-- Login Code -->", "location.href='login'");
+                res.status(200).send(pageString.replace(/web-resources/g,"web/web-resources/"));
             }
             
         } else {

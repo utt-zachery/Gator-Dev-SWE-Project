@@ -81,7 +81,7 @@ app.get('/mission', function(req, res) {
    Page.buildPage(req, res, "mission", -1);
 });
 
-app.get('/home', function(req, res) {
+app.get('/home', function (req, res,next){User.resolveUserID(req,res, next)},function(req, res) {
    Page.buildHome(req,res);
 });
 
