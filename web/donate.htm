@@ -1,4 +1,4 @@
-
+<script src="https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode@8.0.0/dist/dbr.js" data-productKeys="<!-- INSERT BARCODE KEY !-->"></script>
 
 <h1 style="text-align: center; margin-top: 10px; padding-bottom: 10px;">Donate Food Item</h1>
 <br/>
@@ -96,7 +96,7 @@ button:hover {
 </style>
 
 <div style="text-align: center">
-<form id="regForm" action="/action_page.php">
+<div id="regForm">
   
   <!-- One "tab" for each step in the form: -->
   <div class="tab" style="text-align: center; "> <div name="doBtn" class="undoneBtn"><span style="font-size: 35px; position: absolute; top:3px;left:26px;">1</span></div> <h1 style="display: inline-block; position: relative; right:30px;">Food Item Barcode</h1><br/><br/>
@@ -118,6 +118,16 @@ button:hover {
     <p><input type="number" min="1" value="0" onchange="validateButton3()" placeholder="Quantity" style="height: 40px;" oninput="this.className = ''" id="quantChooser"></p>
   </div>
 
+  <div class="tab" style="text-align: center; "> <div name="doBtn" class="undoneBtn"><span style="font-size: 35px; position: absolute; top:3px;left:24px;">4</span></div> <h1 style="display: inline-block; position: relative; right:30px;">Scanning Barcode</h1><br/><br/>
+  <br/>
+    <img src="/web/web-resources/catalog-resources/tenor.gif" /> 
+  </div>
+
+  <div class="tab" style="text-align: center; "> <div name="doBtn" class="doneBtn"><span style="font-size: 35px; position: absolute; top:3px;left:24px;">5</span></div> <h1 style="display: inline-block; position: relative; right:30px;">Donation Successful</h1><br/><br/>
+  <br/>
+    Thank you for your donation. Please deliver the item to the selected food bank within 2 business days. You may also <button onclick="doDonate(event)" style="margin: 10px">Donate</button> another item!
+  </div>
+
   <br/>
   <div style="overflow:auto;">
     <div style="float:right;">
@@ -131,7 +141,7 @@ button:hover {
     <span class="step"></span>
     <span class="step"></span>
   </div>
-</form>
+</div>
 </div>
 <script>
 function preValidate() {
@@ -139,6 +149,7 @@ function preValidate() {
         document.getElementsByName("lname")[0].value = "";
     }
     validateButton();
+    scanImage();
 }
 
 function isFutureDate(idate){
@@ -174,7 +185,7 @@ if (result == false) {
 }
 
 function validateButton() {
-    if (document.getElementsByName("lname")[0].value.length > 0) {
+    if (document.getElementsByName("lname")[0].value.length > 0 && isValidBarcode(document.getElementsByName("lname")[0].value)) {
         document.getElementsByName("doBtn")[currentTab].className = "doneBtn";
         document.getElementById("fileLabel").innerHTML="Upload Image of Item Barcode";
         document.getElementsByName("filename")[0].value = "";
@@ -192,6 +203,7 @@ showTab(currentTab); // Display the current tab
 
 function showTab(n) {
   // This function will display the specified tab of the form...
+
   var x = document.getElementsByClassName("tab");
   x[n].style.display = "block";
   //... and fix the Previous/Next buttons:
@@ -200,8 +212,13 @@ function showTab(n) {
   } else {
     document.getElementById("prevBtn").style.display = "inline";
   }
-  if (n == (x.length - 1)) {
+ 
+
+  if (n == (x.length - 3)) {
     document.getElementById("nextBtn").innerHTML = "Submit";
+  } else  if (n == (x.length - 2) || n == (x.length - 1)) {
+    document.getElementById("nextBtn").style.display = "none";
+    document.getElementById("prevBtn").style.display = "none";
   } else {
     document.getElementById("nextBtn").innerHTML = "Next";
   }
@@ -230,23 +247,217 @@ function nextPrev(n) {
   // Increase or decrease the current tab by 1:
   currentTab = currentTab + n;
   // if you have reached the end of the form...
-  if (currentTab >= x.length) {
-    // ... the form gets submitted:
-    document.getElementById("regForm").submit();
-    return false;
+  if (currentTab >= 3) {
+      if (document.getElementsByName("filename")[0].value.length > 0 ) {
+          showTab(currentTab);
+          if (scrapedProduct != null) {
+            var someDate = new Date(document.getElementById("expirationChooser").value);
+            scrapedProduct.expiration = someDate.getTime();
+            scrapedProduct.quantity = document.getElementById("quantChooser").value;
+            sendItem(scrapedProduct);
+          }
+      } else {
+          showTab(currentTab);
+          donateItemWithBarcode(document.getElementsByName("lname")[0].value);
+      }
+      return false;
   }
   // Otherwise, display the correct tab:
   showTab(currentTab);
 }
 
+function isValidBarcode(barcode) {
+  // check length
+  if (barcode.length < 8 || barcode.length > 18 ||
+      (barcode.length != 8 && barcode.length != 12 &&
+      barcode.length != 13 && barcode.length != 14 &&
+      barcode.length != 18)) {
+    return false;
+  }
+
+  var lastDigit = Number(barcode.substring(barcode.length - 1));
+  var checkSum = 0;
+  if (isNaN(lastDigit)) { return false; } // not a valid upc/ean
+
+  var arr = barcode.substring(0,barcode.length - 1).split("").reverse();
+  var oddTotal = 0, evenTotal = 0;
+
+  for (var i=0; i<arr.length; i++) {
+    if (isNaN(arr[i])) { return false; } // can't be a valid upc/ean we're checking for
+
+    if (i % 2 == 0) { oddTotal += Number(arr[i]) * 3; }
+    else { evenTotal += Number(arr[i]); }
+  }
+  checkSum = (10 - ((evenTotal + oddTotal) % 10)) % 10;
+
+  // true if they are equal
+  return checkSum == lastDigit;
+}
+
+function doDonate(event) {
+  event.preventDefault();
+  location.reload();
+}
+
 function validateForm() {
- var toRet= ((document.getElementsByName("lname")[0].value.length > 0) || (document.getElementsByName("filename")[0].value.length > 0));
+ var toRet= ((document.getElementsByName("lname")[0].value.length > 0 && isValidBarcode(document.getElementsByName("lname")[0].value)) || (document.getElementsByName("filename")[0].value.length > 0));
  if (toRet == false) {
     document.getElementsByName("lname")[0].className += " invalid";
  }
  return toRet;
 }
+let codeValidation = false;
+let reader = null;
+let readBarcode = "";
+let doneScraping = false;
+let scrapedProduct = null;
 
+async function scanImage() {
+  try{
+            reader = reader || await Dynamsoft.DBR.BarcodeReader.createInstance();
+            
+            for(let i = 0; i <  document.getElementsByClassName("custom-file-input")[0].files.length; ++i){
+                let file =  document.getElementsByClassName("custom-file-input")[0].files[i];
+                let results = await reader.decode(file);
+                for(let result of results){
+                   // TODO - hook for barcode
+                    if (isValidBarcode(result.barcodeText)) {
+                      codeValidation = true;
+                      readBarcode = result.barcodeText;
+                      donateItemWithBarcode(readBarcode);
+                      return;
+                    }
+                }
+                document.getElementsByClassName("custom-file-input")[0].style.backgroundColor="#ffdddd";
+                nextPrev(-3); 
+                codeValidation = false;
+            }
+        }catch(ex){
+            document.getElementsByClassName("custom-file-input")[0].style.backgroundColor="#ffdddd";
+            nextPrev(-3);
+            codeValidation = false;
+            throw ex;
+        }
+}
+
+function donateItemWithBarcode(validBarcode) {
+  let xhr = new XMLHttpRequest();
+  xhr.open('GET', 'https://world.openfoodfacts.org/api/v0/product/' + validBarcode + '.json');
+
+
+  // 4. This will be called after the response is received
+  xhr.onload = function() {
+  if (xhr.status == 200) { // analyze HTTP status of the response
+      if (xhr.responseText.indexOf("Not a valid UPC code") == -1) {
+          var prodData = JSON.parse(xhr.responseText);
+
+          var nutritionData = {
+              servingSize: prodData.product.serving_size,
+              calories: prodData.product.nutriments["energy-kcal_serving"],
+              totalFat: prodData.product.nutriments["fat_serving"],
+              saturatedFat:prodData.product.nutriments["saturated-fat"],
+              transFat:prodData.product.nutriments["trans-fat"],
+              polyFat: prodData.product.nutriments["polyunsaturated-fat_serving"],
+              monoFat: prodData.product.nutriments["monounsaturated-fat_serving"],
+              cholest: prodData.product.nutriments["cholesterol_serving"],
+              sodium: prodData.product.nutriments["sodium_serving"],
+              carb: prodData.product.nutriments["carbohydrates_serving"],
+              fiber: prodData.product.nutriments["fiber_serving"],
+              sugar: prodData.product.nutriments["sugars_serving"],
+              protein: prodData.product.nutriments["proteins_serving"],
+              vitA: prodData.product.nutriments["vitamin-a_serving"],
+              vitC: prodData.product.nutriments["vitamin-c_serving"],
+              calcium: prodData.product.nutriments["calcium_serving"],
+              iron: prodData.product.nutriments["iron_serving"] 
+          };
+
+          var prodName = prodData.product.product_name_en_imported;
+          var prodHealthScore =prodData.product.nutriments["nutrition-score-fr"];
+          var xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function() {
+              if (xhttp.readyState == 4 && xhttp.status == 200) {
+                  var imData = JSON.parse(xhttp.responseText);
+                  var imageLink = imData.hints[0].food.image;
+                  
+                  if (!imageLink)
+                    return  tryAlternate(validBarcode, prodHealthScore, JSON.stringify(nutritionData));
+
+                  var someDate = new Date(document.getElementById("expirationChooser").value);
+                  var toSaveObject = {
+                      barcode: validBarcode,
+                      itemName: prodName,
+                      hasNutrition: true,
+                      itemNutrition: prodHealthScore,
+                      itemNutritionLabel: JSON.stringify(nutritionData),
+                      hasImage: true,
+                      imageAddress: imageLink,
+                      expiration:someDate.getTime(),
+                      userID: getCookie("userID"),
+                      quantity: document.getElementById("quantChooser").value,
+                      foodBankID: getCookie("foodBankID")
+                  };  
+                  doneScraping = true;
+                  scrapedProduct = toSaveObject;
+                  sendItem(toSaveObject);
+
+              }
+          };
+          xhttp.open("GET", "https://api.edamam.com/api/food-database/v2/parser?upc=" + validBarcode + "&app_id=3845197c&app_key=4beb9027400f8e78cbd8619c42532730", true);
+          xhttp.send();
+      } else {
+        tryAlternate(validBarcode, null, null);
+      }
+  } else {
+    tryAlternate(validBarcode, null, null);
+  }
+  };
+  // 3. Send the request over the network
+  xhr.send();
+}
+
+function tryAlternate(barcode, nutritionScore, nutritionString) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (xhttp.readyState == 4 && xhttp.status == 200) {
+                var decoded = JSON.parse(xhttp.responseText);
+                var prodName = decoded.items[0].title;
+                var prodImage =decoded.items[0].image[0];
+                
+                var someDate = new Date(document.getElementById("expirationChooser").value);
+
+                var toSaveObject = {
+                    barcode: barcode,
+                    itemName: prodName,
+                    hasNutrition: false,
+                    hasImage: true,
+                    imageAddress: prodImage,
+                    expiration: someDate.getTime(),
+                    userID: getCookie("userID"),
+                    quantity: document.getElementById("quantChooser").value,
+                    foodBankID: getCookie("foodBankID")
+                };  
+                  doneScraping = true;   
+                  scrapedProduct = toSaveObject;          
+                  sendItem(toSaveObject);
+            }
+        };
+        xhttp.open("GET", "https://cors-anywhere.herokuapp.com/https://api.upcitemdb.com/prod/trial/lookup?upc=" + barcode, true);
+        xhttp.send();
+    }
+
+    function sendItem(item) {
+      if (currentTab == 3) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+           document.getElementsByClassName("tab")[currentTab].style.display="none";
+           currentTab = 4;
+           showTab(4);
+        };
+        xhttp.open("POST", "../api/donateItem", true);
+        xhttp.setRequestHeader('Content-type', 'application/json');
+        xhttp.send(JSON.stringify(item));
+      }
+    }
 function fixStepIndicator(n) {
   // This function removes the "active" class of all steps...
   var i, x = document.getElementsByClassName("step");
@@ -254,6 +465,7 @@ function fixStepIndicator(n) {
     x[i].className = x[i].className.replace(" active", "");
   }
   //... and adds the "active" class on the current step:
+  if (n < x.length)
   x[n].className += " active";
 }
 

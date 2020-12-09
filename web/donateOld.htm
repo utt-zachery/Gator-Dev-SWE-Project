@@ -20,7 +20,7 @@
   
     <div id="my-history"></div>
     <script src="../node_modules/dynamsoft-javascript-barcode/dist/dbr.js"
-        data-productKeys="t0076xQAAAIjKUUiAy33ls/u0gA1c4Qe3JQjCrVqWCBmrObJiePN3jQb9gahDa4/IoZVw4D3eLoStdirOwCfEYWYCCjUMeDH2ZRsdbDwqcw=="></script>
+        data-productKeys="<!-- INSERT BARCODE KEY !-->"></script>
 
     <script>
 function removeAllChildNodes(parent) {
@@ -163,7 +163,7 @@ function getCookie(cname) {
                 for (let validBarcode of barcode_results) {
 
                     let xhr = new XMLHttpRequest();
-
+                    alert(validBarcode);
                     // 2. Configure it: GET-request for the URL /article/.../load
                     xhr.open('GET', 'https://world.openfoodfacts.org/api/v0/product/' + validBarcode + '.json');
 

@@ -265,26 +265,26 @@
     }
 
     function createLabel(foodData) {
-        document.getElementById("servSize").innerHTML = foodData.servingSize;
-        document.getElementById("calCount").innerHTML = foodData.calories;
-        document.getElementById("totalFat").innerHTML = foodData.totalFat;
-        document.getElementById("fatRatio").innerHTML = Math.round((parseInt(foodData.totalFat)/65.0) * 100.0) + "%";
-        document.getElementById("satFat").innerHTML = foodData.saturatedFat;
-        document.getElementById("transFat").innerHTML = foodData.transFat;
-        document.getElementById("chol").innerHTML = foodData.cholest;
-        document.getElementById("cholRatio").innerHTML = Math.round((parseInt(foodData.cholest)/300.0) * 100.0) + "%";
-        document.getElementById("sodium").innerHTML = foodData.sodium;
-        document.getElementById("sodRatio").innerHTML = Math.round((parseInt(foodData.sodium)/	2400.0) * 100.0) + "%";
-        document.getElementById("carbs").innerHTML = foodData.carb;
-        document.getElementById("carbRatio").innerHTML = Math.round((parseInt(foodData.carb)/300.0) * 100.0) + "%";
-        document.getElementById("fiber").innerHTML = foodData.fiber;
-        document.getElementById("fiberRatio").innerHTML = Math.round((parseInt(foodData.fiber)/25.0) * 100.0) + "%";
-        document.getElementById("sugar").innerHTML = foodData.sugar;
-        document.getElementById("protein").innerHTML = foodData.protein;
-        document.getElementById("vitA").innerHTML = foodData.vitA;
-        document.getElementById("vitC").innerHTML = foodData.vitC;
-        document.getElementById("iron").innerHTML = foodData.iron;
-        document.getElementById("calcium").innerHTML = foodData.calcium;
+        document.getElementById("servSize").innerHTML = (foodData.servingSize == undefined) ? 0 : (foodData.servingSize == undefined);
+        document.getElementById("calCount").innerHTML = (foodData.calories == undefined) ? 0 : (foodData.calories);
+        document.getElementById("totalFat").innerHTML = (foodData.totalFat == undefined ) ? 0 :(foodData.totalFat);
+        document.getElementById("fatRatio").innerHTML = isNaN(Math.round((parseInt(foodData.totalFat)/65.0) * 100.0)) ? "0%" : (Math.round((parseInt(foodData.totalFat)/65.0) * 100.0) + "%");
+        document.getElementById("satFat").innerHTML = (foodData.saturatedFat == undefined) ? 0 : (foodData.saturatedFat);
+        document.getElementById("transFat").innerHTML = (foodData.transFat == undefined) ? 0 : foodData.transFat;
+        document.getElementById("chol").innerHTML = (foodData.cholest == undefined) ? 0 : foodData.cholest;
+        document.getElementById("cholRatio").innerHTML = isNaN(Math.round((parseInt(foodData.cholest)/300.0) * 100.0)) ? "0%" : Math.round((parseInt(foodData.cholest)/300.0) * 100.0) + "%";
+        document.getElementById("sodium").innerHTML = foodData.sodium == undefined ? 0 : foodData.sodium;
+        document.getElementById("sodRatio").innerHTML = isNaN(Math.round((parseInt(foodData.sodium)/	2400.0) * 100.0)) ? "0%" : (Math.round((parseInt(foodData.sodium)/	2400.0) * 100.0)) + "%";
+        document.getElementById("carbs").innerHTML = foodData.carb == undefined ? 0 : foodData.carb ;
+        document.getElementById("carbRatio").innerHTML = isNaN(Math.round((parseInt(foodData.carb)/300.0) * 100.0)) ? "0%" : Math.round((parseInt(foodData.carb)/300.0) * 100.0) + "%";
+        document.getElementById("fiber").innerHTML = foodData.fiber == undefined ? 0 : foodData.fiber;
+        document.getElementById("fiberRatio").innerHTML = isNaN(Math.round((parseInt(foodData.fiber)/25.0) * 100.0)) ? "0%"  : Math.round((parseInt(foodData.fiber)/25.0) * 100.0) + "%";
+        document.getElementById("sugar").innerHTML = foodData.sugar == undefined ? 0 : foodData.sugar;
+        document.getElementById("protein").innerHTML = foodData.protein == undefined ? 0 : foodData.protein;
+        document.getElementById("vitA").innerHTML = foodData.vitA == undefined ? 0 : foodData.vitA;
+        document.getElementById("vitC").innerHTML = foodData.vitC == undefined ? 0 : foodData.vitC;
+        document.getElementById("iron").innerHTML = foodData.iron == undefined ? 0 : foodData.iron;
+        document.getElementById("calcium").innerHTML = foodData.calcium == undefined ? 0 : foodData.calcium;
     }
 
 function addItemButton(event) {

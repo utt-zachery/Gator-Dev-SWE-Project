@@ -1,5 +1,5 @@
 import * as fs from "fs";
-
+import * as Config from "../../config/config.js"
 
 
 export const buildPage2 = async (receptor1, foodBankData, packageData, req, res, pageNum, shouldAppendFoodBank)  => {
@@ -22,7 +22,7 @@ export const buildPage2 = async (receptor1, foodBankData, packageData, req, res,
             }
                 let pageString = receptor1.replace(/web-resources/g,"web/web-resources/") + packageData + data.replace(/web-resources/g,"web/web-resources/");
                 pageString = pageString.replace("<!-- INSERT AT HERE -->",foodBankData);
-
+                pageString = pageString.replace("<!-- INSERT BARCODE KEY !-->", Config.default.barcode);
                 if (foodBankData.length == 0) {
                     let pageString2 = pageString.substring(0,"<!-- START FOODBANK -->".length + pageString.indexOf("<!-- START FOODBANK -->"));
                     let pageString3 = pageString.substring(pageString.indexOf("<!-- END FOODBANK-->"));
