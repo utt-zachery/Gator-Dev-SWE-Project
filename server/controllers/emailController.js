@@ -32,7 +32,7 @@ export const doEmail = async(req, res, email, order, isLast,itemsOrdered, foodBa
         html: msg, // html body
     }, (error, response) => {
         if (!error) {
-            Order.findByIdAndUpdate(order._id, {bagState: 3}, (err, data) => {
+            Order.findByIdAndUpdate(order._id, {bagState: 2}, (err, data) => {
                 if (err && res != null) 
                     return res.status(200).json(err);
                 if (isLast && res != null) {
@@ -109,7 +109,7 @@ export const resolveEmail = async(req, res, orderData) => {
 }
 
 export const processEmails = async(req, res) => {
-    await Order.find({bagState: 2}, (err, data) => {
+    await Order.find({bagState: 1}, (err, data) => {
         if ((!data || data.length ==0) && res != null) {
             return res.status(200).json({msg: "done"});
         }

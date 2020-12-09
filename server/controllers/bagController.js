@@ -4,11 +4,21 @@ import User from '../models/userModel.js'
 import FoodItem from '../models/foodModel.js'
 import * as Email from "../controllers/emailController.js"
 
+/*
+
+Bag State 0 = Ordered
+Bag State 1 = Bagged
+Bag State 2 = Emailed
+Bag State 3 = Picked Up
+
+*/
+
 export const bagItems = async(req, res) => {
    if (!req.body || !req.body.orderID) {
         return res.status(200).send({msg: "Needs a body OrderID parameter"});
    } else {
         await Order.updateOne({_id: req.body.orderID},{bagState: 1}).then((msg) => {
+            Email.processEmails(null, null);
             res.json(msg);
         }).catch((err) => {
             res.status(200).send(err);
@@ -21,8 +31,7 @@ export const pickUpItems = async(req, res) => {
     if (!req.body || !req.body.orderID) {
          return res.status(200).send({msg: "Needs a body OrderID parameter"});
     } else {
-         await Order.updateOne({_id: req.body.orderID},{bagState: 2}).then((msg) => {
-             Email.processEmails(null, null);
+         await Order.updateOne({_id: req.body.orderID},{bagState: 3}).then((msg) => {
              res.json(msg);
          }).catch((err) => {
              res.status(200).send(err);
@@ -132,7 +141,7 @@ export const viewReadyForPickup = async(req, res) => {
         return res.status(200).send({msg: "Missing required foodBankID query paramater"});
     }
 
-    await Order.find({foodBankID: req.query.foodBankID, bagState: 1}).sort({orderTime: 1}).then((data) => {
+    await Order.find().or({foodBankID: req.query.foodBankID, bagState: 1}, {foodBankID: req.query.foodBankID, bagState: 2}).sort({orderTime: 1}).then((data) => {
         if (!data || data.length == 0) {
            return res.send("[]");
         }
