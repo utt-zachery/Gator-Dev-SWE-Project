@@ -5,6 +5,8 @@ import apiRouter from './routes/apiRouter.js';
 import * as Page from './routes/pageBuilder.js'
 import * as Cred from './routes/middleWareCred.js'
 import {connectToDatabase} from './connectMongodb.js';
+import path from "path"
+
 async function getPort() {
    return import("../config/config.js")
       .then(config => config.default.port)
@@ -34,8 +36,10 @@ app.use(express.urlencoded({
 
 app.use(express.json());
 
-//Serve File resources
-app.use(express.static(process.cwd()));
+//Serve File resources, while lockingdown server information
+let __dirname = path.resolve(path.dirname(''));
+app.use('/web',express.static(path.join(__dirname, 'web/')));
+app.use('/node_modules',express.static(path.join(__dirname, 'node_modules/')));
 
 //Serves the API
 app.use('/api/', apiRouter);
@@ -52,6 +56,10 @@ app.get('/manage', function(req, res) {
 
 app.get('/foodBank', function(req, res) {
    Page.buildPage(req, res, "ViewFoodBank", 1);
+});
+
+app.get('/mission', function(req, res) {
+   Page.buildPage(req, res, "mission", -1);
 });
 
 app.get('/home', function(req, res) {

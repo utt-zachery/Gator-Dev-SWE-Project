@@ -229,7 +229,7 @@
     </div>
     <div style="width: 100%; text-align: center" >
         <div style="display: inline-block;">
-            Quantity: <INPUT TYPE="NUMBER" onclick="onComboChange()" id="quantitySpinner" MIN="1" MAX="10" STEP="1" VALUE="0" SIZE="3" disabled="true" style="width: 55px;" >
+            Quantity: <INPUT TYPE="NUMBER" onclick="onComboChange()" onkeyup="onComboChange()" id="quantitySpinner" MIN="1" MAX="10" STEP="1" VALUE="0" SIZE="3" disabled="true" style="width: 55px;" >
                 <div class="diabledButton" id="placeButton" onclick="placeOrder()" style="margin-left: 10px;">Add to Order</div>
         </div>
     </div>
@@ -297,21 +297,24 @@ function addItemButton(event) {
 
     function placeOrder() {
         if (document.getElementById("placeButton").className == "placeButton") {
+            if (parseInt(document.getElementById("quantitySpinner").value) <= parseInt(document.getElementById("quantitySpinner").max)) {
+                document.getElementById("popup").style.display = "none";
+                document.getElementById("container").style.display = "none";
+                document.getElementById("placeFinalButton").className = "activeButton";
+                var item = document.createElement("option");
+                item.setAttribute("value", document.getElementById("popup").getAttribute("data-id"));
+                item.setAttribute("data-qty", document.getElementById("quantitySpinner").value);
+                item.innerHTML = document.getElementById("quantitySpinner").value + "x " +document.getElementById("popup").getAttribute("data-name");
 
-            document.getElementById("popup").style.display = "none";
-            document.getElementById("container").style.display = "none";
-            document.getElementById("placeFinalButton").className = "activeButton";
-            var item = document.createElement("option");
-            item.setAttribute("value", document.getElementById("popup").getAttribute("data-id"));
-            item.setAttribute("data-qty", document.getElementById("quantitySpinner").value);
-            item.innerHTML = document.getElementById("quantitySpinner").value + "x " +document.getElementById("popup").getAttribute("data-name");
-
-            document.getElementById("itemOrder").appendChild(item);
+                document.getElementById("itemOrder").appendChild(item);
+            }
         }
     }
 function onComboChange() {
-    if (document.getElementById("quantitySpinner").value > 0) {
+    if (document.getElementById("quantitySpinner").value > 0 && (parseInt(document.getElementById("quantitySpinner").value) <= parseInt(document.getElementById("quantitySpinner").max))) {
         document.getElementById("placeButton").className = "placeButton";
+    } else {
+      document.getElementById("placeButton").className = "diabledButton";
     }
 }
 
