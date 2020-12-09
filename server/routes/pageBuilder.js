@@ -1,5 +1,4 @@
 import * as fs from "fs";
-import * as Config from "../../config/config.js"
 
 
 export const buildPage2 = async (receptor1, foodBankData, packageData, req, res, pageNum, shouldAppendFoodBank)  => {
@@ -22,8 +21,8 @@ export const buildPage2 = async (receptor1, foodBankData, packageData, req, res,
             }
                 let pageString = receptor1.replace(/web-resources/g,"web/web-resources/") + packageData + data.replace(/web-resources/g,"web/web-resources/");
                 pageString = pageString.replace("<!-- INSERT AT HERE -->",foodBankData);
-                pageString = pageString.replace("<!-- INSERT BARCODE KEY !-->", Config.default.barcode);
-                pageString = pageString.replace("<-- MAPQUESTKEY -->", Config.default.mapQuest.api);
+                pageString = pageString.replace("<!-- INSERT BARCODE KEY !-->", process.env.barcode);
+                pageString = pageString.replace("<-- MAPQUESTKEY -->", process.env.mapQuest-api);
 
                 if (req.oidc.user != undefined) {
                     pageString = pageString.replace("<!-- Login -->", "Log Out");

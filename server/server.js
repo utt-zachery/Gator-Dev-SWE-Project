@@ -7,7 +7,6 @@ import * as Cred from './routes/middleWareCred.js'
 import {connectToDatabase} from './connectMongodb.js';
 import path from "path";
 import * as Auth0 from 'express-openid-connect';
-import * as Config from '../config/config.js'
 import * as User from './controllers/userController.js'
 
 async function getPort() {
@@ -44,10 +43,10 @@ app.use(
    Auth0.default.auth({
         authRequired: false,
         auth0Logout: true,
-        issuerBaseURL: Config.default.autho.ISSUER_BASE_URL,
-        baseURL: Config.default.autho.BASE_URL,
-        clientID: Config.default.autho.CLIENT_ID,
-        secret: Config.default.autho.SECRET,
+        issuerBaseURL: process.env.autho-ISSUER_BASE_URL,
+        baseURL: process.env.autho-BASE_URL,
+        clientID: process.env.autho-CLIENT_ID,
+        secret: process.env.autho-SECRET,
     })
 );
 

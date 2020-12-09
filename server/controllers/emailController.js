@@ -1,6 +1,5 @@
 import Order from "../models/orderModel.js"
 import User from "../models/userModel.js"
-import * as Config from "../../config/config.js"
 import nodemailer from "nodemailer"
 import ItemOrder from "../models/itemOrder.js"
 import FoodBank from '../models/foodBankModel.js'
@@ -12,8 +11,8 @@ export const doEmail = async(req, res, email, order, isLast,itemsOrdered, foodBa
         service: 'gmail',
         host: 'smtp.gmail.com',
         auth: {
-            user: Config.default.mailer.address, // generated ethereal user
-            pass: Config.default.mailer.password, // generated ethereal password
+            user: process.env.mailer-address, // generated ethereal user
+            pass: process.env.mailer-password, // generated ethereal password
         },
     });
 

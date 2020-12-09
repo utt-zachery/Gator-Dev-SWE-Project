@@ -4,7 +4,7 @@
 import mongoose from "mongoose";
 async function getUri() {
   return import("../config/config.js")
-     .then(config => config.default.db.uri)
+     .then(config => process.env.mongo-uri)
      .catch(process.env.uri)
 }
 const link = await getUri();
