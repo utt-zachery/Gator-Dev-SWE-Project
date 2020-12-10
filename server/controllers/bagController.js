@@ -141,7 +141,7 @@ export const viewReadyForPickup = async(req, res) => {
         return res.status(200).send({msg: "Missing required foodBankID query paramater"});
     }
 
-    await Order.find().or({foodBankID: req.query.foodBankID, bagState: 1}, {foodBankID: req.query.foodBankID, bagState: 2}).sort({orderTime: 1}).then((data) => {
+    await Order.find({foodBankID: req.query.foodBankID}).where({bagState: 2}).or({bagState: 1}).sort({orderTime: 1}).then((data) => {
         if (!data || data.length == 0) {
            return res.send("[]");
         }
