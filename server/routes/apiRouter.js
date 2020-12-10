@@ -28,7 +28,6 @@ apiRouter.get('/viewCatalog', catalogController.viewCatalog);
 apiRouter.get('/viewDonations', donationController.viewDonations);
 
 apiRouter.get('/findFoodBanks', findFoodBankController.viewFoodBanks);
-apiRouter.get('/findRandBanks', findFoodBankController.viewRandFoodBank);
 apiRouter.get('/expired', expirationController.findExpired);
 
 apiRouter.get('/lowItem', lowItemController.viewLowItems);

@@ -7,7 +7,6 @@ const itemOrderSchema = new mongoose.Schema({
     orderModelID: {type: String, required: true},
     foodBankID: {type:String, required:true},
     locations: [String]
-    
 });
 
 export default mongoose.model('ItemOrder', itemOrderSchema);
