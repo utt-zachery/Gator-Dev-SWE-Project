@@ -7,7 +7,6 @@ const foodSchema = new mongoose.Schema({
     hasNutrition: { type: Boolean, required: true },
     itemNutrition: { type: Number, required: false },
     itemNutritionLabel: { type: String, required: false },
-
     hasImage: { type: Boolean, required: true },
     imageAddress:{type: String, required: false }
 

@@ -478,7 +478,7 @@ function placeFinalOrder() {
                       removeAllChildNodes(document.getElementById("mouseControl"));
                       removeAllChildNodes(document.getElementById("orderStuff"));
                       
-                      var htmlString= '<div style="text-align: center"><h3>Your order has been placed successfully.</h3><br/><h4>Order ID: '+ orderCred.orderID +'<br/><h4>You will receive an email when your order is bagged and ready to be picked up at the food bank.</h4><br/><div onclick="location.reload()" class="activeButton">Return Home</div><div onclick="location.reload()" style="margin-left: 30px;" class="activeButton">Place another Order</div></div>';
+                      var htmlString= '<div style="text-align: center"><h3>Your order has been placed successfully.</h3><br/><h4>Order ID: '+ orderCred.orderID +'<br/><h4>You will receive an email when your order is bagged and ready to be picked up at the food bank.</h4><br/><div onclick="location.href=\'home\'" class="activeButton">Return Home</div><div onclick="location.reload()" style="margin-left: 30px;" class="activeButton">Place another Order</div></div>';
                       document.getElementById("mouseControl").innerHTML = htmlString;
                       document.getElementById("mouseControl").setAttribute("style","");
                     } else {

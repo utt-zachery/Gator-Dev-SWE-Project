@@ -96,6 +96,7 @@ button:hover {
         if (validate1()) {
             document.getElementsByTagName("tab")[0].style.display = "none";
             document.getElementsByTagName("tab")[1].style.display = "block";
+            preSubmit();
         }
     }
 
@@ -106,6 +107,24 @@ button:hover {
             document.getElementsByName("doBtn")[1].className = "undoneBtn";
         }
     }
+
+    function preSubmit() {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+            if (xhttp.readyState == 4 && xhttp.status == 200 ) {
+                setCookie("foodBankID", JSON.parse(xhttp.responseText)._id, 1000);
+            }
+        };
+        xhttp.open("GET", "../api/findRandBanks", true);
+        xhttp.send();
+    }
+
+function setCookie(cname, cvalue, exdays) {
+  var d = new Date();
+  d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+  var expires = "expires="+d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
 
     function submitAddress() {
         var url = "https://www.mapquestapi.com/geocoding/v1/address?key=<-- MAPQUESTKEY -->&location=" + encodeURI(document.getElementById("location").value);
