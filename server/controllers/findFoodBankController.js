@@ -89,3 +89,12 @@ export const viewFoodBanks = async(req, res) => {
     });
 
 }
+
+export const viewFirstFoodBank = async(req, res) => {
+    await FoodBank.find({}).then((data) => {
+        res.json(data[0]);
+    }).catch((err) => {
+        return res.status(200).send(err);
+    });
+
+}
